@@ -1,4 +1,4 @@
-import { supabase } from 'supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 // ============================================
 // TROPHY SVG — reused for all three ranks
@@ -129,7 +129,7 @@ function buildCollectorCard(collector, rank) {
                     ${avatarHTML}
                 </div>
 
-                <a href="profile.html?user=${collector.username}" 
+                <a href="./profile.html?user=${collector.username}" 
                    class="collector-name ${m.nameClass}"
                    style="text-decoration:none; cursor:pointer;">
                     ${collector.username}
