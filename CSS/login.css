@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900'); 
+ /* Login Section */
+         
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-30px) rotate(10deg);
+    }
+}
+
+/* Glassmorphism container */
+.glass-container {
+    display: block !important;
+    align-self: center;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 24px;
+    background: #1E2329;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid #D4AF37;
+    box-shadow: 0 15px 35px #8B6A18;
+    overflow: hidden;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    margin: 150px auto 150px auto;
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(12px)) {
+    .glass-container {
+        background: rgba(255, 255, 255, 0.85);
+    }
+}
+
+/* Inner glow effect */
+.glass-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #D4AF37;
+    z-index: 1;
+}
+
+/* Form styling */
+.login-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.login-header h1 {
+    color: #D4AF37;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.login-header p {
+    color: #D4AF37;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 28px;
+}
+
+.input-group i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #F8F9FA;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 16px 20px 16px 52px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: #F8F9FA;
+    font-size: 16px;
+    transition: all 0.3s;
+    border: 2px solid #D4AF37;
+}
+
+/* Fallback for input background */
+@supports not (backdrop-filter: blur(5px)) {
+    .input-group input {
+        background: rgba(255, 255, 255, 0.25);
+    }
+}
+
+.input-group input::placeholder {
+    color: #F8F9FA;
+}
+
+.input-group input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #D4AF37;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.input-group input:focus + i {
+    color: #F8F9FA;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.remember input {
+    margin-right: 8px;
+    accent-color: #F8F9FA;
+}
+
+.forgot-link {
+    color: #F8F9FA;
+    transition: color 0.3s;
+}
+
+.forgot-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: #D4AF37;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid #D4AF37;
+    margin-bottom: 25px;
+}
+
+.login-btn:hover {
+    background: #D4AF37;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 15px #8B6A18;
+    color: white;
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.register-link {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.register-link a {
+    color: #F8F9FA;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    transition: all 0.3s;
+}
+
+.register-link a:hover {
+    color: #8B6A18;
+    text-decoration: underline;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.divider span {
+    padding: 0 15px;
+    font-size: 14px;
+}
+
+.banner-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.banner-option {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    border: 2px solid #D4AF37;
+    cursor: pointer;
+    transition: 0.3s ease;
+    object-fit: cover;
+}
+
+.banner-option.selected {
+    border-color: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+.avatar-selection {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.avatar-option {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #D4AF37;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+    object-fit: cover;
+    background: #1a0f1a;
+    filter: grayscale(30%); /* Slightly dull when not active */
+}
+
+/* Update this rule to ensure selected items still pop on hover */
+.avatar-option.selected:hover,
+.avatar-option:hover {
+    transform: scale(1.25) translateY(-5px) !important; /* Forces the pop */
+    filter: grayscale(0%) brightness(1.1);
+    z-index: 100;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Small click effect */
+.avatar-option:active {
+    transform: scale(0.95);
+}
+
+.avatar-option.selected {
+    border: 3px solid #ffd700;
+    filter: grayscale(0%);
+/* Remove any static transforms here so the hover can take over */
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+
+/* Browser compatibility notice */
+.browser-notice {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    z-index: 100;
+    display: none;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    max-width: 90%;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .glass-container {
+        padding: 30px 25px;
+        border-radius: 20px;
+    }
+    
+    .login-header h1 {
+        font-size: 28px;
+    }
+    
+    .remember-forgot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .glass-container {
+        padding: 25px 20px;
+    }            
+}
+
+/* Add this to the very bottom of your CSS file */
+.fa-brands, .fab {
+    font-family: "Font Awesome 6 Brands" !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}

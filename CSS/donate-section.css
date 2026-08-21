@@ -1,0 +1,292 @@
+/* ============================================================
+   DEXORIA — Donation Section  (donate-section.css)
+   Add this to your existing CSS or paste into global.css
+   ============================================================ */
+
+/* ── Section wrapper ── */
+.dex-donate-section {
+  width: 100%;
+  padding: 80px 32px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  border-top: 2px solid #d4af37;
+  border-bottom: 2px solid #d4af37;
+  margin-bottom: 20px;
+}
+
+/* Subtle radial glow behind the section */
+.dex-donate-section::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(200, 155, 42, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Two-column inner layout ── */
+.dex-donate-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 60px;
+  align-items: center;
+}
+
+/* ── Left: message ── */
+.dex-donate-eyebrow {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #d4af37;
+  margin-bottom: 16px;
+  padding: 4px 12px;
+  border: 1px solid #d4af37;
+  border-radius: 99px;
+  background: rgba(200,155,42,0.07);
+}
+
+.dex-donate-heading {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  color: #F5D06B;
+  line-height: 1.2;
+  margin: 0 0 20px;
+  letter-spacing: 0.5px;
+}
+
+.dex-donate-body {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.7;
+  color: #F8F9FA;
+  margin: 0 0 14px;
+  max-width: 520px;
+}
+
+/* ── Cost breakdown ── */
+.dex-donate-costs-wrap {
+  margin-top: 28px;
+}
+
+.dex-donate-costs-label {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #d4af37;
+  margin: 0 0 12px;
+}
+
+.dex-donate-costs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dex-donate-cost {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  background: #1E2329;
+  border: 1px solid #d4af37;
+  border-radius: 10px;
+  min-width: 110px;
+}
+
+.dex-donate-cost-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #F5D06B;
+  letter-spacing: 0.5px;
+}
+
+.dex-donate-cost-desc {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  color: #F8F9FA;
+}
+
+/* ── Right: CTA card ── */
+.dex-donate-card {
+  background: #1E2329;
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle inner gold shimmer at top of card */
+.dex-donate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #F5D06B, transparent);
+  opacity: 0.6;
+}
+
+.dex-donate-card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(245, 208, 107, 0.08);
+  border: 2px solid #d4af37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  margin-right: 10px;
+}
+
+.dex-donate-card-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #d4af37;
+  letter-spacing: 1px;
+  margin: 0 0 10px;
+}
+
+.dex-donate-card-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #F8F9FA;
+  margin: 0 0 24px;
+}
+
+/* ── Suggested amount buttons ── */
+.dex-donate-amounts {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dex-donate-amount-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 18px;
+  border-radius: 99px;
+  border: 2px solid #d4af37;
+  background: transparent;
+  color: #d4af37;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dex-donate-amount-btn:hover {
+  border-color: #d4af37;
+  color: #F5D06B;
+  background: rgba(212, 175, 55, 0.08);
+  transform: translateY(-1px);
+}
+
+.dex-donate-amount-btn.selected,
+.dex-donate-amount-btn--highlight {
+  border-color: #d4af37;
+  color: #0a0408;
+  background: #d4af37;
+}
+
+.dex-donate-amount-btn--highlight:hover {
+  background: #F5D06B;
+  border-color: #F5D06B;
+  color: #0a0408;
+}
+
+.dex-donate-amount-btn.selected {
+  border-color: #F5D06B;
+  background: #F5D06B;
+  color: #0a0408;
+}
+
+/* ── Form + donate button ── */
+.dex-donate-form {
+  width: 100%;
+}
+
+.dex-donate-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #8B6A18, #C89B2A 50%, #F5D06B);
+  color: #0a0408;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 20px rgba(200, 155, 42, 0.3);
+}
+
+.dex-donate-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(200, 155, 42, 0.4);
+}
+
+.dex-donate-btn:active {
+  transform: translateY(0);
+}
+
+.dex-donate-note {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  color: #F8F9FA;
+  margin: 14px 0 0;
+  letter-spacing: 0.3px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .dex-donate-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .dex-donate-cta {
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .dex-donate-body { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .dex-donate-section { padding: 60px 16px; }
+  .dex-donate-card    { padding: 28px 20px; }
+  .dex-donate-costs   { gap: 8px; }
+  .dex-donate-cost    { min-width: calc(50% - 4px); }
+}

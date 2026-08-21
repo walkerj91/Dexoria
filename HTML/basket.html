@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dexoria - Basket</title>
+
+  <!-- FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- GLOBAL -->
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="../CSS/basket.css">
+  
+</head>
+<body>
+
+<!-- NAVBAR -->
+  <div id="navbar"></div>
+
+<!-- CURSOR -->
+  <div id="cursor"></div>
+
+    <section class="shopping-container">
+        <h2 class="section-title centered-header">YOUR BASKET</h2>
+        
+        <!-- This is where basket.js will inject the trading-rows -->
+        <div id="basket-items-list" class="card-list-vertical">
+            <p class="placeholder-text" style="text-align:center; padding: 40px;">Loading your items...</p>
+        </div>
+
+        <div class="basket-footer">
+            <div class="basket-summary">
+                <h3 id="total-price">TOTAL: £0.00</h3>
+                <button onclick="clearEntireCart()" class="clear-btn">CLEAR BASKET</button>
+            </div>
+            <!-- Standard Dexoria gold button style -->
+            <button class="request-btn">PROCEED TO CHECKOUT</button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">Dexoria</h2>
+      <p class="disclaimer">
+        Dexoria is an unofficial fan-made platform. We are not affiliated with,
+        endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+        or The Pokémon Company.
+      </p>
+      <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+        <li><a href="../HTML/trades.html">Trade Hub</a></li>
+        <li><a href="../HTML/community.html">Community Feed</a></li>
+        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="help-centre.html">Help Centre</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+    <svg class="pokeball-icon" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+        <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+</button>
+
+<!-- NAVBAR SCRIPT -->
+ <script type="module">
+  import { renderNavbar } from "../js/navbar.js";
+
+  import { supabase } from "../js/supabaseClient.js";
+
+const { data } = await supabase.auth.getSession();
+
+let username = "Trainer";
+
+if (data.session) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (profile?.username) username = profile.username;
+}
+
+renderNavbar("navbar", {
+  isLoggedIn: !!data.session,
+  username
+});
+
+</script>
+
+<!-- CURSOR SCRIPT -->
+ <script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+ 
+  const hero = document.querySelector('.hero');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 40}%;
+      animation-duration:${Math.random() * 6 + 5}s;
+      animation-delay:${Math.random() * 4}s;
+      opacity:0;
+    `;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+  setInterval(spawnParticle, 600);
+</script>
+
+<!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+
+<!-- External Scripts -->
+<script type="module" src="../js/basket.js"></script>
+
+
+</body>
+</html>

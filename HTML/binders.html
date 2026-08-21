@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dexoria - Binder Studio.</title>
+
+  <!-- FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- GLOBAL -->
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="../CSS/binders.css">
+  
+</head>
+
+<!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+
+      
+  <!-- HERO SECTION -->
+<section class="hero">
+ 
+  <!-- Perspective grid floor -->
+  <div class="hero-grid-floor"></div>
+  <div class="hero-grid-fade"></div>
+ 
+  <!-- Scanning line -->
+  <div class="hero-scanline"></div>
+ 
+  <!-- HUD corner brackets -->
+  <div class="hud-corner hud-tl"></div>
+  <div class="hud-corner hud-tr"></div>
+  <div class="hud-corner hud-bl"></div>
+  <div class="hud-corner hud-br"></div>
+ 
+  <!-- Top HUD bar -->
+  <div class="hero-hud-bar">
+    <div class="hud-title-tag">BINDER ARCHIVE</div>
+    <div class="hud-bar-line"></div>
+  </div>
+ 
+  <!-- Main hero content -->
+  <div class="hero-main">
+    <div class="hero-bracket left">[</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">DEXORIA COLLECTION</div>
+      <h1 class="hero-title">BINDER STUDIO</h1>
+      <p class="hero-sub">PREMIUM CUSTOM COLLECTORS BINDERS</p>
+      <div class="hero-btns">
+        <a href="#shop" class="hero-btn hero-btn--outline">BROWSE CATALOGUE</a>
+        <a href="https://www.instagram.com/dexoria_studio/" class="hero-btn hero-btn--solid">CUSTOM ORDER</a>
+      </div>
+    </div>
+    <div class="hero-bracket right">]</div>
+  </div>
+ 
+  <!-- Bottom data readout -->
+  <div class="hero-data-bar">
+    <div class="hero-data-item">
+      <span class="hero-data-key">UNITS IN ARCHIVE</span>
+      <span class="hero-data-val">10</span>
+    </div>
+    <div class="hero-data-divider"></div>
+    <div class="hero-data-item">
+      <span class="hero-data-key">CARD CAPACITY</span>
+      <span class="hero-data-val">480 to 720 CARDS</span>
+    </div>
+    <div class="hero-data-divider"></div>
+    <div class="hero-data-item">
+      <span class="hero-data-key">MATERIAL</span>
+      <span class="hero-data-val">PREMIUM LEATHER</span>
+    </div>
+    <div class="hero-data-divider"></div>
+    <div class="hero-data-item">
+      <span class="hero-data-key">CUSTOM ORDERS</span>
+      <span class="hero-data-val hero-data-val--active">● OPEN</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- CUSTOMIZED BINDERS SECTION -->
+<section class="shopping-container" id="shop">
+ 
+  <div class="catalogue-header">
+    <div class="catalogue-tag">CATALOGUE</div>
+    <h2 class="catalogue-title">CUSTOM COLLECTOR BINDERS</h2>
+    <div class="catalogue-line"></div>
+    <span class="catalogue-count">10 ITEMS</span>
+  </div>
+ 
+  <div class="product-grid">
+ 
+    <!-- Binder 1 -->
+    <div class="product-card">
+      <div class="card-container">
+        <div class="card-flipper">
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 1.jpg" alt="Obstagoon & Lucario Binder">
+          </div>
+          <div class="card-back">
+            <img src="../Images/Custom Binder 4.jpg" alt="Binder Back View">
+          </div>
+        </div>
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-01</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Guardian Duo Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Obstagoon, Lucario and Rillaboom art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+ 
+    <!-- Binder 2 -->
+    <div class="product-card">
+      <div class="card-container">
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 2.jpg" alt="Pikachu & Sprigatito Binder">
+          </div>        
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-02</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Starter Squad Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Pikachu and Sprigatito art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+ 
+    <!-- Binder 3 -->
+    <div class="product-card">
+      <div class="card-container">
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 3.jpg" alt="Tyrantrum Binder">
+          </div>
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-03</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Ancient King Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Tyrunt and Tyrantrum art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+ 
+    <!-- Binder 4 -->
+    <div class="product-card">
+      <div class="card-container">
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 4.jpg" alt="Rillaboom Binder">
+          </div>
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-04</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Jungle Protector Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Rillaboom art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+ 
+    <!-- Binder 5 -->
+    <div class="product-card">
+      <div class="card-container">
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 5.jpg" alt="Ghost Crew Binder">
+          </div>
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-05</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Ghost Crew Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Golurk and Golett art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+ 
+    <!-- Binder 6 -->
+    <div class="product-card">
+      <div class="card-container">
+        <div class="card-flipper">
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 6.jpg" alt="Jungle, Fossil & Team Rocket Binder">
+          </div>
+          <div class="card-back">
+            <img src="../Images/Custom Binder 7.jpg" alt="Binder Back View">
+          </div>
+        </div>
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-06</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Jungle, Fossil & Team Rocket Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Gen 1 Jungle, Fossil and Team Rocket art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+
+    <!-- Binder 7 -->
+    <div class="product-card">
+      <div class="card-container">
+        
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 8.jpg" alt="Scarlet & Violet 151 Binder">
+          </div>          
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-07</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Scarlet & Violet 151 Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Gen 1 Scarlet and Violet bubble art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+
+    <!-- Binder 8 -->
+    <div class="product-card">
+      <div class="card-container">
+        
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Iron Valiant Binder Design.jpg" alt="Iron Valiant Binder">
+          </div>          
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-08</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Iron Valiant Illustration Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Iron Valiant Illustration art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+
+    <!-- Binder 9 -->
+    <div class="product-card">
+      <div class="card-container">
+        
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Custom Binder 9.jpg" alt="Mewtwo Binder">
+          </div>          
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-09</span><span>160 CAP · VAULT X LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Mewtwo & Legendary Birds Binder</h3>
+        <p class="desc">Water-resistant Vault X leather 160-card binder featuring Mewtwo and the Legendary Birds art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+
+     <!-- Binder 10 -->
+    <div class="product-card">
+      <div class="card-container">
+        
+          <div class="card-front">
+            <div class="badge">4-Pocket</div>
+            <img src="../Images/Pikachu-Bellibolt Binder.jpg" alt="Pikachu-Bellibolt Binder">
+          </div>          
+      </div>
+      <div class="card-hud-bar">
+        <span>REF-010</span><span>480 CAP · LEATHER</span>
+      </div>
+      <div class="product-info">
+        <h3>Pikachu & Bellibolt Binder</h3>
+        <p class="desc">Water-resistant leather 480-card binder featuring Pikachu and Bellibolt art.</p>
+        <div class="price-row"></div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+
+
+<!-- Custom binder design requests --> 
+<section class="studio-wrapper">
+  <div class="studio-terminal-bar">
+    <span class="terminal-dot"></span>
+    <span class="terminal-label">COMMISSION TERMINAL</span>
+    <span class="terminal-dot"></span>
+    <span class="terminal-label">CUSTOM DESIGN STUDIO</span>
+    <div class="terminal-bar-line"></div>
+    <span class="terminal-label">● APPOINTMENTS OPEN</span>
+  </div>
+ 
+  <div class="custom-container">
+    <div class="custom-content">
+      <div class="section-title-container stc-plain">
+        <h2>CUSTOM DESIGN STUDIO</h2>
+      </div>
+      <p class="custom-statement">
+        Can't find the perfect match for your collection? Work directly with our artists to create a
+        <strong>One-of-a-Kind</strong> premium binder featuring your favourite Pokémon artwork.
+      </p>
+      <ul class="custom-features">
+        <li>✨ Hand-drawn custom artwork</li>
+        <li>🛠️ Choice of premium materials</li>
+        <li>🔒 Reinforced zipper and stitching</li>
+      </ul>
+      <a href="https://www.instagram.com/dexoria_studio/" class="request-btn">BOOK DESIGN APPOINTMENT</a>
+    </div>
+ 
+    <div class="custom-visual">
+      <div class="visual-box">
+        <img src="../Images/Binder Studio.png">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">Dexoria</h2>
+      <p class="disclaimer">
+        Dexoria is an unofficial fan-made platform. We are not affiliated with,
+        endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+        or The Pokémon Company.
+      </p>
+      <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+        <li><a href="../HTML/trades.html">Trade Hub</a></li>
+        <li><a href="../HTML/community.html">Community Feed</a></li>
+        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="help-centre.html">Help Centre</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+  <svg class="pokeball-icon" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+    <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+    <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+    <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+  </svg>
+</button>
+
+  <!-- CURSOR SCRIPT-->
+  <script>
+    const cursor = document.getElementById('cursor');
+
+    // Cursor movement
+    document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+    });
+
+    // ✅ IMPORTANT: use event delegation (fixes navbar issue)
+    document.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, .feature-card')) {
+        cursor.classList.add('hover');
+    }
+    });
+
+    document.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, .feature-card')) {
+        cursor.classList.remove('hover');
+    }
+    });
+  </script>
+
+  <!-- NAVBAR SCRIPT -->
+  <script type="module">
+    import { renderNavbar } from "../js/navbar.js";
+    renderNavbar("navbar");
+  </script>
+
+  <!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+<!-- DYNAMIC ITEM COUNT -->
+<script>
+  const cards  = document.querySelectorAll('.product-card').length;
+  const countEl = document.getElementById('catalogue-count');
+  if (countEl) countEl.textContent = String(cards).padStart(2, '0') + ' ITEM' + (cards !== 1 ? 'S' : '');
+</script>
+
+</body>
+</html>

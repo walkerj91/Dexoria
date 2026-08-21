@@ -1,0 +1,1285 @@
+/* ============================================================
+   trade-confirmation.css
+   Dexoria Trade Confirmation Page
+   Tokens: --gold-light #F5D06B | --gold-mid #C89B2A | --gold-dark #8B6A18
+   Fonts:  Cinzel (headings) · Rajdhani (body/UI)
+   ============================================================ */
+
+/* ── RESET / BASE ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold-light:   #F5D06B;
+  --gold-mid:     #C89B2A;
+  --gold-dark:    #8B6A18;
+  --bg:           #0a0a0a;
+  --bg-panel:     #111111;
+  --bg-raised:    #191919;
+  --bg-deep:      #0e0e0e;
+  --border:       rgba(255,255,255,0.07);
+  --border-gold:  rgba(200,155,42,0.3);
+  --text:         #f0f0f0;
+  --text-muted:   #888;
+  --text-dim:     #444;
+  --green:        #4ade80;
+  --red:          #f87171;
+  --radius:       14px;
+  --radius-sm:    8px;
+  --shadow:       0 8px 32px rgba(0,0,0,0.5);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* ── NAV ───────────────────────────────────────────────────── */
+.tc-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--bg-panel);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tc-nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+
+.tc-nav-back {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.15s;
+}
+
+.tc-nav-back:hover { color: var(--gold-light); }
+
+/* ── PROGRESS BAR ──────────────────────────────────────────── */
+.tc-progress-wrap {
+  padding: 1.5rem 1rem 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.tc-progress-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 460px;
+}
+
+.tc-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.tc-step-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-dim);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.tc-step-label {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  transition: color 0.25s;
+}
+
+.tc-progress-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  margin-bottom: 1.4rem;   /* align with circle centres */
+  transition: background 0.3s;
+}
+
+/* Active step */
+.tc-step-active .tc-step-circle {
+  border-color: var(--gold-mid);
+  background: rgba(200,155,42,0.12);
+  color: var(--gold-light);
+  box-shadow: 0 0 12px rgba(200,155,42,0.25);
+}
+.tc-step-active .tc-step-label { color: var(--gold-light); }
+
+/* Complete step */
+.tc-step-complete .tc-step-circle {
+  border-color: var(--green);
+  background: rgba(74,222,128,0.1);
+  color: var(--green);
+}
+.tc-step-complete .tc-step-label { color: var(--green); }
+
+/* Filled line */
+.tc-line-done { background: var(--gold-mid); }
+
+/* ── MAIN ──────────────────────────────────────────────────── */
+.tc-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem 5rem;
+  gap: 0;
+}
+
+/* ── PANEL ──────────────────────────────────────────────────── */
+.tc-panel {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.tc-hidden { display: none !important; }
+
+/* ── PANEL HEADER ───────────────────────────────────────────── */
+.tc-panel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.tc-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tc-icon-gold {
+  background: rgba(200,155,42,0.12);
+  border: 1.5px solid var(--gold-mid);
+  color: var(--gold-light);
+}
+
+.tc-icon-green {
+  background: rgba(74,222,128,0.1);
+  border: 1.5px solid var(--green);
+  color: var(--green);
+}
+
+.tc-panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.06em;
+}
+
+.tc-panel-sub {
+  font-size: 1rem;
+  color: var(--text);
+  font-weight: 600;
+  max-width: 360px;
+  line-height: 1.4;
+}
+
+/* ── SWAP ROW ────────────────────────────────────────────────── */
+.tc-swap-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tc-swap-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-raised);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 1rem 0.75rem 0.85rem;
+  transition: border-color 0.2s;
+}
+
+.tc-swap-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.tc-card-frame {
+  position: relative;
+  width: 88px;
+  height: 122px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #1a1a1a;
+  border: 2px solid var(--border-gold);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image — hidden until JS onload fires */
+.tc-card-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* Shimmer placeholder while image fetches */
+.tc-card-frame.tc-card-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #1a1a1a 25%,
+    #252525 50%,
+    #1a1a1a 75%
+  );
+  background-size: 200% 100%;
+  animation: tc-shimmer 1.2s infinite;
+  z-index: 0;
+}
+
+@keyframes tc-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Empty / error state — faint card icon */
+.tc-card-frame.tc-card-empty::after {
+  content: "🃏";
+  font-size: 2rem;
+  opacity: 0.2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* Shine overlay sits above the image */
+.tc-card-frame-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tc-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.tc-card-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tc-swap-arrows {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tc-arrow-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(200,155,42,0.08);
+  border: 2px solid var(--border-gold);
+  color: var(--gold-mid);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── DIFF STRIP ──────────────────────────────────────────────── */
+.tc-diff-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(200,155,42,0.06);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.tc-diff-pill {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+
+.tc-diff-amount {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold-light);
+}
+
+.tc-diff-note {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ── PARTNER BAR ─────────────────────────────────────────────── */
+.tc-partner-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-raised);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+}
+
+.tc-partner-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--border-gold);
+  flex-shrink: 0;
+}
+
+.tc-partner-info { flex: 1; }
+
+.tc-partner-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tc-partner-tag {
+  font-size: 0.75rem;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tc-partner-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* ── STATUS DOTS ─────────────────────────────────────────────── */
+.tc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tc-dot-pending { background: #555; }
+.tc-dot-active  { background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+/* ── COST BOX ────────────────────────────────────────────────── */
+.tc-cost-box {
+  background: var(--bg-raised);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tc-cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tc-cost-note { color: var(--text); font-size: 0.75rem; }
+
+.tc-cost-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.3rem 0;
+}
+
+.tc-cost-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────────── */
+.tc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-sm);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.1s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.tc-btn:hover   { opacity: 0.88; }
+.tc-btn:active  { transform: scale(0.97); }
+
+.tc-btn-gold {
+  background: linear-gradient(135deg, var(--gold-mid) 0%, var(--gold-dark) 100%);
+  color: #0a0a0a;
+  box-shadow: 0 2px 12px rgba(200,155,42,0.25);
+}
+
+.tc-btn-gold:hover { box-shadow: 0 4px 20px rgba(200,155,42,0.4); }
+
+.tc-btn-ghost {
+  background: transparent;
+  border: 2px solid var(--border);
+  color: var(--text-muted);
+}
+
+.tc-btn-ghost:hover { border-color: var(--gold-mid); color: var(--gold-light); }
+
+.tc-btn-sm  { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+.tc-btn-full { width: 100%; }
+
+/* ── LINK BUTTON ────────────────────────────────────────────── */
+.tc-link-btn {
+  background: none;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.tc-link-btn:hover { border-color: var(--gold-mid); color: var(--gold-light); }
+
+/* ── SAVED ADDRESS ───────────────────────────────────────────── */
+.tc-saved-addr {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.tc-saved-addr-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.tc-saved-addr-pin { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+.tc-saved-addr-text {
+  flex: 1;
+  font-size: 0.87rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ── ADDRESS FORM ───────────────────────────────────────────── */
+.tc-addr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.tc-field-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tc-field-row-split { align-items: flex-end; }
+
+.tc-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.tc-field-sm { flex: 0 0 130px; }
+
+.tc-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tc-req { color: var(--gold-mid); }
+.tc-opt { color: var(--text-dim); text-transform: none; font-weight: 400; letter-spacing: 0; }
+
+.tc-input {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 0.85rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.tc-input::placeholder { color: var(--text-dim); }
+
+.tc-input:focus {
+  border-color: var(--gold-mid);
+  box-shadow: 0 0 0 3px rgba(200,155,42,0.12);
+}
+
+.tc-input-upper { text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── CHECKBOX ────────────────────────────────────────────────── */
+.tc-check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.tc-check-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--gold-mid);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── PRIVACY NOTE ────────────────────────────────────────────── */
+.tc-privacy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.tc-privacy-note span { flex-shrink: 0; margin-top: 1px; }
+.tc-privacy-note p { margin: 0; }
+
+/* ── FIELD ERROR ─────────────────────────────────────────────── */
+.tc-field-error {
+  font-size: 0.82rem;
+  color: var(--red);
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.8rem;
+}
+
+/* ── ADDRESS ACTIONS ─────────────────────────────────────────── */
+.tc-addr-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tc-addr-actions .tc-btn-gold { flex: 1; }
+
+/* ── ADDRESS RECAP ───────────────────────────────────────────── */
+.tc-addr-recap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+}
+
+.tc-addr-recap-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.tc-addr-recap-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-dim);
+}
+
+.tc-addr-recap-value {
+  font-size: 0.87rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── PAYPAL WRAP ─────────────────────────────────────────────── */
+.tc-paypal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#paypal-button-container { min-height: 48px; }
+
+.tc-paypal-note {
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ── PAID BADGE ──────────────────────────────────────────────── */
+.tc-paid-badge:not([hidden]) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(74,222,128,0.07);
+  border: 1px solid rgba(74,222,128,0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: var(--green);
+}
+
+.tc-paid-tick {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ── LOADING ─────────────────────────────────────────────────── */
+.tc-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.tc-spinner {
+  width: 46px;
+  height: 46px;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold-mid);
+  border-radius: 50%;
+  animation: tc-spin 0.75s linear infinite;
+}
+
+@keyframes tc-spin { to { transform: rotate(360deg); } }
+
+.tc-loading-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+}
+
+.tc-loading-sub { font-size: 0.85rem; color: var(--text-muted); }
+
+/* ── LABEL CARD ──────────────────────────────────────────────── */
+.tc-label-card {
+  position: relative;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem 1.1rem;
+  overflow: hidden;
+}
+
+.tc-label-card-glow {
+  position: absolute;
+  top: -20px; right: -20px;
+  width: 120px;
+  height: 120px;
+  background: var(--gold-mid);
+  opacity: 0.06;
+  filter: blur(30px);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.tc-label-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.tc-label-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.tc-label-details { flex: 1; }
+
+.tc-label-carrier {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+}
+
+.tc-label-tracking {
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+  word-break: break-all;
+}
+
+/* ── TRACKING STRIP ──────────────────────────────────────────── */
+.tc-tracking-strip {
+  display: flex;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.tc-tracking-cell {
+  flex: 1;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tc-tracking-divider {
+  width: 1px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.tc-tracking-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.tc-tracking-val {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tc-mono {
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: var(--gold-light);
+  word-break: break-all;
+}
+
+/* ── EMAIL BAR ────────────────────────────────────────────────── */
+.tc-email-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.tc-email-icon { color: var(--gold-mid); font-size: 1rem; }
+.tc-email-bar strong { color: var(--text); }
+
+/* ── LABEL ACTIONS ────────────────────────────────────────────── */
+.tc-label-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tc-label-actions .tc-btn { flex: 1; }
+
+/* ── PARTNER LABEL STATUS ─────────────────────────────────────── */
+.tc-partner-label-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.tc-partner-label-row p { margin: 0; }
+
+/* ── BOTH ACTIVE STEP ─────────────────────────────────────────── */
+.tc-both-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1rem;
+}
+
+.tc-both-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tc-both-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tc-both-label-box {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.5rem;
+}
+
+.tc-both-label-theirs { border-color: var(--border); opacity: 0.6; }
+
+.tc-both-label-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tc-both-icon { font-size: 1.3rem; }
+
+.tc-both-tracking {
+  font-family: 'Courier New', monospace;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  text-align: center;
+  word-break: break-all;
+}
+
+.tc-both-pill {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+.tc-pill-ready {
+  background: rgba(74,222,128,0.1);
+  color: var(--green);
+  border: 1px solid rgba(74,222,128,0.2);
+}
+
+.tc-both-divider {
+  font-size: 1.2rem;
+  color: var(--gold-mid);
+  flex-shrink: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .tc-panel { padding: 1.25rem; }
+  .tc-field-row-split { flex-direction: column; }
+  .tc-field-sm { flex: 1; }
+  .tc-addr-actions { flex-direction: column-reverse; }
+  .tc-label-actions { flex-direction: column; }
+  .tc-tracking-strip { flex-direction: column; }
+  .tc-tracking-divider { width: 100%; height: 1px; }
+}
+
+
+/* ── TRADE CONFIRMATION WELCOME MODAL ─────────────────────────── */
+.tcw-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.tcw-card {
+  background: #111;
+  border: 1px solid rgba(200,155,42,0.5);
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+  font-family: 'Rajdhani', sans-serif;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.tcw-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tcw-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.07em;
+  margin: 0 0 0.25rem;
+}
+
+.tcw-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+
+/* ── Steps ── */
+.tcw-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.tcw-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 0.9rem;
+}
+
+.tcw-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold-dark));
+  color: #000;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tcw-step-body { flex: 1; }
+
+.tcw-step-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.15rem;
+}
+
+.tcw-step-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* ── CTA button ── */
+.tcw-btn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold-dark));
+  color: #000;
+  border: none;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.tcw-btn:hover  { opacity: 0.88; }
+.tcw-btn:active { transform: scale(0.98); }
+
+@media (max-width: 480px) {
+  .tcw-card { padding: 1.5rem 1.25rem; }
+  .tcw-title { font-size: 1.2rem; }
+}
+
+
+/* ═══════════════════════════════════════════════════
+   TRADE CONFIRMATION — WELCOME MODAL
+   Edit colours and sizes freely here.
+   ═══════════════════════════════════════════════════ */
+
+/* Backdrop overlay */
+#tcWelcomeModal.tcw-backdrop {
+  position:       fixed;
+  top:            0;
+  left:           0;
+  width:          100%;
+  height:         100%;
+  z-index:        99999;
+  background:     rgba(0, 0, 0, 0.88);
+  display:        flex;
+  align-items:    center;
+  justify-content: center;
+  padding:        1rem;
+  box-sizing:     border-box;
+  font-family:    'Rajdhani', sans-serif;
+}
+
+/* Inner card */
+.tcw-card {
+  background:    #111111;
+  border:        1px solid rgba(200, 155, 42, 0.5);
+  border-radius: 18px;
+  padding:       2rem 1.75rem;
+  width:         100%;
+  max-width:     460px;
+  text-align:    center;
+  box-sizing:    border-box;
+  max-height:    90vh;
+  overflow-y:    auto;
+  box-shadow:    0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+/* Emoji icon */
+.tcw-icon {
+  font-size:     2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* "Trade Agreed!" heading */
+.tcw-title {
+  font-family:    'Cinzel', serif;
+  font-size:      1.35rem;
+  font-weight:    700;
+  color:          #F5D06B;
+  letter-spacing: 0.07em;
+  margin:         0 0 0.3rem;
+}
+
+/* "Here's what happens next" */
+.tcw-subtitle {
+  font-size: 0.88rem;
+  color:     #888888;
+  margin:    0 0 1.5rem;
+}
+
+/* Steps container */
+.tcw-steps {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.75rem;
+  margin-bottom:  1.5rem;
+  text-align:     left;
+}
+
+/* Individual step row */
+.tcw-step {
+  display:     flex;
+  align-items: flex-start;
+  gap:         0.85rem;
+  background:  #1a1a1a;
+  border:      1px solid #C89B2A;
+  border-radius: 10px;
+  padding:     0.8rem 0.9rem;
+}
+
+/* Numbered circle */
+.tcw-step-num {
+  width:         28px;
+  height:        28px;
+  border-radius: 50%;
+  flex-shrink:   0;
+  margin-top:    1px;
+  background:    linear-gradient(135deg, #C89B2A, #8B6A18);
+  color:         #000000;
+  font-family:   'Cinzel', serif;
+  font-size:     0.78rem;
+  font-weight:   700;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+}
+
+/* Step text wrapper */
+.tcw-step-content {
+  flex: 1;
+}
+
+/* Step title */
+.tcw-step-title {
+  font-size:   0.88rem;
+  font-weight: 700;
+  color:       #f0f0f0;
+  margin:      0 0 0.2rem;
+}
+
+/* Step description */
+.tcw-step-desc {
+  font-size:   0.78rem;
+  color:       #888888;
+  margin:      0;
+  line-height: 1.45;
+}
+
+/* "Let's Get Started" button */
+.tcw-btn {
+  display:        block;
+  width:          100%;
+  background:     linear-gradient(135deg, #C89B2A, #8B6A18);
+  color:          #000000;
+  border:         none;
+  padding:        0.85rem 1rem;
+  border-radius:  10px;
+  font-family:    'Cinzel', serif;
+  font-size:      0.95rem;
+  font-weight:    700;
+  letter-spacing: 0.05em;
+  cursor:         pointer;
+  transition:     opacity 0.15s, transform 0.1s;
+}
+
+.tcw-btn:hover  { opacity: 0.88; }
+.tcw-btn:active { transform: scale(0.98); }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .tcw-card  { padding: 1.5rem 1.25rem; }
+  .tcw-title { font-size: 1.15rem; }
+}
+
+/* Footer — trainer count paragraph (moved from inline style) */
+.footer-trainer-count {
+  font-size:  14px;
+  margin-top: 15px;
+}
+/* ─── STRIPE PAYMENT ─────────────────────────────────────────────────────────── */
+.tc-stripe-wrap {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.75rem;
+}
+
+#stripe-payment-element {
+  min-height: 200px;
+}
+
+.tc-stripe-error {
+  color:       #e74c3c;
+  font-size:   0.85rem;
+  font-family: 'Rajdhani', sans-serif;
+  padding:     0.5rem 0;
+}
+
+.tc-stripe-note {
+  font-size:   0.78rem;
+  color:       #555;
+  font-family: 'Rajdhani', sans-serif;
+  text-align:  center;
+  margin-top:  0.25rem;
+}

@@ -1,0 +1,242 @@
+/* =========================
+   CONTACT PAGE
+========================= */
+
+.contact-page {
+  padding: 80px 5%;
+}
+
+.help-grid {
+  margin-bottom: 40px;
+}
+
+.card-content {
+  color: #F8F9FA;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+/* =========================
+   FORM STRUCTURE
+========================= */
+
+.dex-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* FORM GROUP */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ROW SYSTEM */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   LABELS
+========================= */
+
+.dex-form label {
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  color: var(--gold-mid);
+  font-weight: 600;
+}
+
+/* =========================
+   INPUT SYSTEM (CLEAN + PREMIUM)
+========================= */
+
+.dex-form input,
+.dex-form textarea,
+.dex-form select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+
+  background: rgba(255,255,255,0.04);
+  border: 2px solid rgba(200,155,42,0.25);
+
+  color: white;
+  font-family: 'Radjhani', sans-serif;
+  font-size: 16px;
+
+  outline: none;
+  transition: all 0.25s ease;
+  text-transform: none !important;
+}
+
+/* TEXTAREA SIZE */
+.dex-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* PLACEHOLDER */
+.dex-form ::placeholder {
+  color: #F8F9FA;
+  text-transform: none !important;
+}
+
+/* Add to contact-us.css */
+.dex-form select option {
+  background: #8B6A18;
+  color: white;
+}
+
+/* AUTOFILL FIX */
+.dex-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px black inset;
+  -webkit-text-fill-color: var(--gold-light);
+}
+
+/* FOCUS STATE */
+.dex-form input:focus,
+.dex-form textarea:focus,
+.dex-form select:focus {
+  border-color: rgba(200,155,42,0.25);
+  background: rgba(255,255,255,0.04);
+  box-shadow: none;
+}
+
+.dex-form input:hover,
+.dex-form textarea:hover,
+.dex-form select:hover {
+  border-color: rgba(200,155,42,0.25);
+  background: rgba(255,255,255,0.04);
+  box-shadow: none;
+}
+
+/* =========================
+   FORM SECTIONS (GLASS CARDS)
+========================= */
+
+.form-section {
+  margin-top: 40px;
+  padding: 30px;
+
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius-lg);
+
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft);
+}
+
+.form-section:hover {
+  transform: none;
+  box-shadow: var(--shadow-soft);
+  border-color: var(--gold-line);
+  background: var(--glass-bg);
+}
+
+
+/* FORM SPACING */
+.full-form {
+  margin-top: 15px;
+}
+
+/* BUTTON POSITION */
+.full-form .dex-btn {
+  margin-top: 15px;
+  align-self: flex-start;
+}
+
+/* =========================
+   CARDS (HOVER UPGRADE)
+========================= */
+
+.help-card {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.help-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--gold-line);
+  background: var(--glass-bg);
+}
+
+/* =========================
+   HEADER / TITLES
+========================= */
+
+.card-header h3 {
+  font-family: var(--font-title);
+  font-size: 20px;
+  letter-spacing: 0.15em;
+
+  color: var(--gold-light);
+
+  text-shadow:
+    0 0 6px rgba(200,155,42,0.4);
+}
+
+/* =========================
+   BUTTON UPGRADE
+========================= */
+
+.dex-btn {
+  padding: 14px 32px;
+  border-radius: 50px;
+
+  background: linear-gradient(
+    135deg,
+    var(--gold-mid),
+    var(--gold-dark)
+  );
+
+  color: black;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+
+  border: none;
+
+  box-shadow:
+    0 4px 0 var(--gold-dark),
+    0 0 12px rgba(200,155,42,0.4);
+
+  transition: all 0.25s ease;
+}
+
+.dex-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 6px 0 var(--gold-dark),
+    0 0 20px rgba(200,155,42,0.8);
+}
+
+.dex-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 2px 0 var(--gold-dark);
+}
+
+.contact-form-status {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 20px;
+  letter-spacing: 0.3px;
+}
