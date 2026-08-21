@@ -1,7 +1,7 @@
 // ============================================
 // SUPABASE IMPORT
 // ============================================
-import { supabase } from 'supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 // ============================================
 // GLOBAL STATE
@@ -257,7 +257,7 @@ async function renderPublicBinders() {
 
     binders.forEach(binder => {
         const wrap = document.createElement('a');
-        wrap.href      = `../HTML/portfolio.html?id=${binder.id}`;
+        wrap.href      = `./portfolio.html?id=${binder.id}`;
         wrap.className = 'profile-binder-card';
         wrap.style.borderColor = binder.color ?? '#C89B2A';
         wrap.style.boxShadow   = `0 0 18px ${binder.color ?? '#C89B2A'}44`;
@@ -568,7 +568,7 @@ window.addEventListener('visibilitychange', async () => {
     const tradeBtn = document.getElementById('trade-with-btn');
     if (tradeBtn) {
         if (!isOwnProfile && profile?.username) {
-            tradeBtn.href = `../HTML/trades.html?user=${profile.username}`;
+            tradeBtn.href = `./trades.html?user=${profile.username}`;
             tradeBtn.style.display = '';
         } else {
             tradeBtn.style.display = 'none';
@@ -641,7 +641,7 @@ window.addEventListener('visibilitychange', async () => {
 
             friendsList.innerHTML = friendProfiles && friendProfiles.length > 0
                 ? friendProfiles.map(p => `
-                    <a href="profile.html?user=${p.username}" style="text-decoration:none; color:inherit;">
+                    <a href="./profile.html?user=${p.username}" style="text-decoration:none; color:inherit;">
                         <div class="user-item">
                             <img src="${safeImg(p.avatar_url, 'Ash Ketchum User.jpg')}"
                                  alt="${p.username}"
