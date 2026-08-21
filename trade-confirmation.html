@@ -11,11 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
   
   <!-- GLOBAL -->
-  <link rel="stylesheet" href="navbar.css" />
-  <link rel="stylesheet" href="dexoria-ui.css" />
+  <link rel="stylesheet" href="./navbar.css" />
+  <link rel="stylesheet" href="./dexoria-ui.css" />
 
   <!-- PAGE CSS -->
-  <link rel="stylesheet" href="trade-confirmation.css" />
+  <link rel="stylesheet" href="./trade-confirmation.css" />
 </head>
 <body>
 
@@ -27,7 +27,7 @@
 
   <!-- ── NAVBAR ── -->
   <nav class="tc-nav">
-    <a class="tc-nav-back" href="trades.html">← Back to Trades</a>
+    <a class="tc-nav-back" href="./trades.html">← Back to Trades</a>
   </nav>
 
   <!-- ── PROGRESS BAR ── -->
@@ -443,7 +443,7 @@
 
   </main>
 
-  <!-- PayPal SDK injection point -->
+  <!-- Stripe SDK injection point -->
   <script src="https://js.stripe.com/v3/"></script>
 
   <!-- FOOTER -->
@@ -463,20 +463,20 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="trades.html">Trade Hub</a></li>
-        <li><a href="community.html">Community Feed</a></li>
-        <li><a href="portfolio.html">My Collection</a></li>
+        <li><a href="./marketplace.html">Marketplace</a></li>
+        <li><a href="./trades.html">Trade Hub</a></li>
+        <li><a href="./community.html">Community Feed</a></li>
+        <li><a href="./portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
       <h4>Support</h4>
       <ul>
-        <li><a href="help-centre.html">Help Centre</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="terms-of-use.html">Terms of Use</a></li>
-        <li><a href="contact-us.html">Contact Us</a></li>
+        <li><a href="./help-centre.html">Help Centre</a></li>
+        <li><a href="./privacy.html">Privacy Policy</a></li>
+        <li><a href="./terms-of-use.html">Terms of Use</a></li>
+        <li><a href="./contact-us.html">Contact Us</a></li>
       </ul>
     </div>
 
@@ -530,7 +530,7 @@
 
   <!-- NAVBAR SCRIPT -->
   <script type="module">
-    import { renderNavbar } from "navbar.js";
+    import { renderNavbar } from "./navbar.js";
     renderNavbar("navbar");
   </script>
 
@@ -562,6 +562,6 @@ backToTopBtn.addEventListener("click", () => {
   if (countEl) countEl.textContent = String(cards).padStart(2, '0') + ' ITEM' + (cards !== 1 ? 'S' : '');
 </script>
 
-  <script type="module" src="trade-confirmation.js"></script>
+  <script type="module" src="./trade-confirmation.js"></script>
 </body>
 </html>
