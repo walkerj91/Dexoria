@@ -599,9 +599,9 @@ window.addEventListener('visibilitychange', async () => {
             const newEmail = document.getElementById('editEmailAddress')?.value.trim() || user?.email       || '';
             const newBio   = document.getElementById('editBio')?.value.trim()           || profile?.bio      || 'Pro Trainer | Legendary Card Hunter';
             const selectedAvatar = document.querySelector('#editAvatarGrid .avatar-option.selected');
-            const newAvatar = selectedAvatar ? selectedAvatar.getAttribute('src') : safeImg(profile?.avatar_url, 'Ash Ketchum User.jpg');
+            const newAvatar = selectedAvatar ? selectedAvatar.getAttribute('src') : safeImg(profile?.avatar_url, './Ash Ketchum User.jpg');
             const selectedBanner = document.querySelector('#editBannerGrid .banner-option.selected');
-            const newBanner = selectedBanner ? selectedBanner.getAttribute('src') : safeImg(profile?.banner_url, 'Arcanine_Full.png');
+            const newBanner = selectedBanner ? selectedBanner.getAttribute('src') : safeImg(profile?.banner_url, './Arcanine_Full.png');
 
             const { error: updateError } = await supabase.from('profiles')
                 .upsert({ id: user.id, username: newName, bio: newBio, avatar_url: newAvatar, banner_url: newBanner });
@@ -643,9 +643,9 @@ window.addEventListener('visibilitychange', async () => {
                 ? friendProfiles.map(p => `
                     <a href="./profile.html?user=${p.username}" style="text-decoration:none; color:inherit;">
                         <div class="user-item">
-                            <img src="${safeImg(p.avatar_url, 'Ash Ketchum User.jpg')}"
+                            <img src="${safeImg(p.avatar_url, './Ash Ketchum User.jpg')}"
                                  alt="${p.username}"
-                                 onerror="this.src='Ash Ketchum User.jpg'">
+                                 onerror="this.src='./Ash Ketchum User.jpg'">
                             <span>${p.username}</span>
                             <i class="status ${p.is_online ? 'online' : 'offline'}"></i>
                         </div>
@@ -684,7 +684,7 @@ window.addEventListener('visibilitychange', async () => {
                 const partnerId     = amSender ? t.receiver_id : t.sender_id;
                 const partner       = profileMap[partnerId];
                 const partnerName   = partner?.username ?? 'Trainer';
-                const partnerAvatar = safeImg(partner?.avatar_url, 'Ash Ketchum User.jpg');
+                const partnerAvatar = safeImg(partner?.avatar_url, './Ash Ketchum User.jpg');
                 return `
                     <div class="trade-item">
                         <div class="trade-item-partner">
@@ -731,7 +731,7 @@ window.addEventListener('visibilitychange', async () => {
                 ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
                 : results.map(r => `
                     <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #3d2b3d;">
-                        <img src="${safeImg(r.avatar_url, '../Images/Ash Ketchum User.jpg')}" alt="${r.username}"
+                        <img src="${safeImg(r.avatar_url, './Ash Ketchum User.jpg')}" alt="${r.username}"
                              style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid #ffd700;">
                         <span style="flex:1;font-size:14px;">${r.username}</span>
                         <button onclick="sendFriendRequest('${r.id}','${user.id}',this)"
@@ -774,7 +774,7 @@ window.addEventListener('visibilitychange', async () => {
                     ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
                     : results.map(r => `
                         <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #3d2b3d;">
-                            <img src="${safeImg(r.avatar_url, '../Images/Ash Ketchum User.jpg')}" alt="${r.username}"
+                            <img src="${safeImg(r.avatar_url, './Ash Ketchum User.jpg')}" alt="${r.username}"
                                  style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid #ffd700;">
                             <span style="flex:1;font-size:14px;">${r.username}</span>
                             <button onclick="sendFriendRequest('${r.id}','${user.id}',this)"
