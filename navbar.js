@@ -1,4 +1,4 @@
-import { supabase } from '../js/supabaseClient.js';
+import { supabase } from 'js/supabaseClient.js';
 
 export async function renderNavbar(containerId) {
 
@@ -45,8 +45,8 @@ export async function renderNavbar(containerId) {
     container.innerHTML = `
     <nav>
         <div class="nav-logo">
-            <a href="/HTML/index.html">
-                <img src="/Images/Dexoria_Logo_Icon_bg.jpg">
+            <a href="index.html">
+                <img src="Dexoria_Logo_Icon_bg.jpg">
             </a>
         </div>
 
@@ -54,26 +54,26 @@ export async function renderNavbar(containerId) {
 
         <div class="nav-links" id="nav-links">
 
-            <a href="/HTML/index.html">HOME</a>
+            <a href="index.html">HOME</a>
 
             <div class="dropdown">
-                <a href="/HTML/marketplace.html">MARKETPLACE ▾</a>
+                <a href="marketplace.html">MARKETPLACE ▾</a>
                 <div class="dropdown-content">
-                    <a href="/HTML/binders.html">Binders</a>
+                    <a href="binders.html">Binders</a>
                 </div>
             </div>
 
-            <a href="/HTML/trades.html"    id="trades-nav-link">TRADES</a>
-            <a href="/HTML/community.html" id="community-nav-link">COMMUNITY</a>
+            <a href="trades.html"    id="trades-nav-link">TRADES</a>
+            <a href="community.html" id="community-nav-link">COMMUNITY</a>
 
             <div class="dropdown">
-                <a href="/HTML/portfolio.html" id="portfolio-nav-link">PORTFOLIO ▾</a>
+                <a href="portfolio.html" id="portfolio-nav-link">PORTFOLIO ▾</a>
                 <div class="dropdown-content">
-                    <a href="/HTML/set-tracker.html" id="set-tracker-link">Set Tracker</a>
+                    <a href="set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
             </div>
 
-            <a href="/HTML/profile.html" id="profile-nav-link">PROFILE</a>
+            <a href="profile.html" id="profile-nav-link">PROFILE</a>
 
             <!-- NOTIFICATION BELL — logged in only -->
             ${isLoggedIn ? `
