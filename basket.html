@@ -11,11 +11,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- GLOBAL -->
-  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
-  <link rel="stylesheet" href="../CSS/navbar.css">
+  <link rel="stylesheet" href="dexoria-ui.css">
+  <link rel="stylesheet" href="navbar.css">
 
   <!-- PAGE CSS -->
-  <link rel="stylesheet" href="../CSS/basket.css">
+  <link rel="stylesheet" href="basket.css">
   
 </head>
 <body>
@@ -61,10 +61,10 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
-        <li><a href="../HTML/trades.html">Trade Hub</a></li>
-        <li><a href="../HTML/community.html">Community Feed</a></li>
-        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="trades.html">Trade Hub</a></li>
+        <li><a href="community.html">Community Feed</a></li>
+        <li><a href="portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
@@ -105,9 +105,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "../js/navbar.js";
+  import { renderNavbar } from "navbar.js";
 
-  import { supabase } from "../js/supabaseClient.js";
+  import { supabase } from "supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -184,7 +184,7 @@ backToTopBtn.addEventListener("click", () => {
 
 
 <!-- External Scripts -->
-<script type="module" src="../js/basket.js"></script>
+<script type="module" src="basket.js"></script>
 
 
 </body>
