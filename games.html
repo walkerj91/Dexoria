@@ -4,12 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dexoria — Game Corner</title>
+
+  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="dexoria-ui.css">
-  <link rel="stylesheet" href="navbar.css">
-  <link rel="stylesheet" href="games.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./dexoria-ui.css">
+  <link rel="stylesheet" href="./navbar.css">
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="./games.css">
 </head>
 <body>
 
@@ -140,20 +146,20 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="trades.html">Trade Hub</a></li>
-        <li><a href="community.html">Community Feed</a></li>
-        <li><a href="portfolio.html">My Collection</a></li>
+        <li><a href="./marketplace.html">Marketplace</a></li>
+        <li><a href="./trades.html">Trade Hub</a></li>
+        <li><a href="./community.html">Community Feed</a></li>
+        <li><a href="./portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
       <h4>Support</h4>
       <ul>
-        <li><a href="help-centre.html">Help Centre</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="terms-of-use.html">Terms of Use</a></li>
-        <li><a href="contact-us.html">Contact Us</a></li>
+        <li><a href="./help-centre.html">Help Centre</a></li>
+        <li><a href="./privacy.html">Privacy Policy</a></li>
+        <li><a href="./terms-of-use.html">Terms of Use</a></li>
+        <li><a href="./contact-us.html">Contact Us</a></li>
       </ul>
     </div>
 
@@ -184,9 +190,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "navbar.js";
+  import { renderNavbar } from "./navbar.js";
 
-  import { supabase } from "supabaseClient.js";
+  import { supabase } from "./supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -261,6 +267,6 @@ backToTopBtn.addEventListener("click", () => {
 });
 </script>
 
-<script type="module" src="games.js"></script>
+<script type="module" src="./games.js"></script>
 </body>
 </html>
