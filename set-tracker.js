@@ -7,7 +7,7 @@
  * anonymous key otherwise), and renders an interactive card grid.
  */
 
-import { supabase } from './supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -235,46 +235,46 @@ function renderOverall() {
 // ─── Render: set hero cards ──────────────────────────────────────────────────
 
 const SET_IMAGES = {
-  'me05':   '../images/Pitch Black Logo 2.png',
-  'me04':   '../images/Chaos Rising Logo.jpg',
-  'me03':   '../images/Perfect Order Logo.jpg',
-  'me02.5': '../images/Ascended Heroes Logo.jpg',
-  'me02':   '../images/Phantasmal Flames Logo.png',
-  'me01':   '../images/Mega Evolution Logo.jpg',
+  'me05':   'Pitch Black Logo 2.png',
+  'me04':   'Chaos Rising Logo.jpg',
+  'me03':   'Perfect Order Logo.jpg',
+  'me02.5': 'Ascended Heroes Logo.jpg',
+  'me02':   'Phantasmal Flames Logo.png',
+  'me01':   'Mega Evolution Logo.jpg',
 
-  'sv10.5b': '../images/Black Bolt Logo.png',
-  'sv10.5a': '../images/White Flare Logo.png',
-  'sv10':    '../images/Destined Rivals Logo.jpg',
-  'sv09':    '../images/Journey Together Logo.jpg',
-  'sv08.5':  '../images/Prismatic Evolutions Logo.jpg',
-  'sv08':    '../images/Surging Sparks Logo.jpg',
-  'sv07':    '../images/Stellar Crown Logo.jpg',
-  'sv06.5':  '../images/Shrouded Fable Logo.jpg',
-  'sv06':    '../images/Twilight Masquerade Logo.jpg',
-  'sv05':    '../images/Temporal Forces Logo.png',
-  'sv04':    '../images/Paradox Rift Logo.png',
-  'sv03.5':  '../images/151 Logo.png',
-  'sv03':    '../images/Obsidian Flames Logo.png',
-  'sv02':    '../images/Paldea Evolved Logo.png',
-  'sv01':    '../images/Scarlet & Violet Base Logo.webp',
+  'sv10.5b': 'Black Bolt Logo.png',
+  'sv10.5a': 'White Flare Logo.png',
+  'sv10':    'Destined Rivals Logo.jpg',
+  'sv09':    'Journey Together Logo.jpg',
+  'sv08.5':  'Prismatic Evolutions Logo.jpg',
+  'sv08':    'Surging Sparks Logo.jpg',
+  'sv07':    'Stellar Crown Logo.jpg',
+  'sv06.5':  'Shrouded Fable Logo.jpg',
+  'sv06':    'Twilight Masquerade Logo.jpg',
+  'sv05':    'Temporal Forces Logo.png',
+  'sv04':    'Paradox Rift Logo.png',
+  'sv03.5':  '151 Logo.png',
+  'sv03':    'Obsidian Flames Logo.png',
+  'sv02':    'Paldea Evolved Logo.png',
+  'sv01':    'Scarlet & Violet Base Logo.webp',
 
-  'swsh12.5': '../images/Crown Zenith Logo.jpg',
-  'swsh10': '../images/Astral Radiance Logo.jpg',
-  'swsh09': '../images/Brilliant Stars Logo.jpg',
-  'swsh08': '../images/Fusion Strike Logo.jpg',
-  'swsh07': '../images/Evolving Skies Logo.jpg',
-  'swsh06': '../images/Chilling Reign Logo.jpg',
-  'swsh05': '../images/Battle Styles Logo.jpg',
-  'swsh04': '../images/Vivid Voltage Logo.jpg',
-  'swsh03': '../images/Darkness Ablaze Logo.jpg',
-  'swsh02': '../images/rebel Clash Logo.jpg',
-  'swsh01': '../images/Sword & Shield Base Logo.jpg', 
+  'swsh12.5': 'Crown Zenith Logo.jpg',
+  'swsh10': 'Astral Radiance Logo.jpg',
+  'swsh09': 'Brilliant Stars Logo.jpg',
+  'swsh08': 'Fusion Strike Logo.jpg',
+  'swsh07': 'Evolving Skies Logo.jpg',
+  'swsh06': 'Chilling Reign Logo.jpg',
+  'swsh05': 'Battle Styles Logo.jpg',
+  'swsh04': 'Vivid Voltage Logo.jpg',
+  'swsh03': 'Darkness Ablaze Logo.jpg',
+  'swsh02': 'rebel Clash Logo.jpg',
+  'swsh01': 'Sword & Shield Base Logo.jpg', 
 
-  'base1': '../images/Base Set Logo.jpg',
-  'base2': '../images/Jungle Logo.jpg',
-  'base3': '../images/Fossil Logo.jpg',
-  'base4': '../images/Base Set 2 Logo.jpg',
-  'base5': '../images/Team Rocket Logo.jpg',
+  'base1': 'Base Set Logo.jpg',
+  'base2': 'Jungle Logo.jpg',
+  'base3': 'Fossil Logo.jpg',
+  'base4': 'Base Set 2 Logo.jpg',
+  'base5': 'Team Rocket Logo.jpg',
   
 };
 
