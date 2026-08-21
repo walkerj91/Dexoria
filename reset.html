@@ -68,7 +68,7 @@
 </div>
 
 <script type="module">
-    import { supabase } from 'supabaseClient.js';
+    import { supabase } from './supabaseClient.js';
 
     document.getElementById("resetBtn").addEventListener("click", async () => {
         const email = document.getElementById("email").value.trim();
@@ -93,7 +93,7 @@
             <p>A password reset link has been sent to:</p>
             <p style="font-weight:bold; margin-top:10px;">${email}</p>
             <p style="margin-top:20px;">Follow the instructions in the email to reset your password.</p>
-            <button onclick="window.location.href='login.html'">Back to Login</button>
+            <button onclick="window.location.href='./login.html'">Back to Login</button>
         `;
     });
 </script>
