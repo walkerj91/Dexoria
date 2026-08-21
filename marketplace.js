@@ -1,4 +1,4 @@
-import { resolveCardImages } from './card-image-cache.js';
+import { resolveCardImages } from 'card-image-cache.js';
 
 const TCGDEX_BASE = 'https://api.tcgdex.net/v2/en';
 
