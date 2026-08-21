@@ -20,7 +20,7 @@ let isOwnProfile   = false;
     } else {
         supabase.auth.onAuthStateChange((_event, session) => {
             if (session) startProfilePage();
-            else window.location.replace("index.html");
+            else window.location.replace("./index.html");
         });
     }
 })();
@@ -418,7 +418,7 @@ async function profileSearchCards() {
     btn.disabled = false;
 }
 
-import { resolveCardImage } from '../js/card-image-cache.js';
+import { resolveCardImage } from './card-image-cache.js';
 
 async function profileSelectCard(card) {
     document.getElementById('addCardModal').style.display = 'none';
@@ -448,7 +448,7 @@ async function initProfile() {
 
     // 1. AUTH
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { window.location.replace("index.html"); return; }
+    if (!user) { window.location.replace("./index.html"); return; }
     currentUser = user;
 
     // Set online + update last_seen on load
@@ -482,7 +482,7 @@ window.addEventListener('visibilitychange', async () => {
     if (viewingUsername) {
         const { data: friendProfile, error } = await supabase
             .from('profiles').select('*').eq('username', viewingUsername).single();
-        if (error || !friendProfile) { console.error('Could not load profile:', error); window.location.replace("index.html"); return; }
+        if (error || !friendProfile) { console.error('Could not load profile:', error); window.location.replace("./index.html"); return; }
         profile = friendProfile;
     } else {
         const { data: ownProfile, error } = await supabase
@@ -508,9 +508,9 @@ window.addEventListener('visibilitychange', async () => {
     // 4. POPULATE PROFILE
     if (profile) {
         if (nameDisplay)   nameDisplay.innerText = profile.username || 'Trainer';
-        if (avatarDisplay) avatarDisplay.src     = safeImg(profile.avatar_url, 'Ash Ketchum User.jpg');
+        if (avatarDisplay) avatarDisplay.src     = safeImg(profile.avatar_url, './Ash Ketchum User.jpg');
         if (bioDisplay)    bioDisplay.innerText  = profile.bio || 'Pro Trainer | Legendary Card Hunter | Kanto Region';
-        if (bannerDisplay) bannerDisplay.src     = safeImg(profile.banner_url, 'Arcanine_Full.png');
+        if (bannerDisplay) bannerDisplay.src     = safeImg(profile.banner_url, './Arcanine_Full.png');
         if (content)       content.classList.add('auth-confirmed');
 
         // Trade count stat — written by increment_trade_count RPC when a trade completes
@@ -853,7 +853,7 @@ async function renderTradeReviews() {
     reviewsList.innerHTML = reviews.map(r => {
         const reviewer     = profileMap[r.reviewer_id];
         const name         = reviewer?.username ?? 'Trainer';
-        const avatar       = safeImg(reviewer?.avatar_url, 'Ash Ketchum User.jpg');
+        const avatar       = safeImg(reviewer?.avatar_url, './Ash Ketchum User.jpg');
         const stars        = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
         return `
             <div class="review-item">
