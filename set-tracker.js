@@ -7,7 +7,7 @@
  * anonymous key otherwise), and renders an interactive card grid.
  */
 
-import { supabase } from 'supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
