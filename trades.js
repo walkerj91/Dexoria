@@ -1,8 +1,8 @@
 // ============================================
 // IMPORTS
 // ============================================
-import { supabase }         from 'supabaseClient.js';
-import { resolveCardImage } from 'card-image-cache.js';
+import { supabase }         from './supabaseClient.js';
+import { resolveCardImage } from './card-image-cache.js';
 
 // ============================================
 // CONSTANTS
@@ -927,7 +927,7 @@ async function declineTrade() {
         type:    'trade_declined',
         title:   'Trade Proposal Declined',
         body:    `${myUsername} declined the trade offer.`,
-        link:    `/HTML/trades.html?user=${currentUserProfile?.username ?? ''}`
+        link:    `./trades.html?user=${currentUserProfile?.username ?? ''}`
     });
 
     activeProposal = null;
