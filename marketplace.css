@@ -5,7 +5,7 @@
   position: relative;
   width: 100%;
   height: 50vh;
-  background-image: url('/Images/Marketplace.png');
+  background-image: url('Marketplace.png');
   background-size: cover;
   background-position: center 30%;
   background-repeat: no-repeat;
