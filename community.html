@@ -11,11 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="dexoria-ui.css">
-  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="./dexoria-ui.css">
+  <link rel="stylesheet" href="./navbar.css">
 
   <!-- PAGE CSS -->
-  <link rel="stylesheet" href="community.css">
+  <link rel="stylesheet" href="./community.css">
   
 </head>
 
@@ -38,7 +38,7 @@
     <button class="comm-tab active" data-tab="home">🏠 Home</button>
     <button class="comm-tab" data-tab="trending">🔥 Trending</button>
     <button class="comm-tab" data-tab="saved">🔖 Saved</button>
-    <a class="comm-tab" href="games.html">🎮 Game Corner</a>
+    <a class="comm-tab" href="./games.html">🎮 Game Corner</a>
   </nav>
 
   <!-- Two-column layout below the nav -->
@@ -123,20 +123,20 @@
         <div class="footer-col">
             <h4>Explore</h4>
             <ul>
-                <li><a href="marketplace.html">Marketplace</a></li>
-                <li><a href="trades.html">Trade Hub</a></li>
-                <li><a href="community.html">Community Feed</a></li>
-                <li><a href="portfolio.html">My Collection</a></li>
+                <li><a href="./marketplace.html">Marketplace</a></li>
+                <li><a href="./trades.html">Trade Hub</a></li>
+                <li><a href="./community.html">Community Feed</a></li>
+                <li><a href="./portfolio.html">My Collection</a></li>
             </ul>
         </div>
 
         <div class="footer-col">
             <h4>Support</h4>
             <ul>
-                <li><a href="help-centre.html">Help Centre</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="terms-of-use.html">Terms of Use</a></li>
-                <li><a href="contact-us.html">Contact Us</a></li>
+                <li><a href="./help-centre.html">Help Centre</a></li>
+                <li><a href="./privacy.html">Privacy Policy</a></li>
+                <li><a href="./terms-of-use.html">Terms of Use</a></li>
+                <li><a href="./contact-us.html">Contact Us</a></li>
             </ul>
         </div>
 
@@ -164,9 +164,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "navbar.js";
+  import { renderNavbar } from "./navbar.js";
 
-  import { supabase } from "supabaseClient.js";
+  import { supabase } from "./supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -242,7 +242,7 @@ backToTopBtn.addEventListener("click", () => {
 </script>
 
 <!-- SCRIPTS -->
-<script type="module" src="community.js"></script>
+<script type="module" src="./community.js"></script>
 
 </body>
 </html>
