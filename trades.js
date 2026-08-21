@@ -236,7 +236,7 @@ async function selectConversation(partner, itemEl) {
     const nameEl   = document.getElementById('trade-partner-name');
     const avatarEl = document.getElementById('trade-partner-avatar');
     if (nameEl)   nameEl.textContent = partner.username;
-    if (avatarEl) avatarEl.src = partner.avatar_url || 'Ash Ketchum User.jpg';
+    if (avatarEl) avatarEl.src = partner.avatar_url || './Ash Ketchum User.jpg';
 
     await loadMessages();
     await loadActiveProposal();
@@ -288,7 +288,7 @@ async function startConversationWith(partner) {
         item.className = 'conversation-item';
         item.dataset.partnerId = partner.id;
         item.innerHTML = `
-            <img src="${partner.avatar_url || 'Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
+            <img src="${partner.avatar_url || './Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
             <div class="conv-info">
                 <div class="conv-name">${partner.username}</div>
                 <div class="conv-preview">No messages yet</div>
@@ -947,7 +947,7 @@ function showTradeAgreedModal(proposalId) {
     document.getElementById('tradeAgreedModal')?.remove();
 
     const partnerName = tradePartner?.username ?? 'your trading partner';
-    const confirmUrl  = '.trade-confirmation.html?trade_id=' + proposalId;
+    const confirmUrl  = './trade-confirmation.html?trade_id=' + proposalId;
 
     const backdrop = document.createElement('div');
     backdrop.id        = 'tradeAgreedModal';
