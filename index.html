@@ -53,7 +53,7 @@
 <!-- Hero content -->
   <div class="hero-content">
     <div class="logo-ring">
-      <img src="../Images/Dexoria Logo Icon.jpg" alt="Dexoria Logo"/>
+      <img src="Dexoria Logo Icon.jpg" alt="Dexoria Logo"/>
     </div>
 
     <h1>DEXORIA</h1>
@@ -65,9 +65,9 @@
     </p>
 
     <div class="cta-row">
-      <a href="../HTML/portfolio.html"><button class="btn-primary">View Portfolio</button></a>
-      <a href="../HTML/marketplace.html"><button class="btn-primary">Explore Marketplace</button></a>
-      <a href="../HTML/trades.html"><button class="btn-primary">Start Trading</button></a>
+      <a href="portfolio.html"><button class="btn-primary">View Portfolio</button></a>
+      <a href="marketplace.html"><button class="btn-primary">Explore Marketplace</button></a>
+      <a href="trades.html"><button class="btn-primary">Start Trading</button></a>
     </div>
   </div>
 
@@ -108,7 +108,7 @@
         <span class="sparkle"></span>
         <i class="fa-solid fa-right-left feature-icon"></i>
         <h3 class="title-with-icon">
-            <img src="../Images/trading.jpg" alt="trade" class="mini-icon">
+            <img src="trading.jpg" alt="trade" class="mini-icon">
             Smart Trading
         </h3>
         <p>Find fair trades instantly</p>
@@ -118,7 +118,7 @@
         <span class="sparkle"></span>
         <i class="fa-solid fa-gem feature-icon"></i>
         <h3 class="title-with-icon">
-            <img src="../Images/market.png" alt="market insights" class="mini-icon">
+            <img src="market.png" alt="market insights" class="mini-icon">
             Market Insights
         </h3>
         <p>Spot deals before others</p>
@@ -128,7 +128,7 @@
         <span class="sparkle"></span>
         <i class="fa-solid fa-bolt feature-icon"></i>
         <h3 class="title-with-icon">
-            <img src="../Images/pokedex mini icon.png" alt="pokedex" class="mini-icon">
+            <img src="pokedex mini icon.png" alt="pokedex" class="mini-icon">
             Collection Tracking
         </h3>
         <p>See your cards grow over time</p>
@@ -154,8 +154,8 @@
         <!-- PITCH BLACK -->
          <div class="pcard">
           <div class="pcard-img" style="background:#1a1530">
-            <a href="../HTML/TCG SETS/pitch-black.html">
-            <img src="../Images/Pitch Black Logo.png" alt="Pitch Black Logo">
+            <a href="pitch-black.html">
+            <img src="Pitch Black Logo.png" alt="Pitch Black Logo">
             <span class="pbadge badge-upcoming">New</span>
             </a>
           </div>
@@ -170,8 +170,8 @@
         <!-- CHAOS RISING -->
         <div class="pcard">
           <div class="pcard-img" style="background:#1a1530">
-            <a href="../HTML/TCG SETS/chaos-rising.html">
-            <img src="../Images/Chaos Rising Logo.webp" alt="Chaos Rising Logo">
+            <a href="chaos-rising.html">
+            <img src="Chaos Rising Logo.webp" alt="Chaos Rising Logo">
             <span class="pbadge badge-new">Recent</span>
             </a>
           </div>
@@ -186,8 +186,8 @@
         <!-- PERFECT ORDER -->
         <div class="pcard">
           <div class="pcard-img" style="background:#1e1530">
-            <a href="../HTML/TCG SETS/perfect-order.html">
-            <img src="../Images/Perfect Order Logo.webp" alt="Perfect Order Logo">
+            <a href="perfect-order.html">
+            <img src="Perfect Order Logo.webp" alt="Perfect Order Logo">
             </a>
           </div>
 
@@ -201,8 +201,8 @@
         <!-- ASCENDED HEROES -->
         <div class="pcard">
           <div class="pcard-img" style="background:#0f2020">
-            <a href="../HTML/TCG SETS/ascended-heroes.html">
-              <img src="../Images/Ascended Heroes Logo.webp" alt="Ascended Heroes Logo">
+            <a href="ascended-heroes.html">
+              <img src="Ascended Heroes Logo.webp" alt="Ascended Heroes Logo">
             </a>
           </div>
 
@@ -216,8 +216,8 @@
         <!-- PHANTASMAL FLAMES -->
         <div class="pcard">
           <div class="pcard-img" style="background:#201510">
-            <a href="../HTML/TCG SETS/phantasmal-flames.html">
-              <img src="../Images/Phantasmal Flames Logo.jpg" alt="Phantasmal Flames Logo">
+            <a href="phantasmal-flames.html">
+              <img src="Phantasmal Flames Logo.jpg" alt="Phantasmal Flames Logo">
             </a>
           </div>
 
@@ -231,8 +231,8 @@
         <!-- MEGA EVOLUTION -->
         <div class="pcard">
           <div class="pcard-img" style="background:#1e1530">
-            <a href="../HTML/TCG SETS/mega-evolution.html">
-              <img src="../Images/Mega Evolution Logo.webp" alt="Mega Evolution Logo">
+            <a href="mega-evolution.html">
+              <img src="Mega Evolution Logo.webp" alt="Mega Evolution Logo">
             </a>
           </div>
 
@@ -503,10 +503,10 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
-        <li><a href="../HTML/trades.html">Trade Hub</a></li>
-        <li><a href="../HTML/community.html">Community Feed</a></li>
-        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="trades.html">Trade Hub</a></li>
+        <li><a href="community.html">Community Feed</a></li>
+        <li><a href="portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
@@ -547,9 +547,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "../js/navbar.js";
+  import { renderNavbar } from "navbar.js";
 
-  import { supabase } from "../js/supabaseClient.js";
+  import { supabase } from "supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -625,15 +625,15 @@ backToTopBtn.addEventListener("click", () => {
 </script>
 
 <script type="module">
-  import { renderNavbar } from '../JS/navbar.js';
+  import { renderNavbar } from 'navbar.js';
   renderNavbar('navbar');
 </script>
 
 <!-- SCRIPTS -->
-<script type="module" src="../js/market-movers.js"></script>
-<script type="module" src="../js/top-collectors-avatars.js"></script>
-<script type="module" src="../js/tcg-sets.js"></script>
-<script src="../JS/donate-section.js"></script>
+<script type="module" src="market-movers.js"></script>
+<script type="module" src="top-collectors-avatars.js"></script>
+<script type="module" src="tcg-sets.js"></script>
+<script src="donate-section.js"></script>
 
 </body>
 </html>
