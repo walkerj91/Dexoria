@@ -11,11 +11,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- GLOBAL -->
-  <link rel="stylesheet" href="dexoria-ui.css">
-  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="./dexoria-ui.css">
+  <link rel="stylesheet" href="./navbar.css">
 
   <!-- PAGE CSS -->
-  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="./login.css">
   
 </head>
 
@@ -98,9 +98,9 @@
   <div class="avatar-selection">
       <p>Choose Your Starting Banner</p>
   <div class="banner-grid" id="signupBannerGrid">
-      <img src="/Images/Arcanine_Full.png" class="banner-option selected">
-      <img src="/Images/Charizard_Banner.jpg" class="banner-option">
-      <img src="/Images/Blastoise_Banner.jpg" class="banner-option">
+      <img src="Arcanine_Full.png" class="banner-option selected">
+      <img src="Charizard_Banner.jpg" class="banner-option">
+      <img src="Blastoise_Banner.jpg" class="banner-option">
   </div>
 
 
@@ -151,20 +151,20 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="trades.html">Trade Hub</a></li>
-        <li><a href="community.html">Community Feed</a></li>
-        <li><a href="portfolio.html">My Collection</a></li>
+        <li><a href="./marketplace.html">Marketplace</a></li>
+        <li><a href="./trades.html">Trade Hub</a></li>
+        <li><a href="./community.html">Community Feed</a></li>
+        <li><a href="./portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
       <h4>Support</h4>
       <ul>
-        <li><a href="help-centre.html">Help Centre</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="terms-of-use.html">Terms of Use</a></li>
-        <li><a href="contact-us.html">Contact Us</a></li>
+        <li><a href="./help-centre.html">Help Centre</a></li>
+        <li><a href="./privacy.html">Privacy Policy</a></li>
+        <li><a href="./terms-of-use.html">Terms of Use</a></li>
+        <li><a href="./contact-us.html">Contact Us</a></li>
       </ul>
     </div>
 
@@ -195,9 +195,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "navbar.js";
+  import { renderNavbar } from "./navbar.js";
 
-  import { supabase } from "supabaseClient.js";
+  import { supabase } from "./supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: "https://your-site.com/reset.html"
+                redirectTo: "https://your-site.com/./reset.html"
             });
 
             if (error) {
@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <!-- SCRIPTS -->
-<script type="module" src="login.js"></script>
+<script type="module" src="./login.js"></script>
 
 </body>
 </html>
