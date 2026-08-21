@@ -1,7 +1,7 @@
 // =========================
 //  IMPORTS
 // =========================
-import { supabase } from 'supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 // =========================
 //  CLOUDINARY CONFIG
@@ -173,7 +173,7 @@ function buildPostCard(post, likedIds, savedIds) {
     article.innerHTML = `
         <div class="post-card-header">
             <img class="post-card-avatar" src="${avatar}" alt="${escapeHTML(username)}"
-                 onerror="this.src='../Images/Ash Ketchum User.jpg'">
+                 onerror="this.src='Ash Ketchum User.jpg'">
             <div class="post-card-meta">
                 <span class="post-card-username">${escapeHTML(username)}</span>
                 <span class="post-card-time">${timeAgo(post.created_at)}</span>
@@ -621,7 +621,7 @@ function renderAuthGate() {
             <p class="comm-auth-text">
                 Sign in to post, like and save content from other trainers.
             </p>
-            <a class="comm-auth-btn" href="login.html?view=login&community=true">
+            <a class="comm-auth-btn" href="./login.html?view=login&community=true">
                 Sign In / Sign Up
             </a>
         </div>
@@ -719,7 +719,7 @@ function showLoginPrompt() {
             <p>
                 Join the Dexoria community to like, save, and share posts.
             </p>
-            <a class="login-btn" href="login.html?view=login&community=true">
+            <a class="login-btn" href="./login.html?view=login&community=true">
                 Sign In / Sign Up
             </a>
         </div>
