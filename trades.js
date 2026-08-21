@@ -48,7 +48,7 @@ function showToast(message) {
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { window.location.replace('../HTML/index.html'); return; }
+    if (!user) { window.location.replace('./index.html'); return; }
     currentUser = user;
 
     const { data: profile } = await supabase
@@ -101,7 +101,7 @@ async function searchTrainers(query) {
         item.onmouseenter = () => item.style.background = 'rgba(255,215,0,0.07)';
         item.onmouseleave = () => item.style.background = 'transparent';
         item.innerHTML = `
-            <img src="${t.avatar_url || '../Images/Ash Ketchum User.jpg'}" alt="${t.username}"
+            <img src="${t.avatar_url || 'Ash Ketchum User.jpg'}" alt="${t.username}"
                  style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #8B6A18;flex-shrink:0;">
             <div>
                 <div style="color:#ffd700;font-size:14px;font-weight:600;">${t.username}</div>
@@ -821,7 +821,7 @@ async function acceptTrade() {
 
     if (bothAccepted) {
         try {
-            const tradeUrl        = '/HTML/trade-confirmation.html?trade_id=' + activeProposal.id;
+            const tradeUrl        = './trade-confirmation.html?trade_id=' + activeProposal.id;
             const partnerUsername = tradePartner?.username ?? 'Your trade partner';
             const convoId         = [currentUser.id, otherUserId].sort().join('_');
 
@@ -899,7 +899,7 @@ async function acceptTrade() {
             type:    'trade_awaiting',
             title:   'Trade Accepted — Your Turn!',
             body:    `${myUsername} has accepted the trade. Open the trade page to confirm or decline.`,
-            link:    `/HTML/trades.html?user=${currentUserProfile?.username ?? ''}`
+            link:    `./trades.html?user=${currentUserProfile?.username ?? ''}`
         });
 
         showToast('✅ You\'ve accepted! Waiting for the other trainer to confirm...');
@@ -947,7 +947,7 @@ function showTradeAgreedModal(proposalId) {
     document.getElementById('tradeAgreedModal')?.remove();
 
     const partnerName = tradePartner?.username ?? 'your trading partner';
-    const confirmUrl  = 'trade-confirmation.html?trade_id=' + proposalId;
+    const confirmUrl  = '.trade-confirmation.html?trade_id=' + proposalId;
 
     const backdrop = document.createElement('div');
     backdrop.id        = 'tradeAgreedModal';
