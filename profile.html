@@ -11,11 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
-  <link rel="stylesheet" href="../CSS/navbar.css">
+  <link rel="stylesheet" href="dexoria-ui.css">
+  <link rel="stylesheet" href="navbar.css">
 
   <!-- PAGE CSS -->
-  <link rel="stylesheet" href="../CSS/profile.css">
+  <link rel="stylesheet" href="profile.css">
 
 </head>
 
@@ -39,12 +39,12 @@
         <!-- Banner + Info -->
         <div class="banner-and-info">
             <div class="profile-banner">
-                <img src="../Images/Arcanine_Full.png" alt="Banner">
+                <img src="Arcanine_Full.png" alt="Banner">
             </div>
 
             <div class="profile-info">
                 <div class="avatar-wrapper">
-                    <img src="../Images/Ash Ketchum User.jpg" alt="User" class="user-avatar">
+                    <img src="Ash Ketchum User.jpg" alt="User" class="user-avatar">
                 </div>
 
                 <h2 class="username" id="trainer-name-display"></h2>
@@ -209,32 +209,32 @@
                         <div class="avatar-selection">
                             <p>Change Profile Banner</p>
                             <div class="banner-grid" id="editBannerGrid">
-                                <img src="../Images/Arcanine_Full.png" class="banner-option selected">
-                                <img src="../Images/Charizard_Banner.jpg" class="banner-option">
-                                <img src="../Images/Blastoise_Banner.jpg" class="banner-option">
-                                <img src="../Images/Greninja Profile Banner.png" class="banner-option">
-                                <img src="../Images/Gengar Profile Banner.jpg" class="banner-option">
-                                <img src="../Images/Pikachu Profile Banner.jpg" class="banner-option">
-                                <img src="../Images/Mewtwo Profile Banner.jpg" class="banner-option">
-                                <img src="../Images/Lucario Profile Banner.jpg" class="banner-option">
+                                <img src="Arcanine_Full.png" class="banner-option selected">
+                                <img src="Charizard_Banner.jpg" class="banner-option">
+                                <img src="Blastoise_Banner.jpg" class="banner-option">
+                                <img src="Greninja Profile Banner.png" class="banner-option">
+                                <img src="Gengar Profile Banner.jpg" class="banner-option">
+                                <img src="Pikachu Profile Banner.jpg" class="banner-option">
+                                <img src="Mewtwo Profile Banner.jpg" class="banner-option">
+                                <img src="Lucario Profile Banner.jpg" class="banner-option">
                             </div>
                         </div>
 
                         <div class="avatar-selection">
                             <p>Change Avatar</p>
                             <div class="avatar-grid" id="editAvatarGrid">
-                                <img src="../Images/Ash Ketchum User.jpg" class="avatar-option">
-                                <img src="../Images/Prof Oak.jpg" class="avatar-option">
-                                <img src="../Images/Gary Oak.jpg" class="avatar-option">
-                                <img src="../Images/Brock User.jpg" class="avatar-option">
-                                <img src="../Images/Misty User.jpg" class="avatar-option">
-                                <img src="../Images/Lt Surge User.jpg" class="avatar-option">
-                                <img src="../Images/Erika User.jpg" class="avatar-option">
-                                <img src="../Images/Koga User.jpg" class="avatar-option">
-                                <img src="../Images/Sabrina User.jpg" class="avatar-option">
-                                <img src="../Images/Blaine User.jpg" class="avatar-option">
-                                <img src="../Images/Giovanni User.jpg" class="avatar-option">
-                                <img src="../Images/Pikachu User.jpg" class="avatar-option">
+                                <img src="Ash Ketchum User.jpg" class="avatar-option">
+                                <img src="Prof Oak.jpg" class="avatar-option">
+                                <img src="Gary Oak.jpg" class="avatar-option">
+                                <img src="Brock User.jpg" class="avatar-option">
+                                <img src="Misty User.jpg" class="avatar-option">
+                                <img src="Lt Surge User.jpg" class="avatar-option">
+                                <img src="Erika User.jpg" class="avatar-option">
+                                <img src="Koga User.jpg" class="avatar-option">
+                                <img src="Sabrina User.jpg" class="avatar-option">
+                                <img src="Blaine User.jpg" class="avatar-option">
+                                <img src="Giovanni User.jpg" class="avatar-option">
+                                <img src="Pikachu User.jpg" class="avatar-option">
                             </div>
                         </div>
 
@@ -322,10 +322,10 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
-        <li><a href="../HTML/trades.html">Trade Hub</a></li>
-        <li><a href="../HTML/community.html">Community Feed</a></li>
-        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="trades.html">Trade Hub</a></li>
+        <li><a href="community.html">Community Feed</a></li>
+        <li><a href="portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
@@ -366,9 +366,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "../js/navbar.js";
+  import { renderNavbar } from "navbar.js";
 
-  import { supabase } from "../js/supabaseClient.js";
+  import { supabase } from "supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -443,7 +443,7 @@ backToTopBtn.addEventListener("click", () => {
 
 
 <!-- SCRIPTS -->
-<script type="module" src="../js/profile.js"></script>
+<script type="module" src="profile.js"></script>
 
 </body>
 </html>
