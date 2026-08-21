@@ -1,5 +1,5 @@
 // JS/trade-confirmation.js
-import { supabase } from 'supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TqgPX3xUZJX6nAg6YwQNk5Hx2QZST2OCyyNFDPrhqoCregpTW71wGQnmREYm1MOgqW9iwN2C1rgz7dUE1OmCJEI00JNxnqpEt'; // Replace with your live key from stripe.com/dashboard
