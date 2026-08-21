@@ -1,7 +1,7 @@
 // ============================================
 // SUPABASE IMPORT
 // ============================================
-import { supabase } from '../js/supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 // ============================================
 // GLOBAL STATE
@@ -508,9 +508,9 @@ window.addEventListener('visibilitychange', async () => {
     // 4. POPULATE PROFILE
     if (profile) {
         if (nameDisplay)   nameDisplay.innerText = profile.username || 'Trainer';
-        if (avatarDisplay) avatarDisplay.src     = safeImg(profile.avatar_url, '../Images/Ash Ketchum User.jpg');
+        if (avatarDisplay) avatarDisplay.src     = safeImg(profile.avatar_url, 'Ash Ketchum User.jpg');
         if (bioDisplay)    bioDisplay.innerText  = profile.bio || 'Pro Trainer | Legendary Card Hunter | Kanto Region';
-        if (bannerDisplay) bannerDisplay.src     = safeImg(profile.banner_url, '../Images/Arcanine_Full.png');
+        if (bannerDisplay) bannerDisplay.src     = safeImg(profile.banner_url, 'Arcanine_Full.png');
         if (content)       content.classList.add('auth-confirmed');
 
         // Trade count stat — written by increment_trade_count RPC when a trade completes
@@ -599,9 +599,9 @@ window.addEventListener('visibilitychange', async () => {
             const newEmail = document.getElementById('editEmailAddress')?.value.trim() || user?.email       || '';
             const newBio   = document.getElementById('editBio')?.value.trim()           || profile?.bio      || 'Pro Trainer | Legendary Card Hunter';
             const selectedAvatar = document.querySelector('#editAvatarGrid .avatar-option.selected');
-            const newAvatar = selectedAvatar ? selectedAvatar.getAttribute('src') : safeImg(profile?.avatar_url, '../Images/Ash Ketchum User.jpg');
+            const newAvatar = selectedAvatar ? selectedAvatar.getAttribute('src') : safeImg(profile?.avatar_url, 'Ash Ketchum User.jpg');
             const selectedBanner = document.querySelector('#editBannerGrid .banner-option.selected');
-            const newBanner = selectedBanner ? selectedBanner.getAttribute('src') : safeImg(profile?.banner_url, '../Images/Arcanine_Full.png');
+            const newBanner = selectedBanner ? selectedBanner.getAttribute('src') : safeImg(profile?.banner_url, 'Arcanine_Full.png');
 
             const { error: updateError } = await supabase.from('profiles')
                 .upsert({ id: user.id, username: newName, bio: newBio, avatar_url: newAvatar, banner_url: newBanner });
@@ -643,9 +643,9 @@ window.addEventListener('visibilitychange', async () => {
                 ? friendProfiles.map(p => `
                     <a href="profile.html?user=${p.username}" style="text-decoration:none; color:inherit;">
                         <div class="user-item">
-                            <img src="${safeImg(p.avatar_url, '../Images/Ash Ketchum User.jpg')}"
+                            <img src="${safeImg(p.avatar_url, 'Ash Ketchum User.jpg')}"
                                  alt="${p.username}"
-                                 onerror="this.src='../Images/Ash Ketchum User.jpg'">
+                                 onerror="this.src='Ash Ketchum User.jpg'">
                             <span>${p.username}</span>
                             <i class="status ${p.is_online ? 'online' : 'offline'}"></i>
                         </div>
@@ -684,7 +684,7 @@ window.addEventListener('visibilitychange', async () => {
                 const partnerId     = amSender ? t.receiver_id : t.sender_id;
                 const partner       = profileMap[partnerId];
                 const partnerName   = partner?.username ?? 'Trainer';
-                const partnerAvatar = safeImg(partner?.avatar_url, '../Images/Ash Ketchum User.jpg');
+                const partnerAvatar = safeImg(partner?.avatar_url, 'Ash Ketchum User.jpg');
                 return `
                     <div class="trade-item">
                         <div class="trade-item-partner">
@@ -853,7 +853,7 @@ async function renderTradeReviews() {
     reviewsList.innerHTML = reviews.map(r => {
         const reviewer     = profileMap[r.reviewer_id];
         const name         = reviewer?.username ?? 'Trainer';
-        const avatar       = safeImg(reviewer?.avatar_url, '../Images/Ash Ketchum User.jpg');
+        const avatar       = safeImg(reviewer?.avatar_url, 'Ash Ketchum User.jpg');
         const stars        = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
         return `
             <div class="review-item">
@@ -946,7 +946,7 @@ async function renderWishlist() {
             `}
             <div class="wishlist-card-img-wrap">
                 <img src="${item.card_image || ''}" alt="${item.card_name}" class="wishlist-card-img"
-                     onerror="this.src='../Images/card-placeholder.png'" loading="lazy" />
+                     onerror="this.src='card-placeholder.png'" loading="lazy" />
             </div>
             <div class="wishlist-card-name">${item.card_name}</div>
             <div class="wishlist-card-set">${item.card_set || ''}</div>
