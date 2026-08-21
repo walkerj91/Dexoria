@@ -185,7 +185,7 @@ async function loadConversationList(autoSelectUsername = null) {
         item.className = 'conversation-item';
         item.dataset.partnerId = partner.id;
         item.innerHTML = `
-            <img src="${partner.avatar_url || 'Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
+            <img src="${partner.avatar_url || './Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
             <div class="conv-info">
                 <div class="conv-name">${partner.username}</div>
                 <div class="conv-preview ${isUnread ? 'conv-unread' : ''}">${preview}</div>
