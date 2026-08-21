@@ -1,7 +1,7 @@
 // =========================
 //  IMPORTS
 // =========================
-import { supabase } from '../js/supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 // =========================
 //  CLOUDINARY CONFIG
@@ -124,7 +124,7 @@ function buildPostCard(post, likedIds, savedIds) {
     const isLiked  = likedIds.has(post.id);
     const isSaved  = savedIds.has(post.id);
     const isOwner  = !!currentUser && currentUser.id === post.user_id;
-    const avatar   = post.profiles?.avatar_url || '../Images/Ash Ketchum User.jpg';
+    const avatar   = post.profiles?.avatar_url || 'Ash Ketchum User.jpg';
     const username = post.profiles?.username   || 'Trainer';
     const likes    = post.like_count ?? 0;
 
@@ -621,7 +621,7 @@ function renderAuthGate() {
             <p class="comm-auth-text">
                 Sign in to post, like and save content from other trainers.
             </p>
-            <a class="comm-auth-btn" href="/HTML/login.html?view=login&community=true">
+            <a class="comm-auth-btn" href="login.html?view=login&community=true">
                 Sign In / Sign Up
             </a>
         </div>
@@ -719,7 +719,7 @@ function showLoginPrompt() {
             <p>
                 Join the Dexoria community to like, save, and share posts.
             </p>
-            <a class="login-btn" href="/HTML/login.html?view=login&community=true">
+            <a class="login-btn" href="login.html?view=login&community=true">
                 Sign In / Sign Up
             </a>
         </div>
