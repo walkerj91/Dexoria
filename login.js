@@ -44,7 +44,7 @@ const forgotPasswordLink = document.getElementById("forgotPasswordLink");
 if (forgotPasswordLink) {
     forgotPasswordLink.addEventListener("click", () => {
         console.log("Forgot password clicked");
-        window.location.href = "reset.html";
+        window.location.href = "./reset.html";
     });
 }
 
@@ -110,7 +110,7 @@ if (forgotPasswordLink) {
                 return;
             }
 
-            window.location.href = "profile.html";
+            window.location.href = "./profile.html";
         });
     }
 
