@@ -35,7 +35,7 @@ function renderBasket() {
         <!-- Image Section (Now on the left side of the row) -->
         <div class="card-image" style="width: 120px; height: 120px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;">
             <img src="${item.image}" alt="${item.name}" 
-                 onerror="this.src='/images/quickball.png'"
+                 onerror="this.src='quickball.png'"
                  style="width: 100%; height: 100%; object-fit: cover; display: block;">
         </div>
 
