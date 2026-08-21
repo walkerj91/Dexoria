@@ -1,8 +1,8 @@
 // ============================================
 // IMPORTS
 // ============================================
-import { supabase }         from '../js/supabaseClient.js';
-import { resolveCardImage } from '../js/card-image-cache.js';
+import { supabase }         from 'supabaseClient.js';
+import { resolveCardImage } from 'card-image-cache.js';
 
 // ============================================
 // CONSTANTS
@@ -185,7 +185,7 @@ async function loadConversationList(autoSelectUsername = null) {
         item.className = 'conversation-item';
         item.dataset.partnerId = partner.id;
         item.innerHTML = `
-            <img src="${partner.avatar_url || '../Images/Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
+            <img src="${partner.avatar_url || 'Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
             <div class="conv-info">
                 <div class="conv-name">${partner.username}</div>
                 <div class="conv-preview ${isUnread ? 'conv-unread' : ''}">${preview}</div>
@@ -236,7 +236,7 @@ async function selectConversation(partner, itemEl) {
     const nameEl   = document.getElementById('trade-partner-name');
     const avatarEl = document.getElementById('trade-partner-avatar');
     if (nameEl)   nameEl.textContent = partner.username;
-    if (avatarEl) avatarEl.src = partner.avatar_url || '../Images/Ash Ketchum User.jpg';
+    if (avatarEl) avatarEl.src = partner.avatar_url || 'Ash Ketchum User.jpg';
 
     await loadMessages();
     await loadActiveProposal();
@@ -288,7 +288,7 @@ async function startConversationWith(partner) {
         item.className = 'conversation-item';
         item.dataset.partnerId = partner.id;
         item.innerHTML = `
-            <img src="${partner.avatar_url || '../Images/Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
+            <img src="${partner.avatar_url || 'Ash Ketchum User.jpg'}" class="conv-avatar" alt="${partner.username}">
             <div class="conv-info">
                 <div class="conv-name">${partner.username}</div>
                 <div class="conv-preview">No messages yet</div>
@@ -367,7 +367,7 @@ function appendMessage(msg, updateTimestamp = true) {
     div.className = `message ${isMine ? 'msg-sent' : 'msg-received'}`;
     div.innerHTML = isMine
         ? `<div class="bubble">${msg.message}<span class="timestamp">${timeStr}</span></div>`
-        : `<img src="${tradePartner?.avatar_url || '../Images/Ash Ketchum User.jpg'}" class="chat-avatar" alt="">
+        : `<img src="${tradePartner?.avatar_url || 'Ash Ketchum User.jpg'}" class="chat-avatar" alt="">
            <div class="bubble">${msg.message}<span class="timestamp">${timeStr}</span></div>`;
 
     chatFeed.appendChild(div);
@@ -947,7 +947,7 @@ function showTradeAgreedModal(proposalId) {
     document.getElementById('tradeAgreedModal')?.remove();
 
     const partnerName = tradePartner?.username ?? 'your trading partner';
-    const confirmUrl  = '/HTML/trade-confirmation.html?trade_id=' + proposalId;
+    const confirmUrl  = 'trade-confirmation.html?trade_id=' + proposalId;
 
     const backdrop = document.createElement('div');
     backdrop.id        = 'tradeAgreedModal';
