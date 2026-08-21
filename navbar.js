@@ -1,4 +1,4 @@
-import { supabase } from 'js/supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 export async function renderNavbar(containerId) {
 
@@ -119,7 +119,7 @@ export async function renderNavbar(containerId) {
 
             ${isLoggedIn
                 ? `<a href="#" id="logout-link">LOGOUT (${username})</a>`
-                : `<a href="/HTML/login.html">LOGIN</a>`
+                : `<a href="login.html">LOGIN</a>`
             }
 
         </div>
@@ -265,7 +265,7 @@ async function loadNotifications(userId) {
     const tradeAgreedNotif = (notifs ?? []).find(n =>
         !n.is_read &&
         n.title === '🎉 Trade Agreed — Pay Shipping!' &&
-        n.link?.includes('/HTML/trade-confirmation.html')
+        n.link?.includes('trade-confirmation.html')
     );
     if (tradeAgreedNotif) {
         window.dispatchEvent(new CustomEvent('dexoria:trade:agreed', {
