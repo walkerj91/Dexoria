@@ -1,4 +1,4 @@
-import { supabase } from '../js/supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -99,8 +99,8 @@ if (forgotPasswordLink) {
                     firstname,
                     lastname,
                     username,
-                    avatar_url: selectedAvatar || "/Images/Ash Ketchum User.jpg",
-                    banner_url: selectedBanner || "/Images/Arcanine_Full.png",
+                    avatar_url: selectedAvatar || "Ash Ketchum User.jpg",
+                    banner_url: selectedBanner || "Arcanine_Full.png",
                     bio: "New Trainer on Dexoria!"
                 })
                 .eq('id', user.id);
