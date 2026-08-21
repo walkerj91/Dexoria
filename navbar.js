@@ -45,7 +45,7 @@ export async function renderNavbar(containerId) {
     container.innerHTML = `
     <nav>
         <div class="nav-logo">
-            <a href="index.html">
+            <a href="./index.html">
                 <img src="Dexoria_Logo_Icon_bg.jpg">
             </a>
         </div>
