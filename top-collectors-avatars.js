@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 // ============================================
 // TROPHY SVG — reused for all three ranks
