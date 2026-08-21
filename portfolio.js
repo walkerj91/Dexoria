@@ -1,4 +1,4 @@
-import { supabase } from 'supabaseClient.js';
+import { supabase } from './supabaseClient.js';
 
 // ── DOM refs ──────────────────────────────────────────────
 const binderSelectionScreen = document.getElementById('binderSelectionScreen');
