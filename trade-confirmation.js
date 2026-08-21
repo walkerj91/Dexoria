@@ -1,5 +1,5 @@
 // JS/trade-confirmation.js
-import { supabase } from '../js/supabaseClient.js';
+import { supabase } from 'supabaseClient.js';
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51TqgPX3xUZJX6nAg6YwQNk5Hx2QZST2OCyyNFDPrhqoCregpTW71wGQnmREYm1MOgqW9iwN2C1rgz7dUE1OmCJEI00JNxnqpEt'; // Replace with your live key from stripe.com/dashboard
@@ -498,7 +498,7 @@ function renderMyLabel(shipment) {
 
   // Chat link
   const chatLink = document.getElementById('go-to-chat-from-label');
-  if (chatLink) chatLink.href = `/HTML/trades.html?trade_id=${tradeId}`;
+  if (chatLink) chatLink.href = `trades.html?trade_id=${tradeId}`;
 }
 
 function renderBothLabels(mine, theirs) {
@@ -612,7 +612,7 @@ function showError(message) {
     <div class="tc-error">
       <p class="tc-error-icon">⚠</p>
       <p class="tc-error-msg">${message}</p>
-      <a href="/HTML/trades.html" class="dex-btn dex-btn-ghost">Back to Trades</a>
+      <a href="trades.html" class="dex-btn dex-btn-ghost">Back to Trades</a>
     </div>`;
 }
 
