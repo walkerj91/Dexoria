@@ -54,26 +54,26 @@ export async function renderNavbar(containerId) {
 
         <div class="nav-links" id="nav-links">
 
-            <a href="index.html">HOME</a>
+            <a href="./index.html">HOME</a>
 
             <div class="dropdown">
-                <a href="marketplace.html">MARKETPLACE ▾</a>
+                <a href="./marketplace.html">MARKETPLACE ▾</a>
                 <div class="dropdown-content">
-                    <a href="binders.html">Binders</a>
+                    <a href="./binders.html">Binders</a>
                 </div>
             </div>
 
-            <a href="trades.html"    id="trades-nav-link">TRADES</a>
-            <a href="community.html" id="community-nav-link">COMMUNITY</a>
+            <a href="./trades.html"    id="trades-nav-link">TRADES</a>
+            <a href="./community.html" id="community-nav-link">COMMUNITY</a>
 
             <div class="dropdown">
-                <a href="portfolio.html" id="portfolio-nav-link">PORTFOLIO ▾</a>
+                <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO ▾</a>
                 <div class="dropdown-content">
-                    <a href="set-tracker.html" id="set-tracker-link">Set Tracker</a>
+                    <a href="./set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
             </div>
 
-            <a href="profile.html" id="profile-nav-link">PROFILE</a>
+            <a href="./profile.html" id="profile-nav-link">PROFILE</a>
 
             <!-- NOTIFICATION BELL — logged in only -->
             ${isLoggedIn ? `
@@ -103,7 +103,7 @@ export async function renderNavbar(containerId) {
             ` : ''}
 
             <!-- CART -->
-            <div class="cart-icon-container" onclick="location.href='basket.html'"
+            <div class="cart-icon-container" onclick="location.href='./basket.html'"
                  style="position:relative; display:inline-block; cursor:pointer; margin:0 15px; vertical-align:middle;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -119,7 +119,7 @@ export async function renderNavbar(containerId) {
 
             ${isLoggedIn
                 ? `<a href="#" id="logout-link">LOGOUT (${username})</a>`
-                : `<a href="login.html">LOGIN</a>`
+                : `<a href="./login.html">LOGIN</a>`
             }
 
         </div>
@@ -137,7 +137,7 @@ export async function renderNavbar(containerId) {
         logoutBtn.onclick = async (e) => {
             e.preventDefault();
             await supabase.auth.signOut();
-            window.location.href = 'index.html';
+            window.location.href = './index.html';
         };
     }
 
@@ -417,7 +417,7 @@ function showLoginRequiredModal() {
     `;
     overlay.querySelector('#continueBtn')?.addEventListener('click', (e) => {
         e.stopPropagation();
-        window.location.href = 'login.html?view=login&loginRequired=true';
+        window.location.href = './login.html?view=login&loginRequired=true';
     });
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
     document.body.appendChild(overlay);
