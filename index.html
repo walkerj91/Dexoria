@@ -11,12 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="dexoria-ui.css">
-  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="./dexoria-ui.css">
+  <link rel="stylesheet" href="./navbar.css">
 
   <!-- PAGE CSS -->
-  <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="donate-section.css">
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="./donate-section.css">
   
 </head>
 
@@ -65,9 +65,9 @@
     </p>
 
     <div class="cta-row">
-      <a href="portfolio.html"><button class="btn-primary">View Portfolio</button></a>
-      <a href="marketplace.html"><button class="btn-primary">Explore Marketplace</button></a>
-      <a href="trades.html"><button class="btn-primary">Start Trading</button></a>
+      <a href="./portfolio.html"><button class="btn-primary">View Portfolio</button></a>
+      <a href="./marketplace.html"><button class="btn-primary">Explore Marketplace</button></a>
+      <a href="./trades.html"><button class="btn-primary">Start Trading</button></a>
     </div>
   </div>
 
@@ -154,7 +154,7 @@
         <!-- PITCH BLACK -->
          <div class="pcard">
           <div class="pcard-img" style="background:#1a1530">
-            <a href="pitch-black.html">
+            <a href="./pitch-black.html">
             <img src="Pitch Black Logo.png" alt="Pitch Black Logo">
             <span class="pbadge badge-upcoming">New</span>
             </a>
@@ -170,7 +170,7 @@
         <!-- CHAOS RISING -->
         <div class="pcard">
           <div class="pcard-img" style="background:#1a1530">
-            <a href="chaos-rising.html">
+            <a href="./chaos-rising.html">
             <img src="Chaos Rising Logo.webp" alt="Chaos Rising Logo">
             <span class="pbadge badge-new">Recent</span>
             </a>
@@ -186,7 +186,7 @@
         <!-- PERFECT ORDER -->
         <div class="pcard">
           <div class="pcard-img" style="background:#1e1530">
-            <a href="perfect-order.html">
+            <a href="./perfect-order.html">
             <img src="Perfect Order Logo.webp" alt="Perfect Order Logo">
             </a>
           </div>
@@ -201,7 +201,7 @@
         <!-- ASCENDED HEROES -->
         <div class="pcard">
           <div class="pcard-img" style="background:#0f2020">
-            <a href="ascended-heroes.html">
+            <a href="./ascended-heroes.html">
               <img src="Ascended Heroes Logo.webp" alt="Ascended Heroes Logo">
             </a>
           </div>
@@ -216,7 +216,7 @@
         <!-- PHANTASMAL FLAMES -->
         <div class="pcard">
           <div class="pcard-img" style="background:#201510">
-            <a href="phantasmal-flames.html">
+            <a href="./phantasmal-flames.html">
               <img src="Phantasmal Flames Logo.jpg" alt="Phantasmal Flames Logo">
             </a>
           </div>
@@ -231,7 +231,7 @@
         <!-- MEGA EVOLUTION -->
         <div class="pcard">
           <div class="pcard-img" style="background:#1e1530">
-            <a href="mega-evolution.html">
+            <a href="./mega-evolution.html">
               <img src="Mega Evolution Logo.webp" alt="Mega Evolution Logo">
             </a>
           </div>
@@ -503,20 +503,20 @@
     <div class="footer-col">
       <h4>Explore</h4>
       <ul>
-        <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="trades.html">Trade Hub</a></li>
-        <li><a href="community.html">Community Feed</a></li>
-        <li><a href="portfolio.html">My Collection</a></li>
+        <li><a href="./marketplace.html">Marketplace</a></li>
+        <li><a href="./trades.html">Trade Hub</a></li>
+        <li><a href="./community.html">Community Feed</a></li>
+        <li><a href="./portfolio.html">My Collection</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
       <h4>Support</h4>
       <ul>
-        <li><a href="help-centre.html">Help Centre</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="terms-of-use.html">Terms of Use</a></li>
-        <li><a href="contact-us.html">Contact Us</a></li>
+        <li><a href="./help-centre.html">Help Centre</a></li>
+        <li><a href="./privacy.html">Privacy Policy</a></li>
+        <li><a href="./terms-of-use.html">Terms of Use</a></li>
+        <li><a href="./contact-us.html">Contact Us</a></li>
       </ul>
     </div>
 
@@ -547,9 +547,9 @@
 
 <!-- NAVBAR SCRIPT -->
  <script type="module">
-  import { renderNavbar } from "navbar.js";
+  import { renderNavbar } from "./navbar.js";
 
-  import { supabase } from "supabaseClient.js";
+  import { supabase } from "./supabaseClient.js";
 
 const { data } = await supabase.auth.getSession();
 
@@ -630,10 +630,10 @@ backToTopBtn.addEventListener("click", () => {
 </script>
 
 <!-- SCRIPTS -->
-<script type="module" src="market-movers.js"></script>
-<script type="module" src="top-collectors-avatars.js"></script>
-<script type="module" src="tcg-sets.js"></script>
-<script src="donate-section.js"></script>
+<script type="module" src="./market-movers.js"></script>
+<script type="module" src="./top-collectors-avatars.js"></script>
+<script type="module" src="./tcg-sets.js"></script>
+<script src="./donate-section.js"></script>
 
 </body>
 </html>
