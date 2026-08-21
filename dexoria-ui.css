@@ -1,0 +1,552 @@
+:root {
+  --gold-light: #F5D06B;
+  --gold-mid:   #C89B2A;
+  --gold-dark:  #8B6A18;
+  --gold-dim:   rgba(200,155,42,0.18);
+  --gold-line:  rgba(200,155,42,0.35);
+
+  --bg: #000;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.1);
+
+  --font-title: 'Cinzel', serif;
+  --font-body: 'Cinzel', serif;
+  --font-family: 'Cinzel', serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-soft: 0 8px 25px rgba(0,0,0,0.35);
+  --shadow-gold: 0 0 12px rgba(200,155,42,0.5);
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--gold-light);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+body {
+  padding-top: 80px;
+}
+
+main {
+  flex: 1;
+}
+
+#cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 20px; height: 20px;
+  border: 1px solid var(--gold-mid);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: width .2s, height .2s, background .2s, border-color .2s;
+  mix-blend-mode: difference;
+  z-index: 999999;
+}
+
+#cursor.hover {
+  width: 40px;
+  height: 40px;
+  background: var(--gold-dim);
+  border-color: var(--gold-light);
+}
+
+.section-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin: 60px auto 40px;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
+/* Fixed width lines + justify-content:center = same length everywhere,
+   always centred regardless of parent container width */
+.section-title-container::before,
+.section-title-container::after,
+.stc-row::before,
+.stc-row::after {
+  content: '';
+  flex: none;
+  width: 250px;
+  height: 1px;
+}
+.section-title-container::before,
+.stc-row::before {
+  background: linear-gradient(90deg, transparent, #C89B2A);
+}
+.section-title-container::after,
+.stc-row::after {
+  background: linear-gradient(90deg, #C89B2A, transparent);
+}
+
+/* The heading itself */
+.section-title-container h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(42px, 2.2vw, 28px);
+  font-weight: 700;
+  color: #F5D06B;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stc-diamond {
+  color: #C89B2A;
+  font-size: 30px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Subtitle variant — lines live on the inner row, subtitle sits below */
+.section-title-container.stc-with-sub {
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title-container.stc-with-sub::before,
+.section-title-container.stc-with-sub::after {
+  display: none;
+}
+
+.stc-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.stc-sub {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #F8F9FA;
+  text-transform: uppercase;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .section-title-container {
+    padding: 0 16px;
+    margin: 40px auto 28px;
+  }
+  .section-title-container h2 {
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+
+}
+
+.section-title-container.stc-plain::before,
+.section-title-container.stc-plain::after {
+  display: none;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  backdrop-filter: blur(15px);
+  box-shadow: var(--shadow-soft);
+}
+
+.dex-card {
+  background: rgba(200,155,42,0.05);
+  border: 1px solid rgba(200,155,42,0.25);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-soft);
+  transition: transform .3s, background .3s, border-color .3s;
+}
+
+.dex-card:hover {
+  background: rgba(200,155,42,0.12);
+  border-color: var(--gold-mid);
+  transform: translateY(-6px);
+}
+
+.dex-img-wrap {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(200,155,42,0.25);
+}
+
+.dex-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dex-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.dex-price {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+.dex-condition {
+  background: rgba(200,155,42,0.15);
+  border: 1px solid rgba(200,155,42,0.35);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+
+.dex-score {
+  color: #2ecc71;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(46,204,113,0.4);
+}
+
+.dex-grid {
+  display: grid;
+  gap: 24px;
+  padding: 40px 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dex-grid.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.dex-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.dex-grid.cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 768px) {
+  .dex-grid.cols-4,
+  .dex-grid.cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.dex-btn {
+  padding: 15px 40px;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-family: var(--font-body);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.dex-btn:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: var(--gold-light);
+  color: var(--gold-light);
+  transform: translateY(-3px);
+}
+
+/* FOOTER */
+
+html {
+    min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+footer {
+  background: #311432 !important; 
+  border: none !important;
+  padding: 40px 0;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Cinzel', serif;
+  box-shadow: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  align-self: stretch !important;
+}
+
+/* If you want a very subtle "divider" line like your boxes have */
+footer::before {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    margin: 0 auto 20px auto;
+}
+
+.main-footer {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  align-self: stretch !important;
+  background: #1E2329 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 60px 0 30px 0;
+  font-family: 'Cinzel', serif;
+  color: #D4AF37;
+  margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 0 5%;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-logo {
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.disclaimer {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 20px;
+}
+
+.footer-col h4 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #D4AF37; /* Pokemon Yellow */
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.footer-col a:hover {
+    color: #D4AF37;
+}
+
+.copyright {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 20px;
+    color: #b38f00;
+}
+
+.privacy-policy {
+  padding: 60px 20px;
+  font-family: 'Cinzel', serif;
+}
+
+.policy-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  color: #F8F9FA;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  background: #292828;
+}
+
+.policy-container h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #F5D06B;
+}
+
+.last-updated {
+  font-size: 14px;
+  font-weight: 600;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.intro {
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.policy-container h2 {
+  font-size: 20px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #d4af37;
+  padding-bottom: 5px;
+  color: #F5D06B;
+}
+
+.policy-container p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.policy-container ul {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.policy-container li {
+  margin-bottom: 8px;
+}
+
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: #D4AF37; /* Pokémon Yellow */
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    z-index: 9999;
+    
+/* 3D Depth Effect */
+    box-shadow: 0 4px 0 #b38f00;
+    transition: all 0.3s ease;
+    
+/* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+}
+
+/* Show state triggered by JavaScript */
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Hover & Active States */
+.back-to-top:hover {
+    background-color: #ffd633;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 0 #b38f00;
+}
+
+.back-to-top:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #b38f00;
+}
+
+.back-to-top {
+/* Keep your existing 3D button styles here */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.pokeball-icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+}
+
+/* 3. The Pokemon "Catch" Wobble Animation */
+@keyframes pokeball-wobble {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(-15deg); }
+    40% { transform: rotate(15deg); }
+    60% { transform: rotate(-10deg); }
+    80% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.back-to-top:hover .pokeball-icon {
+    animation: pokeball-wobble 0.6s ease-in-out;
+}
+
+/* Optional: Make the Pokéball "Open" slightly on click */
+.back-to-top:active .pokeball-icon {
+    transform: scale(0.8);
+}
+
+/* Create the 'Back to Top' text bubble */
+.back-to-top::before {
+    content: 'Back to Top';
+    position: absolute;
+    bottom: 60px; /* Sits above the button */
+    right: 0;
+    background: #333;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+/* Show the label on hover */
+.back-to-top:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-5px);
+}

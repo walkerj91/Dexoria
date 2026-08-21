@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dexoria — Set Tracker</title>
+
+<!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Global-->
+  <link rel="stylesheet" href="../CSS/navbar.css">
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+
+<!-- Page CSS-->
+  <link rel="stylesheet" href="../CSS/set-tracker.css">
+  <link rel="stylesheet" href="../CSS/national-dex.css">
+
+  
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+
+
+  <main class="st-page">
+ 
+    <!-- Page header -->
+    <header class="st-header">
+      <div class="st-header-inner">
+        <div class="st-header-text">
+          <span class="st-eyebrow">My Collection</span>
+          <div class="section-title-container">
+            <span class="stc-diamond" aria-hidden="true">✦</span>
+            <h2>Set Tracker</h2>
+            <span class="stc-diamond" aria-hidden="true">✦</span>
+          </div>
+          <p class="st-subtitle">Track every card across all Dexoria sets</p>
+        </div>
+        <div class="st-header-actions">
+          <button class="st-btn st-btn--ghost" id="exportBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Checklist
+          </button>
+          <button class="st-btn st-btn--ghost" id="resetBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+            Reset Set
+          </button>
+        </div>
+      </div>
+ 
+      <!-- Overall progress -->
+      <div class="st-overall">
+        <div class="st-overall-stats">
+          <div class="st-overall-stat">
+            <span class="st-overall-num" id="totalCollected">0</span>
+            <span class="st-overall-label">Collected</span>
+          </div>
+          <div class="st-overall-divider"></div>
+          <div class="st-overall-stat">
+            <span class="st-overall-num" id="totalCards">0</span>
+            <span class="st-overall-label">Total Cards</span>
+          </div>
+          <div class="st-overall-divider"></div>
+          <div class="st-overall-stat">
+            <span class="st-overall-num" id="totalSets">0</span>
+            <span class="st-overall-label">Sets Tracked</span>
+          </div>
+          <div class="st-overall-divider"></div>
+          <div class="st-overall-stat">
+            <span class="st-overall-num st-gold" id="totalPct">0%</span>
+            <span class="st-overall-label">Complete</span>
+          </div>
+        </div>
+        <div class="st-overall-bar-wrap">
+          <div class="st-overall-bar">
+            <div class="st-overall-fill" id="overallFill"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+ 
+    <!-- Set selector -->
+    <div class="st-set-nav" id="setNav" aria-label="Set selection"></div>
+ 
+    <!-- Main panel -->
+    <section class="st-panel" id="stPanel">
+
+      <div id="stNoSelection" class="st-no-selection">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2a1e0a" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+        </svg>
+          <p class="st-no-selection-text">Select a set to view cards</p>
+      </div>
+ 
+      <!-- Panel header -->
+      <div class="st-panel-header">
+        <div class="st-panel-info">
+          <h2 class="st-panel-name" id="panelName">—</h2>
+          <span class="st-panel-meta" id="panelMeta">—</span>
+        </div>
+        <div class="st-panel-stats">
+          <div class="st-pstat">
+            <span class="st-pstat-num st-green" id="pCollected">0</span>
+            <span class="st-pstat-label">Collected</span>
+          </div>
+          <div class="st-pstat-div"></div>
+          <div class="st-pstat">
+            <span class="st-pstat-num st-dim" id="pRemaining">0</span>
+            <span class="st-pstat-label">Remaining</span>
+          </div>
+          <div class="st-pstat-div"></div>
+          <div class="st-pstat">
+            <span class="st-pstat-num st-gold" id="pPct">0%</span>
+            <span class="st-pstat-label">Complete</span>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Set progress bar -->
+      <div class="st-set-progress">
+        <div class="st-set-bar">
+          <div class="st-set-fill" id="setPctFill"></div>
+        </div>
+        <span class="st-set-pct-label" id="setPctLabel">0%</span>
+      </div>
+ 
+      <!-- Filters -->
+      <div class="st-filters">
+        <div class="st-filter-group">
+          <button class="st-filter active" data-filter="all"       onclick="setFilter(this,'all')">All</button>
+          <button class="st-filter"        data-filter="collected" onclick="setFilter(this,'collected')">Collected</button>
+          <button class="st-filter"        data-filter="missing"   onclick="setFilter(this,'missing')">Missing</button>
+        </div>
+        <div class="st-filter-right">
+          <div class="st-search-wrap">
+            <svg class="st-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="st-search" type="text" id="cardSearch" placeholder="Search name or #..." oninput="filterSearch(this.value)" />
+          </div>
+          <button class="st-btn st-btn--ghost st-btn--sm" id="markAllBtn">Mark all visible</button>
+        </div>
+      </div>
+ 
+      <!-- Loading state -->
+      <div class="st-loading" id="stLoading">
+        <div class="st-loading-inner">
+          <div class="st-spinner"></div>
+          <span class="st-loading-text">Loading cards from TCGDex...</span>
+        </div>
+      </div>
+ 
+      <!-- Card grid -->
+      <div class="st-card-grid" id="cardGrid" style="display:none"></div>
+ 
+      <!-- Empty state -->
+      <div class="st-empty" id="stEmpty" style="display:none">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="st-empty-text">No cards match your filter</span>
+      </div>
+ 
+      <!-- Legend + missing -->
+      <div class="st-panel-footer">
+ 
+        <div class="st-missing-wrap" id="missingWrap">
+          <span class="st-missing-label">Still needed:</span>
+          <div class="st-missing-list" id="missingList"></div>
+        </div>
+      </div>
+ 
+    </section>
+
+    <!-- National Dex Tracker -->
+    <section class="ndex-section" id="ndexSection">
+
+      <header class="ndex-header">
+        <div class="ndex-header-inner">
+          <div class="ndex-header-text">
+            <span class="ndex-eyebrow">My Pokédex</span>
+            <div class="section-title-container">
+              <span class="stc-diamond" aria-hidden="true">✦</span>
+              <h2>National Dex Tracker</h2>
+              <span class="stc-diamond" aria-hidden="true">✦</span>
+            </div>
+            <p class="ndex-subtitle">Track every Pokémon you own a card for, across all generations</p>
+          </div>
+          <div class="ndex-header-actions">
+            <button class="ndex-btn ndex-btn--ghost" id="ndexExportBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Checklist
+            </button>
+            <button class="ndex-btn ndex-btn--ghost" id="ndexResetBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+              Reset All
+            </button>
+          </div>
+        </div>
+
+        <!-- Overall progress -->
+        <div class="ndex-overall">
+          <div class="ndex-overall-stats">
+            <div class="ndex-overall-stat">
+              <span class="ndex-overall-num" id="ndexCollected">0</span>
+              <span class="ndex-overall-label">Owned</span>
+            </div>
+            <div class="ndex-overall-divider"></div>
+            <div class="ndex-overall-stat">
+              <span class="ndex-overall-num" id="ndexTotal">—</span>
+              <span class="ndex-overall-label">Total Pokémon</span>
+            </div>
+            <div class="ndex-overall-divider"></div>
+            <div class="ndex-overall-stat">
+              <span class="ndex-overall-num" id="ndexGens">0</span>
+              <span class="ndex-overall-label">Generations</span>
+            </div>
+            <div class="ndex-overall-divider"></div>
+            <div class="ndex-overall-stat">
+              <span class="ndex-overall-num ndex-gold" id="ndexPct">0%</span>
+              <span class="ndex-overall-label">Complete</span>
+            </div>
+          </div>
+          <div class="ndex-overall-bar">
+            <div class="ndex-overall-fill" id="ndexOverallFill"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Filters -->
+      <div class="ndex-filters">
+        <div class="ndex-filter-group">
+          <button class="ndex-filter active" data-filter="all">All</button>
+          <button class="ndex-filter" data-filter="owned">Owned</button>
+          <button class="ndex-filter" data-filter="missing">Missing</button>
+        </div>
+        <div class="ndex-filter-right">
+          <div class="ndex-search-wrap">
+            <svg class="ndex-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="ndex-search" type="text" id="ndexSearch" placeholder="Search name or #..." />
+          </div>
+        </div>
+      </div>
+
+      <!-- Generation accordion -->
+      <div id="ndexGenNav" aria-label="Pokédex generation selection"></div>
+
+    </section>
+ 
+  </main>
+
+  <!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">Dexoria</h2>
+      <p class="disclaimer">
+        Dexoria is an unofficial fan-made platform. We are not affiliated with,
+        endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+        or The Pokémon Company.
+      </p>
+      <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+        <li><a href="../HTML/trades.html">Trade Hub</a></li>
+        <li><a href="../HTML/community.html">Community Feed</a></li>
+        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="help-centre.html">Help Centre</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+  <svg class="pokeball-icon" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+    <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+    <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+    <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+  </svg>
+</button>
+
+  <!-- CURSOR SCRIPT-->
+  <script>
+    const cursor = document.getElementById('cursor');
+
+    // Cursor movement
+    document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+    });
+
+    // ✅ IMPORTANT: use event delegation (fixes navbar issue)
+    document.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, .feature-card')) {
+        cursor.classList.add('hover');
+    }
+    });
+
+    document.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, .feature-card')) {
+        cursor.classList.remove('hover');
+    }
+    });
+  </script>
+
+  <!-- NAVBAR SCRIPT -->
+  <script type="module">
+    import { renderNavbar } from "../js/navbar.js";
+    renderNavbar("navbar");
+  </script>
+
+  <!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+<!-- DYNAMIC ITEM COUNT -->
+<script>
+  const cards  = document.querySelectorAll('.product-card').length;
+  const countEl = document.getElementById('catalogue-count');
+  if (countEl) countEl.textContent = String(cards).padStart(2, '0') + ' ITEM' + (cards !== 1 ? 'S' : '');
+</script>
+
+<!-- Scripts-->
+  <script type="module" src="../JS/navbar.js"></script>
+  <script type="module" src="../JS/set-tracker.js"></script>
+  <script type="module" src="../JS/national-dex.js"></script>
+
+</body>
+</html>

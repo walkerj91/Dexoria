@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dexoria - Login</title>
+
+  <!-- FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- GLOBAL -->
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="../CSS/login.css">
+  
+</head>
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+
+<main>
+
+<!-- Glassmorphism login form -->
+<div class="glass-container">
+
+<!-- LOGIN VIEW -->
+<div id="loginView">
+    <div class="login-header">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your account to continue</p>
+    </div>
+
+  <form id="loginForm">
+      <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Email Address" id="email" required>
+      </div>
+      <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Password" id="password" required>
+      </div>
+      <div class="remember-forgot">
+          <label class="remember">
+              <input type="checkbox" id="remember">
+              <span>Remember me</span>
+          </label>
+          <a id="forgotPasswordLink" style="cursor:pointer;">Forgot password?</a>
+      </div>
+      <button type="submit" class="login-btn">Sign In</button>
+      <p class="register-link">
+          Don't have an account?
+          <a href="#" id="toSignup">Sign up</a>
+      </p>
+  </form>
+</div>
+    
+
+<!-- SIGNUP VIEW (Hidden by default) -->
+<div id="signupView" style="display: none;">
+    <div class="login-header">
+        <h1>Join the Dex</h1>
+        <p>Create your trainer profile today</p>
+    </div>
+
+  <form id="signupForm">
+      <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="First Name" id="firstname" required>
+      </div>
+
+      <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Last Name" id="lastname" required>
+      </div>
+
+      <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Desired Username" id="newUsername" required>
+      </div>
+
+      <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" placeholder="Email Address" id="signupEmail" required>
+      </div>
+
+      <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" placeholder="Create Password" id="newPassword" required>
+      </div>
+
+  <div class="avatar-selection">
+      <p>Choose Your Starting Banner</p>
+  <div class="banner-grid" id="signupBannerGrid">
+      <img src="/Images/Arcanine_Full.png" class="banner-option selected">
+      <img src="/Images/Charizard_Banner.jpg" class="banner-option">
+      <img src="/Images/Blastoise_Banner.jpg" class="banner-option">
+  </div>
+
+
+  <div class="avatar-selection">
+      <p>Choose Your Trainer</p>
+
+    <div class="avatar-grid" id="avatarGrid">
+  <!-- Avatars will be injected here or hardcoded -->
+        <img src="/Images/Ash Ketchum User.jpg" class="avatar-option">
+        <img src="/Images/Prof Oak.jpg" class="avatar-option">
+        <img src="/Images/Gary Oak.jpg" class="avatar-option">
+        <img src="/Images/Brock User.jpg" class="avatar-option">
+        <img src="/Images/Misty User.jpg" class="avatar-option">
+        <img src="/Images/Lt Surge User.jpg" class="avatar-option">
+        <img src="/Images/Erika User.jpg" class="avatar-option">
+        <img src="/Images/Koga User.jpg" class="avatar-option">
+        <img src="/Images/Sabrina User.jpg" class="avatar-option">
+        <img src="/Images/Blaine User.jpg" class="avatar-option">
+        <img src="/Images/Giovanni User.jpg" class="avatar-option">
+        <img src="/Images/Pikachu User.jpg" class="avatar-option">
+    </div>
+  </div>
+
+    <button type="submit" class="login-btn">Create Account</button>
+    <p class="register-link">
+        Already a member?
+        <a href="#" id="toLogin">Sign in</a>
+    </p>
+  </form>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">Dexoria</h2>
+      <p class="disclaimer">
+        Dexoria is an unofficial fan-made platform. We are not affiliated with,
+        endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+        or The Pokémon Company.
+      </p>
+      <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+        <li><a href="../HTML/trades.html">Trade Hub</a></li>
+        <li><a href="../HTML/community.html">Community Feed</a></li>
+        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="help-centre.html">Help Centre</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+
+    <!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+    <svg class="pokeball-icon" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+        <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+</button>
+
+<!-- NAVBAR SCRIPT -->
+ <script type="module">
+  import { renderNavbar } from "../js/navbar.js";
+
+  import { supabase } from "../js/supabaseClient.js";
+
+const { data } = await supabase.auth.getSession();
+
+let username = "Trainer";
+
+if (data.session) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (profile?.username) username = profile.username;
+}
+
+renderNavbar("navbar", {
+  isLoggedIn: !!data.session,
+  username
+});
+
+</script>
+
+<!-- CURSOR SCRIPT -->
+ <script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+ 
+  const hero = document.querySelector('.hero');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 40}%;
+      animation-duration:${Math.random() * 6 + 5}s;
+      animation-delay:${Math.random() * 4}s;
+      opacity:0;
+    `;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+  setInterval(spawnParticle, 600);
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("JS Loaded");
+
+    const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+    console.log("Found link:", forgotPasswordLink);
+
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener("click", async () => {
+            console.log("Forgot password clicked");
+
+            const email = prompt("Enter the email address to send the reset link to:");
+
+            if (!email) {
+                alert("No email entered.");
+                return;
+            }
+
+            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: "https://your-site.com/reset.html"
+            });
+
+            if (error) {
+                alert("Error sending reset email: " + error.message);
+                return;
+            }
+
+            alert("Password reset email sent. Check your inbox.");
+        });
+    }
+});
+</script>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/login.js"></script>
+
+</body>
+</html>

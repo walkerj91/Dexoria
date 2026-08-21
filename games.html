@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dexoria — Game Corner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+  <link rel="stylesheet" href="../CSS/games.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+<div id="cursor"></div>
+
+<!-- HERO -->
+<section class="games-hero">
+  <div class="games-hero-content">
+    <div class="games-hero-tag">DEXORIA</div>
+    <h1 class="games-hero-title">GAME CORNER</h1>
+    <p class="games-hero-sub">Daily & Weekly Pokémon Challenges</p>
+  </div>
+  <div class="games-hero-pokeball"></div>
+</section>
+
+<!-- STREAK BAR -->
+<div class="streak-bar" id="streakBar" style="display:none;">
+  <div class="streak-inner" id="streakInner"></div>
+</div>
+
+<!-- GAME HUB -->
+<div class="games-wrapper">
+
+   <!-- ── DAILY TRIVIA ── -->
+  <section class="game-panel" id="triviaPanel">
+    <div class="game-panel-header">
+      <div class="game-badge daily-badge">DAILY</div>
+      <h2 class="game-panel-title">🧠 Trainer Trivia</h2>
+      <p class="game-panel-sub">5 questions · Resets at midnight</p>
+      <div class="game-streak" id="triviaStreak"></div>
+    </div>
+
+    <div class="game-body" id="triviaBody">
+      <div class="game-loading">Loading today's questions…</div>
+    </div>
+  </section>
+
+  <!-- ── WHO'S THAT POKEMON ── -->
+  <section class="game-panel" id="whosPanel">
+    <div class="game-panel-header">
+      <div class="game-badge daily-badge">DAILY</div>
+      <h2 class="game-panel-title">❓ Who's That Pokémon?</h2>
+      <p class="game-panel-sub">One Pokémon · One chance · Resets at midnight</p>
+      <div class="game-streak" id="whosStreak"></div>
+    </div>
+
+    <div class="game-body" id="whosBody">
+      <div class="game-loading">Loading today's Pokémon…</div>
+    </div>
+  </section>
+
+  <!-- ── SPOTLIGHT + COUNTDOWN ── -->
+  <section class="game-panel" id="spotlightPanel">
+
+    <!-- Pokémon of the Day -->
+    <div class="game-panel-header">
+      <div class="game-badge daily-badge">DAILY</div>
+      <h2 class="game-panel-title">✨ Pokémon Spotlight</h2>
+      <p class="game-panel-sub">Featured Pokémon · Full stats revealed</p>
+    </div>
+
+    <div class="game-body" id="spotlightBody">
+      <div class="game-loading">Loading today's Pokémon…</div>
+    </div>
+
+    <!-- Reset Countdowns -->
+    <div class="countdown-section" id="countdownSection">
+      <div class="countdown-header">⏱ NEXT RESET</div>
+      <div class="countdown-grid">
+        <div class="countdown-item">
+          <div class="countdown-label">🧠 Daily Games</div>
+          <div class="countdown-timer" id="dailyCountdown">--:--:--</div>
+          <div class="countdown-sub">Trivia + Who's That</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-label">🌟 Weekly Quiz</div>
+          <div class="countdown-timer" id="weeklyCountdown">--d --:--:--</div>
+          <div class="countdown-sub">Pokémon Master Quiz</div>
+        </div>
+      </div>
+      <div class="played-today" id="playedToday"></div>
+    </div>
+
+  </section>
+
+  <!-- ── WEEKLY MASTER QUIZ ── -->
+  <section class="game-panel" id="typePanel">
+    <div class="game-panel-header">
+      <div class="game-badge weekly-badge">WEEKLY</div>
+      <h2 class="game-panel-title">🌟 Pokémon Master Quiz</h2>
+      <p class="game-panel-sub">25 questions · Games · Anime · Movies · TCG · Lore · Resets Monday</p>
+      <div class="game-streak" id="typeStreak"></div>
+    </div>
+
+    <div class="game-body" id="typeBody">
+      <div class="game-loading">Loading this week's challenge…</div>
+    </div>
+  </section>
+
+  <!-- ── LEADERBOARD ── -->
+  <section class="game-panel leaderboard-panel" id="leaderboardPanel">
+    <div class="game-panel-header">
+      <h2 class="game-panel-title">🏆 Leaderboard</h2>
+      <p class="game-panel-sub">Top trainers this week</p>
+    </div>
+    <div class="game-body" id="leaderboardBody">
+      <div class="game-loading">Loading scores…</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">Dexoria</h2>
+      <p class="disclaimer">
+        Dexoria is an unofficial fan-made platform. We are not affiliated with,
+        endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+        or The Pokémon Company.
+      </p>
+      <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+        <li><a href="../HTML/trades.html">Trade Hub</a></li>
+        <li><a href="../HTML/community.html">Community Feed</a></li>
+        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="help-centre.html">Help Centre</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+    <svg class="pokeball-icon" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+        <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+</button>
+
+<!-- NAVBAR SCRIPT -->
+ <script type="module">
+  import { renderNavbar } from "../js/navbar.js";
+
+  import { supabase } from "../js/supabaseClient.js";
+
+const { data } = await supabase.auth.getSession();
+
+let username = "Trainer";
+
+if (data.session) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (profile?.username) username = profile.username;
+}
+
+renderNavbar("navbar", {
+  isLoggedIn: !!data.session,
+  username
+});
+
+</script>
+
+<!-- CURSOR SCRIPT -->
+ <script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+ 
+  const hero = document.querySelector('.hero');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 40}%;
+      animation-duration:${Math.random() * 6 + 5}s;
+      animation-delay:${Math.random() * 4}s;
+      opacity:0;
+    `;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+  setInterval(spawnParticle, 600);
+</script>
+
+<!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+<script type="module" src="../js/games.js"></script>
+</body>
+</html>

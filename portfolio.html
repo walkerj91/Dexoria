@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dexoria - Portfolio</title>
+
+  <!-- FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- GLOBAL -->
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="../CSS/portfolio.css">
+  
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+
+<main>
+
+  <!-- ========== BINDER SELECTION SCREEN ========== -->
+<div id="binderSelectionScreen" class="binder-selection-screen">
+
+  <div class="binder-selection-header">
+    <div class="section-title-container stc-with-sub">
+      <div class="stc-row">
+        <span class="stc-diamond" aria-hidden="true">✦</span>
+        <h2>MY COLLECTION</h2>
+        <span class="stc-diamond" aria-hidden="true">✦</span>
+      </div>
+        <p class="stc-sub">Choose a binder to open</p>
+    </div>
+  </div>
+
+  <div class="binder-grid" id="binderGrid">
+    <!-- Binders injected by JS -->
+  </div>
+
+  <button class="add-binder-btn" id="addBinderBtn">
+    <span class="add-binder-plus">+</span>
+    <span>New Binder</span>
+  </button>
+
+</div>
+
+<!-- ========== COLLECTION VIEW (inside binder) ========== -->
+<div id="collectionScreen" class="collection-screen" style="display:none;">
+
+  <div class="collection-wrapper">
+    <div class="collection-inner">
+
+      <header class="collection-header">
+        <button class="back-to-binders-btn" id="backToBinders">← Back</button>
+        <h1 class="collection-title" id="openBinderTitle">MY COLLECTION</h1>
+        <div class="collection-page-text">
+          Page <span id="pageCurrent">1</span> of <span id="pageTotal">1</span>
+        </div>
+      </header>
+
+      <div class="collection-body">
+        <div class="page-dots" id="pageDots"></div>
+        <div class="spread">
+          <div class="page" id="pageLeft"></div>
+          <div class="page" id="pageRight"></div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button id="prevBtn" class="page-previous-btn">◀ Prev</button>
+        <button id="nextBtn" class="page-next-btn">Next ▶</button>
+        <button id="addPageBtn" class="add-page-btn">➕ Add Page</button>
+        <button id="deletePageBtn" class="delete-page-btn">🗑️ Delete Page</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center; padding: 16px 0 32px;">
+    <div class="stat-container">
+      <div class="stat-box">
+        <span class="stat-label">cards</span>
+        <span class="stat-value" id="statCards">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">holos</span>
+        <span class="stat-value" id="statHolos">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">pages</span>
+        <span class="stat-value" id="statPages">0</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== CREATE BINDER MODAL ========== -->
+<div id="createBinderModal" class="binder-modal-overlay">
+  <div class="binder-modal">
+    <button class="binder-modal-close" id="closeModal">✕</button>
+    <h2 class="binder-modal-title">Create New Binder</h2>
+
+    <div class="binder-form-group">
+      <label>Binder Name</label>
+      <input type="text" id="binderName" placeholder="e.g. Holos Only" maxlength="30" />
+    </div>
+
+    <div class="binder-form-group">
+      <label>Theme Colour</label>
+      <div class="color-picker-row" id="colorPickerRow">
+        <div class="color-swatch selected" data-color="#6F2DA8" style="background:#6F2DA8;"></div>
+        <div class="color-swatch" data-color="#c0392b" style="background:#c0392b;"></div>
+        <div class="color-swatch" data-color="#1a6ea8" style="background:#1a6ea8;"></div>
+        <div class="color-swatch" data-color="#1a8a4a" style="background:#1a8a4a;"></div>
+        <div class="color-swatch" data-color="#b8860b" style="background:#b8860b;"></div>
+        <div class="color-swatch" data-color="#2d2d2d" style="background:#2d2d2d;"></div>
+        <input type="color" id="customColor" title="Custom colour" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);cursor:pointer;padding:2px;background:none;" />
+      </div>
+    </div>
+
+    <div class="binder-form-group">
+      <label>Cover Image</label>
+      <div class="cover-upload-area" id="coverUploadArea">
+        <input type="file" id="coverImageInput" accept="image/*" style="display:none;" />
+        <div id="coverPreview" class="cover-preview-empty">
+          <span>+ Upload Image</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="binder-form-group">
+      <label>Visibility</label>
+      <div class="binder-visibility-toggle" id="visibilityToggle">
+        <button type="button" class="vis-btn active" data-value="private">🔒 Private</button>
+        <button type="button" class="vis-btn" data-value="public">🌐 Public</button>
+      </div>
+      <p class="vis-hint">Public binders appear on your profile for other trainers to view</p>
+    </div>
+
+    <button class="binder-create-btn" id="createBinderBtn">Create Binder</button>
+    <p class="binder-error" id="binderError"></p>
+  </div>
+</div>
+
+<!-- ========== CARD SEARCH MODAL ========== -->
+<div id="cardSearchModal" class="binder-modal-overlay">
+  <div class="binder-modal card-search-modal">
+    <button class="binder-modal-close" id="closeCardSearch">✕</button>
+    <h2 class="binder-modal-title">Add a Card</h2>
+ 
+    <div class="card-search-inputs">
+      <div class="binder-form-group" style="flex:1;margin-bottom:0;">
+        <label>Card Name</label>
+        <input type="text" id="cardNameInput" placeholder="e.g. Charizard" />
+      </div>
+      <div class="binder-form-group" style="flex:1;margin-bottom:0;">
+        <label>Set</label>
+        <select id="cardSetSelect">
+          <option value="">All Sets</option>
+        </select>
+      </div>
+      <button class="binder-create-btn" id="cardSearchBtn" style="align-self:flex-end;white-space:nowrap;padding:12px 20px;">Search</button>
+    </div>
+ 
+    <div id="cardSearchStatus" class="card-search-status"></div>
+    <div id="cardSearchResults" class="card-search-results"></div>
+  </div>
+</div>
+
+<!-- ========== EDIT BINDER MODAL ========== -->
+<div id="editBinderModal" class="binder-modal-overlay">
+  <div class="binder-modal">
+    <button class="binder-modal-close" id="closeEditModal">✕</button>
+    <h2 class="binder-modal-title">Edit Binder</h2>
+
+    <div class="binder-form-group">
+      <label>Binder Name</label>
+      <input type="text" id="editBinderName" placeholder="e.g. Holos Only" maxlength="30" />
+    </div>
+
+    <div class="binder-form-group">
+      <label>Theme Colour</label>
+      <div class="color-picker-row" id="editColorPickerRow">
+        <div class="color-swatch selected" data-color="#6F2DA8" style="background:#6F2DA8;"></div>
+        <div class="color-swatch" data-color="#c0392b" style="background:#c0392b;"></div>
+        <div class="color-swatch" data-color="#1a6ea8" style="background:#1a6ea8;"></div>
+        <div class="color-swatch" data-color="#1a8a4a" style="background:#1a8a4a;"></div>
+        <div class="color-swatch" data-color="#b8860b" style="background:#b8860b;"></div>
+        <div class="color-swatch" data-color="#2d2d2d" style="background:#2d2d2d;"></div>
+        <input type="color" id="editCustomColor" title="Custom colour" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);cursor:pointer;padding:2px;background:none;" />
+      </div>
+    </div>
+
+    <div class="binder-form-group">
+      <label>Cover Image</label>
+      <div class="cover-upload-area" id="editCoverUploadArea">
+        <input type="file" id="editCoverImageInput" accept="image/*" style="display:none;" />
+        <div id="editCoverPreview" class="cover-preview-empty">
+          <span>+ Upload Image</span>
+        </div>
+      </div>
+      <button class="remove-cover-btn" id="removeCoverBtn" style="display:none;">✕ Remove image</button>
+    </div>
+
+    <div class="binder-form-group">
+      <label>Visibility</label>
+      <div class="binder-visibility-toggle" id="editVisibilityToggle">
+        <button type="button" class="vis-btn active" data-value="private">🔒 Private</button>
+        <button type="button" class="vis-btn" data-value="public">🌐 Public</button>
+      </div>
+      <p class="vis-hint">Public binders appear on your profile for other trainers to view</p>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:8px;">
+      <button class="binder-create-btn" id="saveEditBinderBtn" style="flex:1;">Save Changes</button>
+      <button class="binder-delete-btn" id="deleteBinderBtn">Delete</button>
+    </div>
+    <p class="binder-error" id="editBinderError"></p>
+  </div>
+  
+</div>
+</main>
+
+  <!-- FOOTER -->
+<footer class="main-footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">Dexoria</h2>
+      <p class="disclaimer">
+        Dexoria is an unofficial fan-made platform. We are not affiliated with,
+        endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+        or The Pokémon Company.
+      </p>
+      <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+        <li><a href="../HTML/trades.html">Trade Hub</a></li>
+        <li><a href="../HTML/community.html">Community Feed</a></li>
+        <li><a href="../HTML/portfolio.html">My Collection</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="help-centre.html">Help Centre</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms-of-use.html">Terms of Use</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+
+    <!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+    <svg class="pokeball-icon" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+        <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+</button>
+
+<!-- NAVBAR SCRIPT -->
+ <script type="module">
+  import { renderNavbar } from "../js/navbar.js";
+
+  import { supabase } from "../js/supabaseClient.js";
+
+const { data } = await supabase.auth.getSession();
+
+let username = "Trainer";
+
+if (data.session) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (profile?.username) username = profile.username;
+}
+
+renderNavbar("navbar", {
+  isLoggedIn: !!data.session,
+  username
+});
+
+</script>
+
+<!-- CURSOR SCRIPT -->
+ <script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+ 
+  const hero = document.querySelector('.hero');
+  function spawnParticle() {
+    if (!hero) return;
+
+    const p = document.createElement('div');
+    p.className = 'particle';
+
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 40}%;
+    `;
+
+    hero.appendChild(p);
+  }
+  setInterval(spawnParticle, 600);
+</script>
+
+<!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/portfolio.js"></script>
+
+</body>
+</html>

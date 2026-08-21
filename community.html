@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dexoria - Community Hub</title>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../CSS/dexoria-ui.css">
+  <link rel="stylesheet" href="../CSS/navbar.css">
+
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="../CSS/community.css">
+  
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+
+
+<!-- HERO SECTION -->
+<section class="hero"></section>
+
+<div class="community-main-wrapper">
+
+  <!-- Nav spans full width above both columns -->
+  <nav class="comm-bubble comm-nav">
+    <button class="comm-tab active" data-tab="home">🏠 Home</button>
+    <button class="comm-tab" data-tab="trending">🔥 Trending</button>
+    <button class="comm-tab" data-tab="saved">🔖 Saved</button>
+    <a class="comm-tab" href="../HTML/games.html">🎮 Game Corner</a>
+  </nav>
+
+  <!-- Two-column layout below the nav -->
+  <div class="community-columns">
+
+  <!-- LEFT COLUMN: The Feed -->
+  <main class="comm-center-col">
+
+<!-- Post Creation Bubble -->
+<div class="comm-bubble create-post">
+      <div class="post-input-header">
+        <div class="comm-avatar" id="composerAvatar"></div>
+        <textarea id="postText" placeholder="What's on your mind, Trainer?"></textarea>
+      </div>
+
+      <div id="uploadArea" class="upload-area">
+        <p>📷 Drag & drop or click to add photos / videos</p>
+        <div id="previewContainer" class="preview-container"></div>
+      </div>
+
+      <!-- Single file input -->
+      <input type="file" id="mediaUpload" accept="image/*,video/*" multiple hidden>
+
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+
+      <div class="post-actions">
+        <div class="post-actions-left">
+          <button id="uploadBtn" class="composer-icon-btn" title="Add photo or video">
+            <span>📷</span> Upload
+          </button>
+          <button id="clearBtn" class="composer-clear-btn" title="Clear post">
+            <span>🗑</span> Clear
+          </button>
+        </div>
+        <button id="postBtn" class="post-btn">Post →</button>
+      </div>
+    </div>
+
+    <!-- Feed — posts injected here by JS -->
+    <div id="feedContainer" class="feed-container"></div>
+
+  </main>
+
+  <!-- RIGHT COLUMN: Sidebar -->
+  <aside class="comm-side-col">
+
+    <div class="comm-bubble">
+      <h4>TRENDING TOPICS</h4>
+      <ul class="suggestion-list" id="suggested-topics">
+        <li class="topics-loading">Loading topics…</li>
+      </ul>
+    </div>
+
+    <div class="comm-bubble">
+      <h4>Community Stats</h4>
+      <p style="font-size:14px;margin-top:8px;">
+        <span id="trainer-count-sidebar">—</span> Trainers active
+      </p>
+    </div>
+
+  </aside>
+  </div><!-- end community-columns -->
+</div>
+
+
+<!-- FOOTER -->
+<footer class="main-footer">
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h2 class="footer-logo">Dexoria</h2>
+            <p class="disclaimer">
+                Dexoria is an unofficial fan-made platform. We are not affiliated with,
+                endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+                or The Pokémon Company.
+            </p>
+            <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Explore</h4>
+            <ul>
+                <li><a href="../HTML/marketplace.html">Marketplace</a></li>
+                <li><a href="../HTML/trades.html">Trade Hub</a></li>
+                <li><a href="../HTML/community.html">Community Feed</a></li>
+                <li><a href="../HTML/portfolio.html">My Collection</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="help-centre.html">Help Centre</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms-of-use.html">Terms of Use</a></li>
+                <li><a href="contact-us.html">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Join the Club</h4>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-discord"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+            <p style="font-size: 14px; margin-top: 15px;"><span id="trainer-count">—</span> Trainers Joined Dexoria</p>
+        </div>
+</div>
+</footer>
+
+
+    <!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+    <svg class="pokeball-icon" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+        <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+</button>
+
+<!-- NAVBAR SCRIPT -->
+ <script type="module">
+  import { renderNavbar } from "../js/navbar.js";
+
+  import { supabase } from "../js/supabaseClient.js";
+
+const { data } = await supabase.auth.getSession();
+
+let username = "Trainer";
+
+if (data.session) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (profile?.username) username = profile.username;
+}
+
+renderNavbar("navbar", {
+  isLoggedIn: !!data.session,
+  username
+});
+
+</script>
+
+<!-- CURSOR SCRIPT -->
+ <script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+ 
+  const hero = document.querySelector('.hero');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 40}%;
+      animation-duration:${Math.random() * 6 + 5}s;
+      animation-delay:${Math.random() * 4}s;
+      opacity:0;
+    `;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+  setInterval(spawnParticle, 600);
+</script>
+
+<!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/community.js"></script>
+
+</body>
+</html>
