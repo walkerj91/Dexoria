@@ -57,8 +57,10 @@ export async function renderNavbar(containerId) {
             <a href="./index.html">HOME</a>
 
             <div class="dropdown">
-                <a href="./marketplace.html">MARKETPLACE</a>
-                <span class="dropdown-toggle" aria-label="Toggle Marketplace submenu">▾</span>
+                <div class="dropdwon-title-row">
+                    <a href="./marketplace.html">MARKETPLACE</a>
+                    <span class="dropdown-toggle" aria-label="Toggle Marketplace submenu">▾</span>
+                </div>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binders</a>
                 </div>
@@ -68,8 +70,10 @@ export async function renderNavbar(containerId) {
             <a href="./community.html" id="community-nav-link">COMMUNITY</a>
 
             <div class="dropdown">
-                <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO</a>
-                <span class="dropdown-toggle" aria-label="Toggle Portfolio submenu">▾</span>
+                <div class="dropdown-title-row">
+                    <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO</a>
+                    <span class="dropdown-toggle" aria-label="Toggle Portfolio submenu">▾</span>
+                </div>
                 <div class="dropdown-content">
                     <a href="./set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
