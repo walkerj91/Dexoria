@@ -24,7 +24,7 @@ export async function resolveCardImage(tcgdexImageUrl, cardId, cardName, setName
     }
 
     // Not in cache — use TCGDex directly
-    return `${tcgdexImageUrl}/high.png`;
+    return tcgdexImageUrl;
 }
 
 export async function resolveCardImages(cards) {
