@@ -378,6 +378,14 @@ nav {
     }
 }
 
+@media (max-width: 600px) {
+  .main-footer { padding: 40px 0 20px; }
+  .footer-container { gap: 24px; padding: 0 6%; }
+  .footer-col { min-width: 140px; }
+  .policy-container { padding: 20px; }
+  .privacy-policy { padding: 30px 16px; }
+}
+
 .notif-header-actions {
     display: flex;
     gap: 8px;
