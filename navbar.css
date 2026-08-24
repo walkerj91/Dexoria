@@ -386,6 +386,21 @@ nav {
   .privacy-policy { padding: 30px 16px; }
 }
 
+@media (max-width: 768px) {
+  .dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .dropdown-toggle {
+    cursor: pointer;
+    color: #D4AF37;
+    font-size: 18px;
+    padding: 6px 10px; /* bigger tap target */
+  }
+}
+
 .notif-header-actions {
     display: flex;
     gap: 8px;
