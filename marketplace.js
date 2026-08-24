@@ -45,6 +45,14 @@ async function initMarketplace() {
     const BATCH_SIZE = 8;
     let shown = 0;
 
+    function cardImageUrl(card, size = 'low') {
+    if (!card.image) return '';
+    // Already a fully resolved URL (Supabase cache) — has a file extension
+    if (/\.(png|jpg|jpeg|webp)$/i.test(card.image)) return card.image;
+    // Raw TCGDex base path — needs the size suffix appended
+    return `${card.image}/${size}.png`;
+}
+
     function renderCards(cards) {
         cards.forEach(card => {
             const { price, score, condition } = card;
@@ -53,7 +61,7 @@ async function initMarketplace() {
             div.className = 'dex-card';
             div.innerHTML = `
                 <div class="dex-img-wrap">
-                    <img src="${card.image}/high.png" alt="${card.name}" loading="lazy">
+                    <img src="${cardImageUrl(card)}" alt="${card.name}" loading="lazy" decoding="async">
                 </div>
                 <h3 class="dex-card-title">${card.name}</h3>
                 <p class="dex-card-sub">${card.setName} • ${card.rarity || 'Unknown'}</p>
@@ -203,7 +211,7 @@ async function initMarketplace() {
                 div.className = 'dex-card';
                 div.innerHTML = `
                     <div class="dex-img-wrap">
-                        <img src="${card.image}/high.png" alt="${card.name}" loading="lazy">
+                        <img src="${cardImageUrl(card)}" alt="${card.name}" loading="lazy" decoding="async">
                     </div>
                     <h3 class="dex-card-title">${card.name}</h3>
                     <p class="dex-card-sub">${card.setName} • ${card.rarity || 'Unknown'}</p>
@@ -232,7 +240,7 @@ async function initMarketplace() {
                     div.className = 'dex-card';
                     div.innerHTML = `
                         <div class="dex-img-wrap">
-                            <img src="${card.image}/high.png" alt="${card.name}" loading="lazy">
+                            <img src="${cardImageUrl(card)}" alt="${card.name}" loading="lazy" decoding="async">
                         </div>
                         <h3 class="dex-card-title">${card.name}</h3>
                         <p class="dex-card-sub">${card.setName} • ${card.rarity || 'Unknown'}</p>
@@ -599,7 +607,7 @@ function initSearch() {
                 div.className = 'dex-card';
                 div.innerHTML = `
                     <div class="dex-img-wrap">
-                        <img src="${card.image}/high.png" alt="${card.name}" loading="lazy">
+                        <img src="${cardImageUrl(card)}" alt="${card.name}" loading="lazy" decoding="async">
                     </div>
                     <h3 class="dex-card-title">${card.name}</h3>
                     <p class="dex-card-sub">${card.setName} • ${card.rarity || 'Unknown'}</p>
