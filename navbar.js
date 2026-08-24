@@ -58,6 +58,7 @@ export async function renderNavbar(containerId) {
 
             <div class="dropdown">
                 <a href="./marketplace.html">MARKETPLACE ▾</a>
+                <span class="dropdown-toggle" aria-label="Toggle Marketplace submenu">▾</span>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binders</a>
                 </div>
@@ -67,7 +68,8 @@ export async function renderNavbar(containerId) {
             <a href="./community.html" id="community-nav-link">COMMUNITY</a>
 
             <div class="dropdown">
-                <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO ▾</a>
+                <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO</a>
+                <span class="dropdown-toggle" aria-label="Toggle Portfolio submenu">▾</span>
                 <div class="dropdown-content">
                     <a href="./set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
@@ -362,12 +364,11 @@ function setupNavbar() {
         toggle.addEventListener('click', () => nav.classList.toggle('active'));
     }
 
-    document.querySelectorAll('.dropdown > a').forEach(link => {
-        link.addEventListener('click', function (e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                this.parentElement.classList.toggle('active');
-            }
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.parentElement.classList.toggle('active');
         });
     });
 
