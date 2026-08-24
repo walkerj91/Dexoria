@@ -401,6 +401,26 @@ nav {
   }
 }
 
+@media (max-width: 768px) {
+  .dropdown {
+    display: flex;
+    flex-wrap: wrap;          /* allow the submenu to drop to a new line */
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .dropdown-toggle {
+    cursor: pointer;
+    color: #D4AF37;
+    font-size: 18px;
+    padding: 6px 10px;
+  }
+  .dropdown-content {
+    width: 100%;              /* forces it below the link + toggle */
+    order: 3;                 /* after the link and toggle */
+  }
+}
+
 .notif-header-actions {
     display: flex;
     gap: 8px;
