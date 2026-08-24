@@ -581,3 +581,23 @@ footer::before {
   .policy-container { padding: 20px; }
   .privacy-policy { padding: 30px 16px; }
 }
+
+@media (max-width: 600px) {
+  .section-title-container {
+    padding: 0 16px;
+    margin: 40px auto 28px;
+  }
+  .section-title-container h2 {
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+
+  /* ADD THIS */
+  .stc-sub {
+    white-space: normal;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 0 12px;
+    text-align: center;
+  }
+}
