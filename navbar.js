@@ -58,8 +58,8 @@ export async function renderNavbar(containerId) {
 
             <div class="dropdown">
                 <div class="dropdwon-title-row">
-                    <a href="./marketplace.html">MARKETPLACE▾</a>
-                    <span class="dropdown-toggle" aria-label="Toggle Marketplace submenu"></span>
+                    <a href="./marketplace.html">MARKETPLACE</a>
+                    <span class="dropdown-toggle" aria-label="Toggle Marketplace submenu">▾</span>
                 </div>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binders</a>
