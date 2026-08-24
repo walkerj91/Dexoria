@@ -389,22 +389,12 @@ nav {
 @media (max-width: 768px) {
   .dropdown {
     display: flex;
+    flex-direction: column;   /* title row, then submenu below */
     align-items: center;
-    justify-content: center;
-    gap: 6px;
+    width: 100%;
   }
-  .dropdown-toggle {
-    cursor: pointer;
-    color: #D4AF37;
-    font-size: 18px;
-    padding: 6px 10px; /* bigger tap target */
-  }
-}
-
-@media (max-width: 768px) {
-  .dropdown {
+  .dropdown-title-row {
     display: flex;
-    flex-wrap: wrap;          /* allow the submenu to drop to a new line */
     align-items: center;
     justify-content: center;
     gap: 6px;
@@ -416,9 +406,24 @@ nav {
     padding: 6px 10px;
   }
   .dropdown-content {
-    width: 100%;              /* forces it below the link + toggle */
-    order: 3;                 /* after the link and toggle */
+    position: static;
+    min-width: unset;         /* ← removes the width conflict causing off-centering */
+    width: 100%;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    border: none;
+    border-radius: 0;
+    background: #1E2329;
+    box-shadow: none;
+    border-top: 2px solid #D4AF37;
+    border-bottom: 1px solid #D4AF37;
   }
+  .dropdown-content::before { display: none; }
+  .dropdown-content a { padding-left: 32px; }
+  .dropdown-content a:hover { padding-left: 38px; }
+  .dropdown.active .dropdown-content { display: block; }
 }
 
 .notif-header-actions {
