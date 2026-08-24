@@ -1065,4 +1065,9 @@ order: 2; }
   border-color: var(--gold-light);
 }
 
-            
+/* Phone Accessibility */
+@media (hover: hover) {
+  .mm-ticker:hover {
+    animation-play-state: paused;
+  }
+}
