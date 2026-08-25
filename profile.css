@@ -740,7 +740,6 @@
     width: 100%;
     cursor: pointer;
     transition: background 0.2s;
-    margin-left: 250px;
 }
 
 .wishlist-add-btn:hover {
@@ -1061,4 +1060,52 @@
 #trade-activity-canvas {
     width: 100%;
     display: block;
+}
+
+/* ============================================
+   MOBILE — PROFILE PAGE
+   ============================================ */
+@media (max-width: 768px) {
+
+    .profile-main-grid {
+        padding: 90px 12px 30px 12px;
+    }
+
+    /* Stack banner+info and the friends sidebar instead of forcing them side by side */
+    .header-main-flex {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .banner-and-info,
+    .header-sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .profile-banner {
+        height: 180px;
+    }
+
+    .profile-info {
+        padding: 0 16px 20px 16px;
+    }
+
+    .avatar-wrapper {
+        margin-top: -40px;
+    }
+
+    .user-avatar {
+        width: 90px;
+        height: 90px;
+    }
+
+    .user-stats {
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 }
