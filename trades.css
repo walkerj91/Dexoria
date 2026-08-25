@@ -742,6 +742,43 @@
     .conversation-list { max-height: 200px; }
 }
 
+@media (max-width: 600px) {
+    .trade-section,
+    .trade-main-container {
+        padding: 16px;
+    }
+
+    .glass-panel {
+        padding: 18px;
+    }
+
+    /* Let the offer/receive columns stack instead of squeezing side by side */
+    .trade-grid {
+        flex-wrap: wrap;
+    }
+
+    .trade-column {
+        flex: 1 1 100%;
+    }
+
+    .drop-zone {
+        height: 170px;
+    }
+
+    .conversation-sidebar-header button {
+        margin-left: 0;
+    }
+
+    .trade-console {
+        gap: 20px;
+    }
+
+    .multi-card-item,
+    .multi-card-img {
+        width: 64px;
+    }
+}
+
 /* ============================================
    CUSTOM CURSOR — above modal, clicks pass through
    ============================================ */
