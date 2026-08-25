@@ -59,8 +59,12 @@ export async function renderNavbar(containerId) {
             <div class="dropdown">
                 <div class="dropdown-title-row">
                     <a href="./marketplace.html">MARKETPLACE</a>
-                    <span class="dropdown-toggle">▾</span>
-                </div>
+                    <button
+                        type="button"
+                        class="dropdown-toggle"
+                        aria label="Open submenu">
+                        ▾
+                    </button>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binders</a>
                 </div>
@@ -72,8 +76,12 @@ export async function renderNavbar(containerId) {
             <div class="dropdown">
                 <div class="dropdown-title-row">
                     <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO</a>
-                    <span class="dropdown-toggle">▾</span>
-                </div>
+                    <button
+                        type="button"
+                        class="dropdown-toggle"
+                        aria label="Open submenu">
+                        ▾
+                    </button>
                 <div class="dropdown-content">
                     <a href="./set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
@@ -368,12 +376,15 @@ function setupNavbar() {
         toggle.addEventListener('click', () => nav.classList.toggle('active'));
     }
 
-    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-    toggle.addEventListener('click', function (e) {
+   document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+
         e.preventDefault();
         e.stopPropagation();
 
         const dropdown = this.closest('.dropdown');
+
+        if (!dropdown) return;
 
         document.querySelectorAll('.dropdown.active').forEach(item => {
             if (item !== dropdown) {
