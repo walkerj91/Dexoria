@@ -694,31 +694,22 @@ body {
 /* Phone Accessibilty */
 @media (max-width: 768px) {
 
-  .hero {
-    min-height: 380px;
-    padding: 0 16px;
-  }
-
   .hero-title {
-    font-size: 32px;
-    letter-spacing: 2px;
+    font-size: 28px;
+    letter-spacing: 1px;
     line-height: 1.2;
   }
 
-  .hero-eyebrow,
   .hero-sub {
-    letter-spacing: 2px;
+    font-size: 12px;
+    letter-spacing: 1px;
   }
 
-  .hero-btns {
-    flex-direction: column;
-    align-items: center;
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1px;
   }
-
-  .hero-btn {
-    width: 100%;
-    max-width: 280px;
-  }
+}
 
   .catalogue-header {
     flex-direction: column;
