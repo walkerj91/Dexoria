@@ -266,12 +266,43 @@ body {
 .hero-data-val--active { color: #40ff80; }
 
 @media (max-width: 768px) {
-  .hero { min-height: 320px; }
-  .hero-title { letter-spacing: 6px; }
-  .hero-data-bar { gap: 0; padding: 10px 20px; }
-  .hero-data-item { padding-right: 14px; }
-  .hero-data-divider { margin-right: 14px; }
-  .hero-bracket { display: none; }
+
+  .hero {
+    min-height: 380px;
+    padding: 0 16px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+    letter-spacing: 2px;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .hero-eyebrow {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  .hero-sub {
+    font-size: 12px;
+    letter-spacing: 2px;
+    line-height: 1.5;
+  }
+
+  .hero-btns {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-btn {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .hero-bracket {
+    display: none;
+  }
 }
 
 
@@ -448,6 +479,22 @@ body {
   z-index: 2;
 }
 
+@media (max-width: 768px) {
+
+  .hero-hud-bar {
+    padding: 10px 15px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .hud-os-tag,
+  .hud-title-tag,
+  .hud-status {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+}
+
 /* Product info */
 .product-info {
   padding: 18px 20px 20px;
@@ -505,7 +552,52 @@ body {
   .catalogue-header { flex-wrap: wrap; gap: 10px; }
 }
 
+@media (max-width: 768px) {
 
+  .hero-data-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .hero-data-divider {
+    display: none;
+  }
+
+  .hero-data-item {
+    padding: 0;
+    min-width: 120px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .catalogue-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .catalogue-title,
+  .catalogue-count {
+    white-space: normal;
+  }
+
+  .catalogue-line {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .studio-wrapper .section-title-container h2 {
+    font-size: 24px;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 0;
+  }
+}
 /* ══════════════════════════════════════════════
    CUSTOM DESIGN STUDIO SECTION
 ══════════════════════════════════════════════ */
