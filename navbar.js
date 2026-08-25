@@ -59,7 +59,8 @@ export async function renderNavbar(containerId) {
             <div class="dropdown">
                 <div class="dropdown-title-row">
                     <a href="./marketplace.html">MARKETPLACE</a>
-                    <span class="dropdown-toggle" aria-label="Toggle Marketplace submenu">▾</span>                
+                    <span class="dropdown-toggle">▾</span>
+                </div>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binders</a>
                 </div>
@@ -71,7 +72,8 @@ export async function renderNavbar(containerId) {
             <div class="dropdown">
                 <div class="dropdown-title-row">
                     <a href="./portfolio.html" id="portfolio-nav-link">PORTFOLIO</a>
-                    <span class="dropdown-toggle" aria-label="Toggle Portfolio submenu">▾</span>                                    
+                    <span class="dropdown-toggle">▾</span>
+                </div>
                 <div class="dropdown-content">
                     <a href="./set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
