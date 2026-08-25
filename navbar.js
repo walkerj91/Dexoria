@@ -369,19 +369,21 @@ function setupNavbar() {
     }
 
     document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+    toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-            const dropdown = this.closest('.dropdown.active').forEach(item => {
-                if (item !== dropdown) {
-                    item.classList.remove('active');
-                }
-            });
-            
-            dropdown.classList.toggle('active');
+        const dropdown = this.closest('.dropdown');
+
+        document.querySelectorAll('.dropdown.active').forEach(item => {
+            if (item !== dropdown) {
+                item.classList.remove('active');
+            }
         });
+
+        dropdown.classList.toggle('active');
     });
+});
 
     const current = window.location.pathname.split('/').pop();
     document.querySelectorAll('.nav-links a').forEach(link => {
