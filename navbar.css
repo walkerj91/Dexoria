@@ -392,10 +392,12 @@ nav {
     .dropdown-content a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 14px 20px;
+    justify-content: flex-start;
+    padding: 32px;
     width: 100%;
-    text-align: center;
+    text-align: left;
+   }
+
 }
 
     .notif-dropdown {
@@ -408,7 +410,7 @@ nav {
     .notif-dropdown::before {
         display: none;
     }
-}
+
 .notif-header-actions {
     display: flex;
     gap: 8px;
