@@ -553,6 +553,50 @@
 }
 @media (max-width: 600px) {
     .community-main-wrapper { padding: 10px; margin: 20px auto; }
+
+    /* ── POST CARD — scale carousel and spacing down for phones ── */
+    .post-carousel {
+        height: auto;
+        aspect-ratio: 4 / 3;
+    }
+
+    .post-card-header {
+        padding: 10px 12px 8px;
+        gap: 8px;
+    }
+
+    .post-card-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .post-card-username { font-size: 13px; }
+    .post-card-time { font-size: 11px; }
+
+    .post-card-caption {
+        padding: 0 12px 10px;
+        font-size: 14px;
+    }
+
+    .post-card-actions {
+        padding: 8px 12px 10px;
+    }
+
+    .post-card-actions-left { gap: 12px; }
+
+    .post-like-btn,
+    .post-share-btn,
+    .post-save-btn {
+        font-size: 17px;
+    }
+
+    .carousel-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+    }
+
+    .feed-container { gap: 12px; }
 }
 
 /* ── LIGHTBOX ──────────────────────────────────── */
