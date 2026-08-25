@@ -42,6 +42,9 @@ async function initMarketplace() {
 
     if (!grid || !btn) return;
 
+    initMarketIntelligence();
+    initSearch();
+    
     const BATCH_SIZE = 8;
     let shown = 0;
 
