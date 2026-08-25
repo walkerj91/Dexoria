@@ -320,6 +320,7 @@ nav {
 /* ============================================
    MOBILE NAV
    ============================================ */
+
 .menu-toggle {
     display: none;
     font-size: 28px;
@@ -328,7 +329,10 @@ nav {
 }
 
 @media (max-width: 768px) {
-    .menu-toggle { display: block; }
+
+    .menu-toggle {
+        display: block;
+    }
 
     .nav-links {
         position: absolute;
@@ -342,62 +346,66 @@ nav {
         padding: 20px 0;
         display: none;
     }
-    .nav-links.active { display: flex; }
 
-@media (max-width: 768px) {
-    .notif-dropdown.open {
-        transform: translateX(-50%); /* ensure override applies when open */
+    .nav-links.active {
+        display: flex;
+    }
+
+    .dropdown {
+        width: 100%;
+        text-align: center;
+    }
+
+    .dropdown-title-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .dropdown-toggle {
+        background: none;
+        border: none;
+        color: #D4AF37;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 6px 10px;
+    }
+
+    .dropdown-content {
+        display: none;
+        width: 100%;
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        border: none;
+        border-top: 2px solid #D4AF37;
+        background: #1E2329;
+        box-shadow: none;
+    }
+
+    .dropdown.active .dropdown-content {
+        display: block !important;
+    }
+
+    .dropdown-content a {
+        display: block;
+        padding: 12px 32px;
+        text-align: center;
+    }
+
+    .notif-dropdown {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90vw;
+    }
+
+    .notif-dropdown::before {
+        display: none;
     }
 }
-
-@media (max-width: 600px) {
-  .main-footer { padding: 40px 0 20px; }
-  .footer-container { gap: 24px; padding: 0 6%; }
-  .footer-col { min-width: 140px; }
-  .policy-container { padding: 20px; }
-  .privacy-policy { padding: 30px 16px; }
-}
-
-@media (max-width: 768px) {
-  .dropdown {
-    display: flex;
-    flex-direction: column;   /* title row, then submenu below */
-    align-items: center;
-    width: 100%;
-  }
-  .dropdown-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .dropdown-toggle {
-    cursor: pointer;
-    color: #D4AF37;
-    font-size: 18px;
-    padding: 6px 10px;
-  }
-  .dropdown-content {
-    position: static;
-    min-width: unset;         /* ← removes the width conflict causing off-centering */
-    width: 100%;
-    display: none;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    border: none;
-    border-radius: 0;
-    background: #1E2329;
-    box-shadow: none;
-    border-top: 2px solid #D4AF37;
-    border-bottom: 1px solid #D4AF37;
-  }
-  .dropdown-content::before { display: none; }
-  .dropdown-content a { padding-left: 32px; }
-  .dropdown-content a:hover { padding-left: 38px; }
-  .dropdown.active .dropdown-content { display: block; }
-}
-
 .notif-header-actions {
     display: flex;
     gap: 8px;
