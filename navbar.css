@@ -344,34 +344,6 @@ nav {
     }
     .nav-links.active { display: flex; }
 
-    .dropdown-content {
-        position: static;
-        display: none;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        border: none;
-        border-radius: 0;
-        background: #1E2329;
-        box-shadow: none;
-        border-top: 2px solid #D4AF37;
-        border-bottom: 1px solid #D4AF37;
-    }
-    .dropdown-content::before { display: none; }
-    .dropdown-content a { padding-left: 32px; }
-    .dropdown-content a:hover { padding-left: 38px; }
-    .dropdown.active .dropdown-content { display: block; }
-
-    /* Notification dropdown repositions on mobile */
-    .notif-dropdown {
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90vw;
-    }
-    .notif-dropdown::before { display: none; }
-}
-
 @media (max-width: 768px) {
     .notif-dropdown.open {
         transform: translateX(-50%); /* ensure override applies when open */
