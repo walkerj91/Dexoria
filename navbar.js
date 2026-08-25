@@ -65,6 +65,7 @@ export async function renderNavbar(containerId) {
                         aria label="Open submenu">
                         ▾
                     </button>
+                </div>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binders</a>
                 </div>
@@ -82,6 +83,7 @@ export async function renderNavbar(containerId) {
                         aria label="Open submenu">
                         ▾
                     </button>
+                </div>
                 <div class="dropdown-content">
                     <a href="./set-tracker.html" id="set-tracker-link">Set Tracker</a>
                 </div>
