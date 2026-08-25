@@ -372,7 +372,14 @@ function setupNavbar() {
         toggle.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            this.parentElement.classList.toggle('active');
+
+            const dropdown = this.closest('.dropdown.active').forEach(item => {
+                if (item !== dropdown) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            dropdown.classList.toggle('active');
         });
     });
 
