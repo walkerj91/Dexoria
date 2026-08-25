@@ -180,8 +180,16 @@
   gap: 24px;
 }
 
+/* Phone Accessibility */
 @media (max-width: 768px) {
   .help-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.gold-highlight {
+  color: var(--gold-mid);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
