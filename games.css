@@ -761,3 +761,77 @@
     font-family: 'Cinzel', serif;
     min-height: 18px;
 }
+
+/* ── MOBILE ──────────────────────────────────────── */
+@media (max-width: 768px) {
+    .games-hero {
+        padding: 0 24px;
+        height: 40vh;
+        min-height: 220px;
+    }
+
+    .games-hero-pokeball {
+        width: 220px;
+        height: 220px;
+        right: -60px;
+    }
+    .games-hero-pokeball::after {
+        width: 44px;
+        height: 44px;
+    }
+
+    .games-hero-title {
+        letter-spacing: 4px;
+    }
+
+    .games-hero-tag,
+    .games-hero-sub {
+        letter-spacing: 3px;
+    }
+
+    .streak-bar {
+        padding: 10px 16px;
+    }
+
+    .streak-inner {
+        flex-wrap: wrap;
+        gap: 10px 20px;
+    }
+
+    .games-wrapper {
+        padding: 0 16px;
+        gap: 20px;
+    }
+
+    .game-panel-header {
+        padding: 18px 18px 14px;
+    }
+
+    .game-body {
+        padding: 18px;
+    }
+
+    .whos-silhouette-wrap {
+        width: 150px;
+        height: 150px;
+    }
+    .whos-pokemon-img {
+        width: 135px;
+        height: 135px;
+    }
+
+    .spotlight-artwork {
+        width: 150px;
+        height: 150px;
+    }
+
+    #typePanel .game-body {
+        height: auto;
+        min-height: 280px;
+    }
+
+    #spotlightPanel .game-body {
+        height: auto;
+        min-height: 240px;
+    }
+}
