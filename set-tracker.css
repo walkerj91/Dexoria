@@ -236,6 +236,8 @@
   color: #F8F9FA;
   transition: color 0.2s;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .st-series-header.open .st-series-name {
@@ -1054,6 +1056,28 @@
   .st-search { width: 100%; }
   .st-overall-stats { gap: 12px; }
   .st-overall-divider { display: none; }
+
+  /* Series accordion header — let the name truncate and shrink the bar instead of overflowing */
+  .st-series-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .st-series-name {
+    max-width: 130px;
+  }
+  .st-series-bar {
+    width: 50px;
+  }
+  .st-series-header-right {
+    gap: 6px;
+  }
+
+  /* Expanded sets grid — 3 columns instead of 5 on tablets/large phones */
+  .st-series-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
 }
 
 /* ── Animations ── */
@@ -1073,6 +1097,12 @@
   .st-series-grid.open,
   .st-hero-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .st-series-name {
+    max-width: 90px;
+  }
+  .st-series-bar {
+    display: none;
   }
 }
 /* ── Rarity badges ─────────────────────────────────────────────────── */
