@@ -105,7 +105,34 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
+  .hero {
+    height: 250px;
+  }
+
+  .set-page {
+    padding: 24px 5%;
+    margin-top: 40px;
+  }
+
+  .set-meta {
+    font-size: 17px;
+    gap: 10px;
+  }
+
+  .set-description {
+    font-size: 15px;
+  }
+
   .chase-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .chase-card {
+    padding: 10px;
+  }
+
+  .chase-card p {
+    font-size: 14px;
   }
 }
