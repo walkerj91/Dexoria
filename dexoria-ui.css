@@ -154,17 +154,6 @@ main {
 }
 
 /* ── Responsive ── */
-@media (max-width: 600px) {
-  .section-title-container {
-    padding: 0 16px;
-    margin: 40px auto 28px;
-  }
-  .section-title-container h2 {
-    font-size: 15px;
-    letter-spacing: 2px;
-  }
-
-}
 
 .section-title-container.stc-plain::before,
 .section-title-container.stc-plain::after {
@@ -583,17 +572,17 @@ footer::before {
   .privacy-policy { padding: 30px 16px; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .section-title-container {
     padding: 0 16px;
     margin: 40px auto 28px;
   }
   .section-title-container h2 {
-    font-size: 15px;
+    font-size: 20px;
     letter-spacing: 2px;
+    white-space: normal;
   }
 
-  /* ADD THIS */
   .stc-sub {
     white-space: normal;
     font-size: 13px;
