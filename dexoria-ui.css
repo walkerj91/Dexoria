@@ -583,6 +583,15 @@ footer::before {
     white-space: normal;
   }
 
+  /* The flanking gradient lines are fixed at 250px each (flex: none) and never
+     shrink on their own — that's the actual overflow source on narrow screens */
+  .section-title-container::before,
+  .section-title-container::after,
+  .stc-row::before,
+  .stc-row::after {
+    width: 30px;
+  }
+
   .stc-sub {
     white-space: normal;
     font-size: 13px;
