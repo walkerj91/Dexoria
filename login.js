@@ -100,6 +100,7 @@ if (forgotPasswordLink) {
                     firstname,
                     lastname,
                     username,
+                    display_name: firstname,
                     avatar_url: selectedAvatar || "Ash Ketchum User.jpg",
                     banner_url: selectedBanner || "Arcanine_Full.png",
                     bio: "New Trainer on Dexoria!"
