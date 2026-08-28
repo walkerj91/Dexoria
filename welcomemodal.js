@@ -5,6 +5,9 @@
 // Usage: after your profile-customization save succeeds, call:
 //   import { maybeShowWelcomeModal } from './welcomeModal.js';
 //   await maybeShowWelcomeModal(supabase, user);
+//
+// maybeShowWelcomeModal resolves once the modal has been closed (or immediately
+// if there was nothing to show), so callers can `await` it before navigating away.
 
 const RULES = [
   {
@@ -68,48 +71,57 @@ function buildModalMarkup(displayName) {
 /**
  * Checks whether the current user still needs to see the welcome modal,
  * and if so, shows it, sends the welcome email, and marks it complete.
+ * Resolves once the modal is closed (or immediately if nothing was shown),
+ * so callers can await it before navigating away from the page.
  * @param {import('@supabase/supabase-js').SupabaseClient} supabase
  * @param {{ id: string, email?: string }} user
+ * @returns {Promise<void>}
  */
-export async function maybeShowWelcomeModal(supabase, user) {
-  if (!user?.id) return;
+export function maybeShowWelcomeModal(supabase, user) {
+  return new Promise(async (resolve) => {
+    if (!user?.id) { resolve(); return; }
 
-  const { data: profile, error } = await supabase
-    .from('profiles')
-    .select('welcome_shown, welcome_email_sent, display_name')
-    .eq('id', user.id)
-    .single();
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('welcome_shown, welcome_email_sent, display_name')
+      .eq('id', user.id)
+      .single();
 
-  if (error) {
-    console.error('Failed to check welcome status:', error);
-    return;
-  }
+    if (error) {
+      console.error('Failed to check welcome status:', error);
+      resolve();
+      return;
+    }
 
-  if (profile?.welcome_shown) return;
+    if (profile?.welcome_shown) { resolve(); return; }
 
-  showWelcomeModal(profile?.display_name);
+    showWelcomeModal(profile?.display_name, resolve);
 
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({ welcome_shown: true, profile_completed_at: new Date().toISOString() })
-    .eq('id', user.id);
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ welcome_shown: true, profile_completed_at: new Date().toISOString() })
+      .eq('id', user.id);
 
-  if (updateError) console.error('Failed to mark welcome_shown:', updateError);
+    if (updateError) console.error('Failed to mark welcome_shown:', updateError);
 
-  if (!profile?.welcome_email_sent) {
-    sendWelcomeEmail(supabase, user).catch(err =>
-      console.error('Welcome email failed:', err)
-    );
-  }
+    if (!profile?.welcome_email_sent) {
+      sendWelcomeEmail(supabase, user).catch(err =>
+        console.error('Welcome email failed:', err)
+      );
+    }
+  });
 }
 
-function showWelcomeModal(displayName) {
+function showWelcomeModal(displayName, onClose) {
   const container = document.createElement('div');
   container.innerHTML = buildModalMarkup(displayName);
   document.body.appendChild(container.firstElementChild);
 
   const overlay = document.getElementById('dex-welcome-overlay');
-  const close = () => overlay?.remove();
+  const close = () => {
+    overlay?.remove();
+    onClose?.();
+  };
 
   document.getElementById('dex-welcome-close')?.addEventListener('click', close);
   document.getElementById('dex-welcome-accept')?.addEventListener('click', close);
