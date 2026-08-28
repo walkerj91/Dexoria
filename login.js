@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { maybeShowWelcomeModal } from './welcomemodal.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -109,6 +110,10 @@ if (forgotPasswordLink) {
                 alert("Profile update failed: " + updateError.message);
                 return;
             }
+
+            // Show the welcome modal for new accounts and wait for it to
+            // close before moving on, so the user actually gets to read it.
+            await maybeShowWelcomeModal(supabase, user);
 
             window.location.href = "./profile.html";
         });
