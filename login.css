@@ -222,7 +222,7 @@
 
 .banner-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
     margin-top: 10px;
 }
@@ -249,7 +249,7 @@
 
 .avatar-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
     margin-top: 10px;
 }
@@ -309,10 +309,17 @@
 }
 
 /* Responsive design */
+@media (max-width: 768px) {
+    .glass-container {
+        margin: 40px auto;
+    }
+}
+
 @media (max-width: 480px) {
     .glass-container {
         padding: 30px 25px;
         border-radius: 20px;
+        margin: 24px auto;
     }
     
     .login-header h1 {
@@ -323,6 +330,11 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+
+    .avatar-option {
+        width: 52px;
+        height: 52px;
     }
 }
 
