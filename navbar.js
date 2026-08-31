@@ -1,5 +1,8 @@
 import { supabase } from './supabaseClient.js';
 
+// Dexoria Team system account — excluded from the trainer count
+const DEXORIA_TEAM_ID = 'PUT_YOUR_TEAM_ACCOUNT_UUID_HERE';
+
 export async function renderNavbar(containerId) {
 
     const container = document.getElementById(containerId);
@@ -180,7 +183,8 @@ export async function renderNavbar(containerId) {
     // ============================================
     const trainerCountEl = document.getElementById('trainer-count');
     if (trainerCountEl) {
-        const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+        const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true })
+            .neq('id', DEXORIA_TEAM_ID);
         if (count !== null) trainerCountEl.innerText = count.toLocaleString();
     }
 
