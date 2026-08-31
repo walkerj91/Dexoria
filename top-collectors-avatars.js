@@ -1,5 +1,8 @@
 import { supabase } from './supabaseClient.js';
 
+// Dexoria Team system account — excluded from the leaderboard
+const DEXORIA_TEAM_ID = 'PUT_YOUR_TEAM_ACCOUNT_UUID_HERE';
+
 // ============================================
 // TROPHY SVG — reused for all three ranks
 // ============================================
@@ -49,7 +52,8 @@ async function fetchTopCollectors() {
     // 1. Get all profiles
     const { data: profiles, error: profileError } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url');
+        .select('id, username, avatar_url')
+        .neq('id', DEXORIA_TEAM_ID);
 
     if (profileError || !profiles) {
         console.error('Top collectors fetch error:', profileError);
