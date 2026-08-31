@@ -10,6 +10,9 @@ let currentUser    = null;
 let profileUserId  = null; // the profile being viewed (own or friend)
 let isOwnProfile   = false;
 
+// Dexoria Team system account — excluded from friend search results
+const DEXORIA_TEAM_ID = 'PUT_YOUR_TEAM_ACCOUNT_UUID_HERE';
+
 // ============================================
 // AUTH GUARD
 // ============================================
@@ -326,12 +329,6 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
         btn.innerText = 'Error'; btn.style.background = '#ff4444';
         return;
     }
-
-    const { data } = await supabase
-    .from('profiles')
-    .select('*')
-    .ilike('username', `%${searchTerm}%`)
-    .neq('id', '<dexoria-team-user-id>');
 
     btn.innerText        = 'Added';
     btn.style.background = '#44cc44';
@@ -731,7 +728,7 @@ window.addEventListener('visibilitychange', async () => {
             friendSearchResults.innerHTML  = `<p style="color:#aaa;font-size:13px;">Loading trainers...</p>`;
 
             const { data: results } = await supabase.from('profiles').select('id, username, avatar_url')
-                .neq('id', user.id).order('username', { ascending: true }).limit(20);
+                .neq('id', user.id).neq('id', DEXORIA_TEAM_ID).order('username', { ascending: true }).limit(20);
 
             friendSearchResults.innerHTML = !results || results.length === 0
                 ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
@@ -775,7 +772,7 @@ window.addEventListener('visibilitychange', async () => {
             friendSearchResults.innerHTML = `<p style="color:#aaa;font-size:13px;">Searching...</p>`;
             searchTimeout = setTimeout(async () => {
                 const { data: results } = await supabase.from('profiles').select('id, username, avatar_url')
-                    .ilike('username', `%${query}%`).neq('id', user.id).limit(10);
+                    .ilike('username', `%${query}%`).neq('id', user.id).neq('id', DEXORIA_TEAM_ID).limit(10);
                 friendSearchResults.innerHTML = !results || results.length === 0
                     ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
                     : results.map(r => `
