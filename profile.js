@@ -327,6 +327,12 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
         return;
     }
 
+    const { data } = await supabase
+    .from('profiles')
+    .select('*')
+    .ilike('username', `%${searchTerm}%`)
+    .neq('id', '<dexoria-team-user-id>');
+
     btn.innerText        = 'Added';
     btn.style.background = '#44cc44';
     btn.style.color      = 'white';
