@@ -751,6 +751,21 @@ body {
     margin: 0 10px 40px;
   }
 
+  .studio-terminal-bar {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    padding: 10px 16px;
+  }
+
+  .terminal-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+
+  .terminal-bar-line {
+    display: none;
+  }
+
   .custom-container {
     padding: 24px 16px;
   }
