@@ -885,6 +885,10 @@
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 10px;
     }
+    .wishlist-add-btn {
+        justify-self: center;
+        max-width: 180px;
+    }
 }
 /* ── Public Binders Section ──────────────────────────────── */
 .profile-binders-section {
