@@ -186,9 +186,11 @@ function renderGens() {
 
     const section = document.createElement('div');
     section.className = 'ndex-gen-section';
+    section.dataset.gen = gen.name;
 
     const header = document.createElement('button');
     header.className = 'ndex-gen-header' + (isOpen ? ' open' : '');
+    header.dataset.gen = gen.name;
     header.innerHTML = `
       <div class="ndex-gen-header-left">
         <svg class="ndex-gen-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -252,10 +254,31 @@ function renderGens() {
   });
 }
 
-/** Lightweight update of one generation's header bar without a full re-render. */
+/** Lightweight update of one generation's header bar — patches existing DOM
+ *  in place rather than re-rendering, so scroll position is never disturbed. */
 function updateGenHeader(gen) {
-  // Simplest reliable approach given the accordion re-renders cheaply
-  renderGens();
+  const header = document.querySelector(`.ndex-gen-header[data-gen="${gen.name}"]`);
+  if (!header) { renderGens(); return; } // fallback if somehow not found
+
+  const all     = ndexState.species.filter(s => s.id >= gen.from && s.id <= gen.to);
+  const col     = all.filter(s => isOwned(s.id)).length;
+  const total   = all.length;
+  const pct     = total > 0 ? Math.round(col / total * 100) : 0;
+  const complete = total > 0 && col === total;
+
+  const fill = header.querySelector('.ndex-gen-bar-fill');
+  if (fill) fill.style.width = pct + '%';
+
+  const pctEl = header.querySelector('.ndex-gen-pct');
+  if (pctEl) pctEl.textContent = total > 0 ? pct + '%' : '…';
+
+  const left = header.querySelector('.ndex-gen-header-left');
+  const existingBadge = left?.querySelector('.ndex-gen-complete-badge');
+  if (complete && !existingBadge) {
+    left.insertAdjacentHTML('beforeend', '<span class="ndex-gen-complete-badge">Complete</span>');
+  } else if (!complete && existingBadge) {
+    existingBadge.remove();
+  }
 }
 
 // ─── Filter / search ───────────────────────────────────────────────────────
