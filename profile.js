@@ -11,7 +11,7 @@ let profileUserId  = null; // the profile being viewed (own or friend)
 let isOwnProfile   = false;
 
 // Dexoria Team system account — excluded from friend search results
-const DEXORIA_TEAM_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
+const DEXORIA_TEAM_ID = 'PUT_YOUR_TEAM_ACCOUNT_UUID_HERE';
 
 // ============================================
 // AUTH GUARD
@@ -310,19 +310,76 @@ async function renderPublicBinders() {
 }
 
 // ============================================
+// FRIENDS LIST (accepted only)
+// ============================================
+async function renderFriendsList() {
+    const friendsList = document.getElementById('friends-list');
+    if (!friendsList || !profileUserId) return;
+
+    const { data: friends } = await supabase
+        .from('friends').select('friend_id')
+        .eq('user_id', profileUserId).eq('status', 'accepted');
+
+    if (!friends || friends.length === 0) {
+        friendsList.innerHTML = `<p class="empty-state">No friends added yet.</p>`;
+        return;
+    }
+
+    const friendIds = friends.map(f => f.friend_id);
+    const { data: friendProfiles } = await supabase
+        .from('profiles').select('id, username, avatar_url, is_online').in('id', friendIds);
+
+    friendsList.innerHTML = friendProfiles && friendProfiles.length > 0
+        ? friendProfiles.map(p => `
+            <a href="./profile.html?user=${p.username}" style="text-decoration:none; color:inherit;">
+                <div class="user-item">
+                    <img src="${safeImg(p.avatar_url, './Ash Ketchum User.jpg')}"
+                         alt="${p.username}"
+                         onerror="this.src='./Ash Ketchum User.jpg'">
+                    <span>${p.username}</span>
+                    <i class="status ${p.is_online ? 'online' : 'offline'}"></i>
+                </div>
+            </a>`).join('')
+        : `<p class="empty-state">No friends added yet.</p>`;
+}
+
+// ============================================
 // SEND FRIEND REQUEST (global for inline onclick)
 // ============================================
 window.sendFriendRequest = async function(friendId, userId, btn) {
     btn.disabled  = true;
     btn.innerText = '...';
 
+    // Have I already sent a request / are we already friends?
     const { data: existing } = await supabase
-        .from('friends').select('id')
+        .from('friends').select('id, status')
         .eq('user_id', userId).eq('friend_id', friendId).maybeSingle();
 
-    if (existing) { btn.innerText = 'Added'; return; }
+    if (existing) {
+        btn.innerText = existing.status === 'accepted' ? 'Friends' : 'Requested';
+        return;
+    }
 
-    const { error } = await supabase.from('friends').insert({ user_id: userId, friend_id: friendId });
+    // Did THEY already send ME a request? If so, accept it instead of double-requesting.
+    const { data: incoming } = await supabase
+        .from('friends').select('id, status')
+        .eq('user_id', friendId).eq('friend_id', userId).maybeSingle();
+
+    if (incoming) {
+        if (incoming.status === 'accepted') { btn.innerText = 'Friends'; return; }
+        const accepted = await acceptFriendRequestInternal(incoming.id, friendId, userId);
+        if (accepted) {
+            btn.innerText        = 'Friends';
+            btn.style.background = '#44cc44';
+            btn.style.color      = 'white';
+            showToast('Friend request accepted!');
+        } else {
+            btn.innerText = 'Error'; btn.style.background = '#ff4444';
+        }
+        return;
+    }
+
+    const { error } = await supabase.from('friends').insert({ user_id: userId, friend_id: friendId, status: 'pending' });
 
     if (error) {
         console.error('Friend request error:', error);
@@ -330,11 +387,102 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
         return;
     }
 
-    btn.innerText        = 'Added';
-    btn.style.background = '#44cc44';
+    btn.innerText        = 'Requested';
+    btn.style.background = '#888';
     btn.style.color      = 'white';
-    showToast('Trainer added to friends!');
+    showToast('Friend request sent!');
 };
+
+// ============================================
+// FRIEND REQUESTS — accept / decline
+// ============================================
+// Shared logic used by both the requests panel and the auto-accept path above.
+async function acceptFriendRequestInternal(requestRowId, requesterId, myId) {
+    const { error: updateError } = await supabase
+        .from('friends').update({ status: 'accepted' }).eq('id', requestRowId);
+    if (updateError) { console.error('Accept error:', updateError); return false; }
+
+    // Mirror row so it shows up symmetrically for both users' friends lists
+    const { data: mirrorExisting } = await supabase
+        .from('friends').select('id')
+        .eq('user_id', myId).eq('friend_id', requesterId).maybeSingle();
+
+    if (!mirrorExisting) {
+        const { error: mirrorError } = await supabase
+            .from('friends').insert({ user_id: myId, friend_id: requesterId, status: 'accepted' });
+        if (mirrorError) { console.error('Mirror insert error:', mirrorError); return false; }
+    }
+
+    return true;
+}
+
+window.acceptFriendRequest = async function(requestRowId, requesterId, myId, btn) {
+    btn.disabled  = true;
+    btn.innerText = '...';
+    const ok = await acceptFriendRequestInternal(requestRowId, requesterId, myId);
+    if (!ok) { btn.innerText = 'Error'; return; }
+    showToast('Friend request accepted!');
+    btn.closest('.friend-request-row')?.remove();
+    await renderFriendRequests();
+    await renderFriendsList();
+};
+
+window.declineFriendRequest = async function(requestRowId, btn) {
+    btn.disabled = true;
+    const { error } = await supabase.from('friends').delete().eq('id', requestRowId);
+    if (error) { console.error('Decline error:', error); btn.disabled = false; return; }
+    btn.closest('.friend-request-row')?.remove();
+    await renderFriendRequests();
+};
+
+async function renderFriendRequests() {
+    const container = document.getElementById('friend-requests-list');
+    const badge      = document.getElementById('friend-requests-badge');
+    const group      = document.getElementById('friend-requests-group');
+    if (!container || !currentUser) return;
+
+    // Only ever shown on your own profile
+    if (group) group.style.display = isOwnProfile ? '' : 'none';
+    if (!isOwnProfile) return;
+
+    const { data: incoming } = await supabase
+        .from('friends')
+        .select('id, user_id')
+        .eq('friend_id', currentUser.id)
+        .eq('status', 'pending');
+
+    if (!incoming || incoming.length === 0) {
+        container.innerHTML = `<p class="empty-state">No pending requests.</p>`;
+        if (badge) badge.style.display = 'none';
+        return;
+    }
+
+    // Fetch requester profiles separately (avoids depending on a specific FK constraint name)
+    const requesterIds = incoming.map(r => r.user_id);
+    const { data: requesterProfiles } = await supabase
+        .from('profiles').select('id, username, avatar_url').in('id', requesterIds);
+    const profileById = Object.fromEntries((requesterProfiles || []).map(p => [p.id, p]));
+
+    if (badge) { badge.style.display = ''; badge.textContent = incoming.length; }
+
+    container.innerHTML = incoming.map(r => {
+        const p = profileById[r.user_id];
+        return `
+        <div class="friend-request-row" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #3d2b3d;">
+            <img src="${safeImg(p?.avatar_url, './Ash Ketchum User.jpg')}" alt="${p?.username || ''}"
+                 style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid #ffd700;">
+            <span style="flex:1;font-size:14px;">${p?.username || 'Unknown Trainer'}</span>
+            <button onclick="acceptFriendRequest('${r.id}','${r.user_id}','${currentUser.id}',this)"
+                    style="background:#44cc44;color:white;border:none;padding:6px 14px;border-radius:50px;font-weight:800;font-size:12px;cursor:pointer;">
+                Accept
+            </button>
+            <button onclick="declineFriendRequest('${r.id}',this)"
+                    style="background:transparent;color:#aaa;border:1px solid #666;padding:6px 14px;border-radius:50px;font-weight:800;font-size:12px;cursor:pointer;">
+                Decline
+            </button>
+        </div>`;
+    }).join('');
+}
 
 // ============================================
 // ADD CARD MODAL
@@ -632,32 +780,11 @@ window.addEventListener('visibilitychange', async () => {
         fileInput.onchange = e => { const file = e.target.files[0]; if (file) handleImageUpload(file, user, avatarDisplay); };
     }
 
-    // 9. FRIENDS LIST
-    const friendsList = document.getElementById('friends-list');
-    if (friendsList) {
-        const { data: friends } = await supabase.from('friends').select('friend_id').eq('user_id', user.id);
+    // 9. FRIENDS LIST (accepted friends only)
+    await renderFriendsList();
 
-        if (friends && friends.length > 0) {
-            const friendIds = friends.map(f => f.friend_id);
-            const { data: friendProfiles } = await supabase
-                .from('profiles').select('id, username, avatar_url, is_online').in('id', friendIds);
-
-            friendsList.innerHTML = friendProfiles && friendProfiles.length > 0
-                ? friendProfiles.map(p => `
-                    <a href="./profile.html?user=${p.username}" style="text-decoration:none; color:inherit;">
-                        <div class="user-item">
-                            <img src="${safeImg(p.avatar_url, './Ash Ketchum User.jpg')}"
-                                 alt="${p.username}"
-                                 onerror="this.src='./Ash Ketchum User.jpg'">
-                            <span>${p.username}</span>
-                            <i class="status ${p.is_online ? 'online' : 'offline'}"></i>
-                        </div>
-                    </a>`).join('')
-                : `<p class="empty-state">No friends added yet.</p>`;
-        } else {
-            friendsList.innerHTML = `<p class="empty-state">No friends added yet.</p>`;
-        }
-    }
+    // 9b. FRIEND REQUESTS (incoming, own profile only — function handles visibility)
+    await renderFriendRequests();
 
     // 10. RECENT TRADES — reads from trade_history for both sender and receiver roles
     const tradesList = document.getElementById('trades-list');
