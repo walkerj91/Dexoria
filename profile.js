@@ -11,7 +11,7 @@ let profileUserId  = null; // the profile being viewed (own or friend)
 let isOwnProfile   = false;
 
 // Dexoria Team system account — excluded from friend search results
-const DEXORIA_TEAM_ID = 'P1f931092-bedb-4e60-aff4-1b21a4fb01cd';
+const DEXORIA_TEAM_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
 
 // ============================================
 // AUTH GUARD
@@ -883,8 +883,9 @@ window.addEventListener('visibilitychange', async () => {
             friendSearchInput.focus();
             friendSearchResults.innerHTML  = `<p style="color:#aaa;font-size:13px;">Loading trainers...</p>`;
 
-            const { data: results } = await supabase.from('profiles').select('id, username, avatar_url')
+            const { data: results, error: loadError } = await supabase.from('profiles').select('id, username, avatar_url')
                 .neq('id', user.id).neq('id', DEXORIA_TEAM_ID).order('username', { ascending: true }).limit(20);
+            if (loadError) console.error('Find friends load error:', loadError);
 
             friendSearchResults.innerHTML = !results || results.length === 0
                 ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
@@ -927,8 +928,9 @@ window.addEventListener('visibilitychange', async () => {
             if (query.length < 2) { friendSearchResults.innerHTML = ''; return; }
             friendSearchResults.innerHTML = `<p style="color:#aaa;font-size:13px;">Searching...</p>`;
             searchTimeout = setTimeout(async () => {
-                const { data: results } = await supabase.from('profiles').select('id, username, avatar_url')
+                const { data: results, error: searchError } = await supabase.from('profiles').select('id, username, avatar_url')
                     .ilike('username', `%${query}%`).neq('id', user.id).neq('id', DEXORIA_TEAM_ID).limit(10);
+                if (searchError) console.error('Friend search error:', searchError);
                 friendSearchResults.innerHTML = !results || results.length === 0
                     ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
                     : results.map(r => `
