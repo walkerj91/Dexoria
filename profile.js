@@ -11,7 +11,7 @@ let profileUserId  = null; // the profile being viewed (own or friend)
 let isOwnProfile   = false;
 
 // Dexoria Team system account — excluded from friend search results
-const DEXORIA_TEAM_ID = 'PUT_YOUR_TEAM_ACCOUNT_UUID_HERE';
+const DEXORIA_TEAM_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
 
 // ============================================
 // AUTH GUARD
