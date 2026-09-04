@@ -247,7 +247,7 @@ async function loadNotifications(userId) {
         item.className = `notif-item${n.is_read ? '' : ' notif-unread'}`;
         item.dataset.id = n.id;
 
-        const icon = { message: '💬', trade_proposal: '⇄', trade_accepted: '🎉', trade_agreed: '🎉', trade_awaiting: '⏳', trade_declined: '❌', general: '🔔' }[n.type] ?? '🔔';
+        const icon = { message: '💬', trade_proposal: '⇄', trade_accepted: '🎉', trade_agreed: '🎉', trade_awaiting: '⏳', trade_declined: '❌', friend_request: '🧑\u200d🤝\u200d🧑', friend_accepted: '🎉', general: '🔔' }[n.type] ?? '🔔';
         const time = formatNotifTime(n.created_at);
 
         item.innerHTML = `
