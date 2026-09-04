@@ -11,7 +11,7 @@ let profileUserId  = null; // the profile being viewed (own or friend)
 let isOwnProfile   = false;
 
 // Dexoria Team system account — excluded from friend search results
-const DEXORIA_TEAM_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
+const DEXORIA_TEAM_ID = 'P1f931092-bedb-4e60-aff4-1b21a4fb01cd';
 
 // ============================================
 // AUTH GUARD
@@ -346,6 +346,11 @@ async function renderFriendsList() {
 // ============================================
 // SEND FRIEND REQUEST (global for inline onclick)
 // ============================================
+async function getUsername(userId) {
+    const { data } = await supabase.from('profiles').select('username').eq('id', userId).maybeSingle();
+    return data?.username || 'A trainer';
+}
+
 window.sendFriendRequest = async function(friendId, userId, btn) {
     btn.disabled  = true;
     btn.innerText = '...';
@@ -387,6 +392,18 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
         return;
     }
 
+    // Notify the recipient
+    const myUsername = await getUsername(userId);
+    const { error: notifError } = await supabase.from('notifications').insert({
+        user_id: friendId,
+        title:   '🧑‍🤝‍🧑 New Friend Request',
+        body:    `${myUsername} wants to be your friend.`,
+        link:    `./profile.html?user=${myUsername}`,
+        type:    'friend_request',
+        is_read: false,
+    });
+    if (notifError) console.error('Friend request notification error:', notifError);
+
     btn.innerText        = 'Requested';
     btn.style.background = '#888';
     btn.style.color      = 'white';
@@ -412,6 +429,18 @@ async function acceptFriendRequestInternal(requestRowId, requesterId, myId) {
             .from('friends').insert({ user_id: myId, friend_id: requesterId, status: 'accepted' });
         if (mirrorError) { console.error('Mirror insert error:', mirrorError); return false; }
     }
+
+    // Notify the original requester that their request was accepted
+    const accepterUsername = await getUsername(myId);
+    const { error: notifError } = await supabase.from('notifications').insert({
+        user_id: requesterId,
+        title:   '🎉 Friend Request Accepted',
+        body:    `${accepterUsername} accepted your friend request!`,
+        link:    `./profile.html?user=${accepterUsername}`,
+        type:    'friend_accepted',
+        is_read: false,
+    });
+    if (notifError) console.error('Friend accepted notification error:', notifError);
 
     return true;
 }
