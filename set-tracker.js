@@ -476,7 +476,7 @@ function renderGrid() {
              data-local-id="${card.localId}"
              title="${card.name ?? ''} · #${card.localId} · ${typeInfo?.label ?? 'Unknown'}">
           ${hasImg ? `
-            <img class="st-card-img" src="${card.image}/low.png" alt="${card.name ?? ''}" loading="lazy" />
+            <img class="st-card-img" src="${card.image}/low.png" data-base="${card.image}" data-fallback-idx="0" alt="${card.name ?? ''}" loading="lazy" />
             <div class="st-card-img-overlay"></div>
           ` : ''}
           <div class="st-card-check">
@@ -507,6 +507,45 @@ function renderGrid() {
       checkCompletion();
     });
   });
+
+  // Attach image fallback/retry handlers — a brand new visitor is often the
+  // very first request for a given card image, and TCGDex's CDN can take a
+  // moment to generate/cache it, returning a 404 that a simple refresh fixes.
+  grid.querySelectorAll('.st-card-img').forEach(img => {
+    img.addEventListener('error', () => handleCardImgError(img));
+  });
+}
+
+// Retry the same URL a couple of times (covers "CDN still generating the
+// asset" on a cold cache), then fall back through other quality/format
+// combos, then give up gracefully instead of showing a broken-image icon.
+const IMG_RETRY_DELAYS = [600, 1500];          // ms, tried on the original URL
+const IMG_FALLBACK_FORMATS = ['low.webp', 'high.png', 'high.webp'];
+
+function handleCardImgError(img) {
+  const base    = img.dataset.base;
+  const retries = parseInt(img.dataset.retryCount || '0', 10);
+  const fbIdx   = parseInt(img.dataset.fallbackIdx || '0', 10);
+
+  if (retries < IMG_RETRY_DELAYS.length) {
+    img.dataset.retryCount = String(retries + 1);
+    setTimeout(() => {
+      // Cache-bust so the browser doesn't just replay the same failed response
+      img.src = `${base}/low.png?retry=${retries + 1}`;
+    }, IMG_RETRY_DELAYS[retries]);
+    return;
+  }
+
+  if (fbIdx < IMG_FALLBACK_FORMATS.length) {
+    img.dataset.fallbackIdx = String(fbIdx + 1);
+    img.src = `${base}/${IMG_FALLBACK_FORMATS[fbIdx]}`;
+    return;
+  }
+
+  // Exhausted every option — hide the broken image instead of showing
+  // the browser's broken-image icon; the card number/name still render.
+  img.closest('.st-card-wrap')?.classList.add('st-img-broken');
+  img.style.display = 'none';
 }
 
 // ─── Render: missing pills ────────────────────────────────────────────────────
@@ -784,13 +823,22 @@ async function init() {
     await loadSet(state.activeIdx);
   }
 
-  // Fetch all remaining stale sets in parallel batches of 5
-  // This ensures everything gets cached quickly on first visit
+  // Warm the rest of the cache one set at a time, during browser idle time.
+  // This still gets everything cached (so overall stats fill in), but
+  // avoids competing with the actively viewed set for connections/rate
+  // limit on a cold, first-ever visit.
   const rest = stale.filter(i => i !== state.activeIdx);
-  const BATCH = 5;
-  for (let b = 0; b < rest.length; b += BATCH) {
-    await Promise.allSettled(rest.slice(b, b + BATCH).map(i => loadSet(i)));
-  }
+  backgroundPrefetch(rest);
+}
+
+function backgroundPrefetch(indices) {
+  if (indices.length === 0) return;
+  const [next, ...remaining] = indices;
+  const schedule = window.requestIdleCallback || (cb => setTimeout(cb, 300));
+  schedule(async () => {
+    await loadSet(next);
+    backgroundPrefetch(remaining);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', init);
