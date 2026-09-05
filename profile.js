@@ -73,7 +73,7 @@ function rarityTier(rarity) {
 }
 
 // ============================================
-// COLLECTION VALUE
+// MY COLLECTION VALUE (binder cards — flat rarity-band estimate)
 // ============================================
 async function calculateCollectionValue() {
     const { data: cards } = await supabase
@@ -98,6 +98,40 @@ async function calculateCollectionValue() {
     }, 0);
 
     return total;
+}
+
+// ============================================
+// SET TRACKER VALUE (separate from My Collection above)
+// ============================================
+// Reads the value the Set Tracker page computed and synced to Supabase —
+// real Cardmarket (EUR) prices converted to GBP for that user's tracked-set
+// progress. Distinct stat, distinct data source, distinct meaning from
+// calculateCollectionValue() above; the two are not combined.
+async function renderSetTrackerValue(userId) {
+    const statEl = document.getElementById('stat-set-tracker-value');
+    if (!statEl) return; // element not added to this page's HTML yet
+
+    const { data, error } = await supabase
+        .from('collection_value')
+        .select('total_value_gbp, priced_card_count, collected_card_count, updated_at')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    if (error) {
+        console.warn('Set Tracker value fetch error:', error);
+        statEl.textContent = '—';
+        return;
+    }
+
+    if (!data) {
+        // User hasn't opened Set Tracker yet, or has no collected cards
+        statEl.textContent = '—';
+        statEl.title = 'Open Set Tracker and collect a few cards to see this';
+        return;
+    }
+
+    statEl.textContent = '£' + Number(data.total_value_gbp).toLocaleString();
+    statEl.title = `Based on ${data.priced_card_count} of ${data.collected_card_count} collected cards with known prices`;
 }
 
 async function handleImageUpload(file, user, avatarDisplay) {
@@ -714,6 +748,13 @@ window.addEventListener('visibilitychange', async () => {
                 statRating.textContent = '—';
             }
         }
+
+        // Set Tracker value stat — synced from the Set Tracker page via the
+        // collection_value table (real Cardmarket→GBP market pricing). This
+        // is intentionally separate from stat-collection-value above, which
+        // prices manually-added "My Collection" binder cards with flat
+        // rarity-band estimates — the two track different collections.
+        await renderSetTrackerValue(profileUserId);
     }
 
     // 5. EDIT PROFILE MODAL
