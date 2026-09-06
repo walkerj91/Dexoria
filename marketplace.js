@@ -86,7 +86,7 @@ async function initMarketplace() {
     }
 
     try {
-        const setIds = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05'];
+        const setIds = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30C'];
 
         const setResults = await Promise.allSettled(
             setIds.map(id => fetch(`${TCGDEX_BASE}/sets/${id}`).then(r => r.json()))
@@ -168,6 +168,7 @@ async function initMarketplace() {
             'Perfect Order',
             'Chaos Rising',
             'Pitch Black',
+            '30th Celebration',
         ];
 
         const setNames = [...new Set(allCards.map(c => c.setName))]
