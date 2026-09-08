@@ -625,16 +625,75 @@ function renderCardResults(cards) {
 
     item.appendChild(img);
     item.appendChild(label);
-    item.addEventListener('click', () => selectCard(card));
+    item.addEventListener('click', () => handleCardClick(card));
     cardSearchResults.appendChild(item);
   });
 }
 
 
 // ───────────────────────────────────────────────
+// HANDLE CLICK → ASK WHICH VARIANT IF MORE THAN ONE
+// ───────────────────────────────────────────────
+function handleCardClick(card) {
+  const v = card.variants ?? {};
+  const available = [];
+  if (v.normal)  available.push('normal');
+  if (v.holo)    available.push('holo');
+  if (v.reverse) available.push('reverse');
+
+  // Only one print exists (or TCGdex gave us nothing) — nothing to choose
+  if (available.length <= 1) {
+    selectCard(card, available[0] ?? 'normal');
+    return;
+  }
+
+  // Multiple prints exist — ask which one the user actually has
+  cardSearchModal.classList.remove('active');
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position:fixed; inset:0; z-index:9999; display:flex;
+    align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.7);
+  `;
+  overlay.innerHTML = `
+    <div style="background:#161616;border:1px solid #6F2DA8;border-radius:12px;
+                padding:24px;min-width:260px;text-align:center;">
+      <p style="color:#fff;margin:0 0 14px;font-size:14px;letter-spacing:0.5px;">
+        Which print is this?
+      </p>
+      <div class="variant-picker-options" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  `;
+  const optionsRow = overlay.querySelector('.variant-picker-options');
+
+  const LABELS = { normal: 'Normal', holo: 'Holo', reverse: 'Reverse Holo' };
+  available.forEach(key => {
+    const btn = document.createElement('button');
+    btn.textContent = LABELS[key];
+    btn.style.cssText = `
+      padding:10px 16px;border-radius:8px;border:1px solid #6F2DA8;
+      background:transparent;color:#fff;cursor:pointer;font-size:13px;
+    `;
+    btn.addEventListener('mouseenter', () => btn.style.background = '#6F2DA8');
+    btn.addEventListener('mouseleave', () => btn.style.background = 'transparent');
+    btn.addEventListener('click', () => {
+      overlay.remove();
+      selectCard(card, key);
+    });
+    optionsRow.appendChild(btn);
+  });
+
+  // click outside to cancel
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+  document.body.appendChild(overlay);
+}
+
+// ───────────────────────────────────────────────
 // SELECT CARD → INSERT INTO BINDER
 // ───────────────────────────────────────────────
-async function selectCard(card) {
+async function selectCard(card, chosenVariant = 'normal') {
   cardSearchModal.classList.remove('active');
 
   // card.image already includes /high.png from the search builder
@@ -657,7 +716,8 @@ async function selectCard(card) {
       card_image:  imageUrl,
       image_url:   imageUrl,
       slot_index:  activeSlotIndex,
-      is_holo:     card.variants?.holo || card.variants?.reverse || false,
+      is_holo:     chosenVariant === 'holo' || chosenVariant === 'reverse',
+      variant:     chosenVariant,
       category:    card.category    ?? null,
       trainerType: card.trainerType ?? null,
       rarity:      card.rarity      ?? null,
