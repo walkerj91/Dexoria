@@ -355,11 +355,12 @@ async function getUsername(userId) {
 // Fails silently (logged only) so a slow/unavailable email service never blocks the in-app flow.
 async function sendSystemEmail({ toUserId, subject, heading, message, ctaText, ctaLink }) {
     try {
-        const { data: recipient } = await supabase.from('profiles').select('email').eq('id', toUserId).maybeSingle();
-        if (!recipient?.email) return;
+        const { data: email, error } = await supabase.rpc('get_friend_email', { target_id: toUserId });
+        if (error) { console.error('Email lookup error:', error); return; }
+        if (!email) return;
 
         await emailjs.send('service_fko9f4n', 'template_g23bscd', {
-            to_email: recipient.email,
+            to_email: email,
             subject,
             heading,
             message,
