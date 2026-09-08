@@ -357,9 +357,10 @@ async function sendSystemEmail({ toUserId, subject, heading, message, ctaText, c
     try {
         const { data: email, error } = await supabase.rpc('get_friend_email', { target_id: toUserId });
         if (error) { console.error('Email lookup error:', error); return; }
-        if (!email) return;
+        if (!email) { console.warn('get_friend_email returned no email for', toUserId); return; }
 
-        await emailjs.send('service_fko9f4n', 'template_g23bscd', {
+        console.log('Sending system email to', email);
+        const result = await emailjs.send('service_fko9f4n', 'template_g23bscd', {
             to_email: email,
             subject,
             heading,
@@ -367,6 +368,7 @@ async function sendSystemEmail({ toUserId, subject, heading, message, ctaText, c
             cta_text: ctaText || '',
             cta_link: ctaLink || '',
         });
+        console.log('EmailJS send result:', result);
     } catch (err) {
         console.error('System email error:', err);
     }
