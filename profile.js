@@ -73,94 +73,17 @@ function rarityTier(rarity) {
 }
 
 // ============================================
-// MY COLLECTION VALUE (dynamic Cardmarket pricing, with a flat
-// rarity-band fallback for legacy cards or ones TCGDex can't price)
+// COLLECTION VALUE
 // ============================================
-// Cache keys deliberately match set-tracker.js so the two pages share
-// cached prices/FX rate instead of duplicating requests.
-const PRICE_CACHE_PREFIX = 'dexoria_price_v1_';
-const PRICE_CACHE_TTL    = 12 * 60 * 60 * 1000; // 12 hours — Cardmarket updates daily
-const FX_CACHE_KEY       = 'dexoria_fx_eur_gbp_v1';
-const FX_CACHE_TTL       = 24 * 60 * 60 * 1000; // ECB publishes once per business day
-const FX_FALLBACK_RATE   = 0.87;
-
-async function getEurToGbpRate() {
-    try {
-        const cached = localStorage.getItem(FX_CACHE_KEY);
-        if (cached) {
-            const { rate, ts } = JSON.parse(cached);
-            if (Date.now() - ts < FX_CACHE_TTL) return rate;
-        }
-    } catch { /* ignore */ }
-
-    try {
-        const res = await fetch('https://api.frankfurter.app/latest?from=EUR&to=GBP');
-        if (res.ok) {
-            const data = await res.json();
-            const rate = data.rates?.GBP;
-            if (typeof rate === 'number') {
-                try { localStorage.setItem(FX_CACHE_KEY, JSON.stringify({ rate, ts: Date.now() })); } catch { /* ignore */ }
-                return rate;
-            }
-        }
-    } catch (err) {
-        console.warn('[Profile] FX rate fetch failed:', err);
-    }
-
-    try {
-        const cached = localStorage.getItem(FX_CACHE_KEY);
-        if (cached) return JSON.parse(cached).rate;
-    } catch { /* ignore */ }
-    return FX_FALLBACK_RATE;
-}
-
-function readPriceCache(setId) {
-    try {
-        const raw = localStorage.getItem(`${PRICE_CACHE_PREFIX}${setId}`);
-        return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
-}
-
-function writePriceCacheEntry(setId, localId, priceEUR) {
-    const existing = readPriceCache(setId);
-    const map = (existing && Date.now() - existing.ts < PRICE_CACHE_TTL) ? { ...existing.map } : {};
-    map[localId] = priceEUR;
-    try { localStorage.setItem(`${PRICE_CACHE_PREFIX}${setId}`, JSON.stringify({ map, ts: Date.now() })); } catch { /* ignore */ }
-}
-
-/** Looks up a card's Cardmarket price (EUR) and rarity, cache-first. Returns nulls if unavailable. */
-async function getCardPricingInfo(tcgdexId) {
-    const idx = tcgdexId.lastIndexOf('-');
-    if (idx === -1) return { priceEUR: null, rarity: null };
-    const setId   = tcgdexId.slice(0, idx);
-    const localId = tcgdexId.slice(idx + 1);
-
-    const cached = readPriceCache(setId);
-    if (cached && Date.now() - cached.ts < PRICE_CACHE_TTL && localId in cached.map) {
-        return { priceEUR: cached.map[localId], rarity: null }; // rarity not cached separately here
-    }
-
-    try {
-        const res = await fetch(`${TCGDEX}/cards/${tcgdexId}`);
-        if (!res.ok) return { priceEUR: null, rarity: null };
-        const card = await res.json();
-        const priceEUR = card.pricing?.cardmarket?.trend ?? card.pricing?.cardmarket?.avg ?? null;
-        if (typeof priceEUR === 'number') writePriceCacheEntry(setId, localId, priceEUR);
-        return { priceEUR, rarity: card.rarity ?? null };
-    } catch (err) {
-        console.warn('[Profile] Price fetch failed for', tcgdexId, err);
-        return { priceEUR: null, rarity: null };
-    }
-}
-
 async function calculateCollectionValue() {
     const { data: cards } = await supabase
         .from('cards')
-        .select('rarity, tcgdex_id')
+        .select('rarity')
         .eq('user_id', profileUserId);
 
-    if (!cards || cards.length === 0) return { total: 0, pricedCount: 0, estimatedCount: 0 };
+    if (!cards || cards.length === 0) return 0;
 
+    // Same price bands as marketplace
     const rarityPrices = {
         5: 80,   // secret / hyper rare
         4: 55,   // ultra rare / vmax
@@ -169,69 +92,12 @@ async function calculateCollectionValue() {
         1: 1,    // common / uncommon
     };
 
-    let totalEUR = 0, flatGBP = 0, pricedCount = 0, estimatedCount = 0;
-    const BATCH = 10;
+    const total = cards.reduce((sum, card) => {
+        const tier = rarityTier(card.rarity);
+        return sum + (rarityPrices[tier] ?? 1);
+    }, 0);
 
-    for (let i = 0; i < cards.length; i += BATCH) {
-        const slice = cards.slice(i, i + BATCH);
-        const results = await Promise.allSettled(
-            slice.map(c => c.tcgdex_id ? getCardPricingInfo(c.tcgdex_id) : Promise.resolve({ priceEUR: null, rarity: null }))
-        );
-        results.forEach((res, j) => {
-            const { priceEUR, rarity } = res.status === 'fulfilled' ? res.value : { priceEUR: null, rarity: null };
-            if (typeof priceEUR === 'number') {
-                totalEUR += priceEUR;
-                pricedCount++;
-            } else {
-                // No TCGDex link, or no Cardmarket price available — flat estimate.
-                // Prefer the rarity TCGDex just returned (if we fetched the card at
-                // all) over the stored value, since rarity is never actually saved
-                // on add today.
-                const tier = rarityTier(rarity ?? slice[j].rarity);
-                flatGBP += rarityPrices[tier] ?? 1;
-                estimatedCount++;
-            }
-        });
-    }
-
-    const rate  = await getEurToGbpRate();
-    const total = Math.round((totalEUR * rate + flatGBP) * 100) / 100;
-
-    return { total, pricedCount, estimatedCount };
-}
-
-// ============================================
-// SET TRACKER VALUE (separate from My Collection above)
-// ============================================
-// Reads the value the Set Tracker page computed and synced to Supabase —
-// real Cardmarket (EUR) prices converted to GBP for that user's tracked-set
-// progress. Distinct stat, distinct data source, distinct meaning from
-// calculateCollectionValue() above; the two are not combined.
-async function renderSetTrackerValue(userId) {
-    const statEl = document.getElementById('stat-set-tracker-value');
-    if (!statEl) return; // element not added to this page's HTML yet
-
-    const { data, error } = await supabase
-        .from('collection_value')
-        .select('total_value_gbp, priced_card_count, collected_card_count, updated_at')
-        .eq('user_id', userId)
-        .maybeSingle();
-
-    if (error) {
-        console.warn('Set Tracker value fetch error:', error);
-        statEl.textContent = '—';
-        return;
-    }
-
-    if (!data) {
-        // User hasn't opened Set Tracker yet, or has no collected cards
-        statEl.textContent = '—';
-        statEl.title = 'Open Set Tracker and collect a few cards to see this';
-        return;
-    }
-
-    statEl.textContent = '£' + Number(data.total_value_gbp).toLocaleString();
-    statEl.title = `Based on ${data.priced_card_count} of ${data.collected_card_count} collected cards with known prices`;
+    return total;
 }
 
 async function handleImageUpload(file, user, avatarDisplay) {
@@ -276,14 +142,9 @@ async function renderMyCollection() {
     const statCards        = document.getElementById('stat-cards');
     if (statCards) statCards.textContent = totalCards;
 
-    const { total, pricedCount, estimatedCount } = await calculateCollectionValue();
+    const collectionValue = await calculateCollectionValue();
     const statValue = document.getElementById('stat-collection-value');
-    if (statValue) {
-        statValue.textContent = '£' + total.toLocaleString();
-        statValue.title = estimatedCount > 0
-            ? `${pricedCount} card${pricedCount === 1 ? '' : 's'} priced from market data, ${estimatedCount} estimated by rarity`
-            : `All ${pricedCount} card${pricedCount === 1 ? '' : 's'} priced from market data`;
-    }
+    if (statValue) statValue.textContent = '£' + collectionValue.toLocaleString();
 
     const container = document.getElementById('myCollectionGrid');
     if (!container) return;
@@ -490,6 +351,26 @@ async function getUsername(userId) {
     return data?.username || 'A trainer';
 }
 
+// Reuses the generic 'template_g23bscd' EmailJS template (shared with the Suggestions form).
+// Fails silently (logged only) so a slow/unavailable email service never blocks the in-app flow.
+async function sendSystemEmail({ toUserId, subject, heading, message, ctaText, ctaLink }) {
+    try {
+        const { data: recipient } = await supabase.from('profiles').select('email').eq('id', toUserId).maybeSingle();
+        if (!recipient?.email) return;
+
+        await emailjs.send('service_fko9f4n', 'template_g23bscd', {
+            to_email: recipient.email,
+            subject,
+            heading,
+            message,
+            cta_text: ctaText || '',
+            cta_link: ctaLink || '',
+        });
+    } catch (err) {
+        console.error('System email error:', err);
+    }
+}
+
 window.sendFriendRequest = async function(friendId, userId, btn) {
     btn.disabled  = true;
     btn.innerText = '...';
@@ -543,6 +424,15 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
     });
     if (notifError) console.error('Friend request notification error:', notifError);
 
+    sendSystemEmail({
+        toUserId: friendId,
+        subject:  'New Friend Request on Dexoria',
+        heading:  '🧑\u200d🤝\u200d🧑 New Friend Request',
+        message:  `${myUsername} wants to be your friend on Dexoria!`,
+        ctaText:  'View Request',
+        ctaLink:  `https://dexoria.co.uk/profile.html?user=${myUsername}`,
+    });
+
     btn.innerText        = 'Requested';
     btn.style.background = '#888';
     btn.style.color      = 'white';
@@ -580,6 +470,15 @@ async function acceptFriendRequestInternal(requestRowId, requesterId, myId) {
         is_read: false,
     });
     if (notifError) console.error('Friend accepted notification error:', notifError);
+
+    sendSystemEmail({
+        toUserId: requesterId,
+        subject:  'Friend Request Accepted on Dexoria',
+        heading:  '🎉 Friend Request Accepted',
+        message:  `${accepterUsername} accepted your friend request!`,
+        ctaText:  'View Profile',
+        ctaLink:  `https://dexoria.co.uk/profile.html?user=${accepterUsername}`,
+    });
 
     return true;
 }
@@ -751,7 +650,6 @@ async function profileSelectCard(card) {
         card_image: imageUrl,  // ← Supabase URL instead of TCGDex
         image_url:  imageUrl,
         card_set:   card.set ?? null,
-        tcgdex_id:  card.id ?? null,
         binder_id:  null,
         rating:     0
     });
@@ -854,13 +752,6 @@ window.addEventListener('visibilitychange', async () => {
                 statRating.textContent = '—';
             }
         }
-
-        // Set Tracker value stat — synced from the Set Tracker page via the
-        // collection_value table (real Cardmarket→GBP market pricing). This
-        // is intentionally separate from stat-collection-value above, which
-        // prices manually-added "My Collection" binder cards with flat
-        // rarity-band estimates — the two track different collections.
-        await renderSetTrackerValue(profileUserId);
     }
 
     // 5. EDIT PROFILE MODAL
