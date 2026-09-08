@@ -414,6 +414,18 @@ function makeCardSlot(slotIndex) {
         removeCard(slotIndex, existing.id, wrapper);
       });
       inner.appendChild(removeBtn);
+
+      // ── Drag source: filled cards can be picked up and moved ──
+      wrapper.draggable = true;
+      wrapper.style.cursor = 'grab';
+      wrapper.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', String(slotIndex));
+        e.dataTransfer.effectAllowed = 'move';
+        wrapper.style.opacity = '0.4';
+      });
+      wrapper.addEventListener('dragend', () => {
+        wrapper.style.opacity = '1';
+      });
     }
 
   } else {
@@ -427,8 +439,81 @@ function makeCardSlot(slotIndex) {
     }
   }
 
+  // ── Drop target: every slot (filled or empty) can receive a dropped card ──
+  if (!isReadOnly) {
+    wrapper.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      wrapper.style.outline = '2px dashed rgba(255,255,255,0.6)';
+    });
+    wrapper.addEventListener('dragleave', () => {
+      wrapper.style.outline = '';
+    });
+    wrapper.addEventListener('drop', e => {
+      e.preventDefault();
+      wrapper.style.outline = '';
+      const sourceSlot = parseInt(e.dataTransfer.getData('text/plain'), 10);
+      if (!Number.isNaN(sourceSlot) && sourceSlot !== slotIndex) {
+        moveCard(sourceSlot, slotIndex);
+      }
+    });
+  }
+
   wrapper.appendChild(inner);
   return wrapper;
+}
+
+// ── Move card between slots (swaps if target is occupied) ──
+async function moveCard(sourceSlot, targetSlot) {
+  const sourceCard = slotMap[sourceSlot];
+  if (!sourceCard) return;
+
+  const targetCard = slotMap[targetSlot];
+
+  if (targetCard) {
+    // Both slots occupied — swap them
+    const { error: err1 } = await supabase
+      .from('cards')
+      .update({ slot_index: targetSlot })
+      .eq('id', sourceCard.id);
+    const { error: err2 } = await supabase
+      .from('cards')
+      .update({ slot_index: sourceSlot })
+      .eq('id', targetCard.id);
+
+    if (err1 || err2) {
+      console.error('Move failed:', err1?.message || err2?.message);
+      return;
+    }
+
+    sourceCard.slot_index = targetSlot;
+    targetCard.slot_index = sourceSlot;
+    slotMap[targetSlot] = sourceCard;
+    slotMap[sourceSlot] = targetCard;
+  } else {
+    // Target is empty — just relocate
+    const { error } = await supabase
+      .from('cards')
+      .update({ slot_index: targetSlot })
+      .eq('id', sourceCard.id);
+
+    if (error) {
+      console.error('Move failed:', error.message);
+      return;
+    }
+
+    sourceCard.slot_index = targetSlot;
+    slotMap[targetSlot] = sourceCard;
+    delete slotMap[sourceSlot];
+  }
+
+  refreshSlot(sourceSlot);
+  refreshSlot(targetSlot);
+}
+
+function refreshSlot(slotIndex) {
+  const el = document.querySelector(`.card[data-slot="${slotIndex}"]`);
+  if (el) el.replaceWith(makeCardSlot(slotIndex));
 }
 
 // ── Remove card ───────────────────────────────────────────
