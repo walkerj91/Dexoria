@@ -421,7 +421,7 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
         user_id: friendId,
         title:   '🧑‍🤝‍🧑 New Friend Request',
         body:    `${myUsername} wants to be your friend.`,
-        link:    `./profile.html?user=${myUsername}`,
+        link:    `./profile.html`,
         type:    'friend_request',
         is_read: false,
     });
@@ -433,7 +433,7 @@ window.sendFriendRequest = async function(friendId, userId, btn) {
         heading:  '🧑\u200d🤝\u200d🧑 New Friend Request',
         message:  `${myUsername} wants to be your friend on Dexoria!`,
         ctaText:  'View Request',
-        ctaLink:  `https://dexoria.co.uk/profile.html?user=${myUsername}`,
+        ctaLink:  `https://dexoria.co.uk/profile.html`,
     });
 
     btn.innerText        = 'Requested';
