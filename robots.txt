@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Auth-gated or user-specific pages — no SEO value, don't index
+Disallow: /login.html
+Disallow: /basket.html
+Disallow: /portfolio.html
+Disallow: /trades.html
+Disallow: /set-tracker.html
+
+Sitemap: https://dexoria.co.uk/sitemap.xml
