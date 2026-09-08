@@ -351,6 +351,38 @@ async function getUsername(userId) {
     return data?.username || 'A trainer';
 }
 
+// Returns { [otherUserId]: 'pending' | 'accepted' } for any existing relationship
+// (in either direction) between myId and the given list of otherIds.
+async function getFriendStatuses(otherIds, myId) {
+    if (!otherIds.length) return {};
+    const { data: rows, error } = await supabase
+        .from('friends')
+        .select('user_id, friend_id, status')
+        .or(`and(user_id.eq.${myId},friend_id.in.(${otherIds.join(',')})),and(friend_id.eq.${myId},user_id.in.(${otherIds.join(',')}))`);
+    if (error) { console.error('Friend status lookup error:', error); return {}; }
+
+    const map = {};
+    (rows || []).forEach(r => {
+        const otherId = r.user_id === myId ? r.friend_id : r.user_id;
+        // Prefer 'accepted' over 'pending' if somehow both directions exist
+        if (map[otherId] !== 'accepted') map[otherId] = r.status;
+    });
+    return map;
+}
+
+function friendButtonHtml(profileId, myId, status) {
+    if (status === 'accepted') {
+        return `<button disabled style="background:#44cc44;color:white;border:none;padding:6px 16px;border-radius:50px;font-weight:800;font-size:12px;">Friends</button>`;
+    }
+    if (status === 'pending') {
+        return `<button disabled style="background:#888;color:white;border:none;padding:6px 16px;border-radius:50px;font-weight:800;font-size:12px;">Requested</button>`;
+    }
+    return `<button onclick="sendFriendRequest('${profileId}','${myId}',this)"
+                style="background:#ffd700;color:#2d1b2d;border:none;padding:6px 16px;border-radius:50px;font-weight:800;font-size:12px;cursor:pointer;">
+            + Add
+        </button>`;
+}
+
 // Reuses the generic 'template_g23bscd' EmailJS template (shared with the Suggestions form).
 // Fails silently (logged only) so a slow/unavailable email service never blocks the in-app flow.
 async function sendSystemEmail({ toUserId, subject, heading, message, ctaText, ctaLink }) {
@@ -928,6 +960,8 @@ window.addEventListener('visibilitychange', async () => {
                 .neq('id', user.id).neq('id', DEXORIA_TEAM_ID).order('username', { ascending: true }).limit(20);
             if (loadError) console.error('Find friends load error:', loadError);
 
+            const statuses = await getFriendStatuses((results || []).map(r => r.id), user.id);
+
             friendSearchResults.innerHTML = !results || results.length === 0
                 ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
                 : results.map(r => `
@@ -935,10 +969,7 @@ window.addEventListener('visibilitychange', async () => {
                         <img src="${safeImg(r.avatar_url, './Ash Ketchum User.jpg')}" alt="${r.username}"
                              style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid #ffd700;">
                         <span style="flex:1;font-size:14px;">${r.username}</span>
-                        <button onclick="sendFriendRequest('${r.id}','${user.id}',this)"
-                                style="background:#ffd700;color:#2d1b2d;border:none;padding:6px 16px;border-radius:50px;font-weight:800;font-size:12px;cursor:pointer;">
-                            + Add
-                        </button>
+                        ${friendButtonHtml(r.id, user.id, statuses[r.id])}
                     </div>`).join('');
         };
     }
@@ -972,6 +1003,9 @@ window.addEventListener('visibilitychange', async () => {
                 const { data: results, error: searchError } = await supabase.from('profiles').select('id, username, avatar_url')
                     .ilike('username', `%${query}%`).neq('id', user.id).neq('id', DEXORIA_TEAM_ID).limit(10);
                 if (searchError) console.error('Friend search error:', searchError);
+
+                const statuses = await getFriendStatuses((results || []).map(r => r.id), user.id);
+
                 friendSearchResults.innerHTML = !results || results.length === 0
                     ? `<p style="color:#aaa;font-size:13px;">No trainers found.</p>`
                     : results.map(r => `
@@ -979,10 +1013,7 @@ window.addEventListener('visibilitychange', async () => {
                             <img src="${safeImg(r.avatar_url, './Ash Ketchum User.jpg')}" alt="${r.username}"
                                  style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid #ffd700;">
                             <span style="flex:1;font-size:14px;">${r.username}</span>
-                            <button onclick="sendFriendRequest('${r.id}','${user.id}',this)"
-                                    style="background:#ffd700;color:#2d1b2d;border:none;padding:6px 16px;border-radius:50px;font-weight:800;font-size:12px;cursor:pointer;">
-                                + Add
-                            </button>
+                            ${friendButtonHtml(r.id, user.id, statuses[r.id])}
                         </div>`).join('');
             }, 400);
         };
