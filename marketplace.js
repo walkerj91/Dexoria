@@ -273,7 +273,7 @@ async function initMarketplace() {
 // MARKET INTELLIGENCE
 // ============================================
 
-const MI_TRACKED_SETS = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05'];
+const MI_TRACKED_SETS = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30C'];
 
 const MI_RARITY_PRICES = {
     'Special Illustration Rare': { min: 18,  max: 95  },
