@@ -296,8 +296,11 @@ backToTopBtn.addEventListener("click", () => {
 
     try {
       await emailjs.send('service_fko9f4n', 'template_g23bscd', {
-        from_email: document.getElementById('suggestionEmail').value.trim() || 'No email provided',
+        to_email: 'support@dexoria.co.uk',
+        subject:  'New Suggestion Submitted',
+        heading:  'New Suggestion',
         message,
+        from_email: document.getElementById('suggestionEmail').value.trim() || 'No email provided',
       });
       setStatus('suggestionStatus', '✓ Thanks for the suggestion!', false);
       document.getElementById('suggestionForm').reset();
