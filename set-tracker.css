@@ -971,6 +971,52 @@
   background: transparent;
 }
 
+/* Info button — opens the price detail modal, sits opposite the collected-check */
+.st-card-info-btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(10, 6, 10, 0.7);
+  border: 2px solid #4a3a1a;
+  color: #C89B2A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.st-card-info-btn:hover {
+  border-color: #d4af37;
+  color: var(--gold-light, #ffd700);
+  background: rgba(10, 6, 10, 0.9);
+}
+
+.st-card-info-btn svg { pointer-events: none; }
+
+/* Price badge — bottom-left corner of the card image */
+.st-card-price {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #0a060a;
+  background: #d4af37;
+  border-radius: 5px;
+  padding: 2px 6px;
+  z-index: 3;
+  line-height: 1.3;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
 /* ── Panel footer ── */
 .st-panel-footer {
   border-top: 2px solid #1a0f0a;
@@ -1778,4 +1824,214 @@
 @keyframes ndex-fade-in {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   CARD DETAIL MODAL — price breakdown, opened via the tile's
+   info button. Built once by JS and reused across opens.
+   ============================================================ */
+
+.st-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.st-modal.open { display: flex; }
+
+body.st-modal-open { overflow: hidden; }
+
+.st-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 3, 5, 0.82);
+  backdrop-filter: blur(2px);
+}
+
+.st-modal-dialog {
+  position: relative;
+  background: #14100f;
+  border: 2px solid #d4af37;
+  border-radius: 14px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  animation: st-modal-in 0.2s ease both;
+}
+
+@keyframes st-modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.st-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #4a3a1a;
+  background: #0a060a;
+  color: #C89B2A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.st-modal-close:hover {
+  border-color: #d4af37;
+  color: var(--gold-light, #ffd700);
+}
+
+.st-modal-body {
+  display: flex;
+  gap: 24px;
+  padding: 28px;
+}
+
+.st-modal-media {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.st-modal-img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+  border: 1px solid #3a2a1a;
+}
+
+.st-modal-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.st-modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #d4af37;
+  margin: 0;
+}
+
+.st-modal-meta {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #8a7a5a;
+  margin: 0 0 10px;
+}
+
+.st-modal-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.st-modal-price-block {
+  background: #0a060a;
+  border: 1px solid #3a2a1a;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.st-modal-price-source {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #C89B2A;
+  margin: 0 0 8px;
+}
+
+.st-modal-price-source a {
+  color: #d4af37;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.st-modal-price-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.st-modal-price-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  color: #d8d0c0;
+}
+
+.st-modal-price-row span:first-child { color: #8a7a5a; }
+.st-modal-price-row span:last-child  { font-weight: 700; color: #d4af37; }
+
+.st-modal-price-variant {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+  border-bottom: 1px solid #1e1512;
+}
+
+.st-modal-price-variant:last-child { border-bottom: none; }
+
+.st-modal-price-variant-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #d8d0c0;
+}
+
+.st-modal-price-variant-vals {
+  display: flex;
+  gap: 12px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  color: #C89B2A;
+}
+
+.st-modal-no-price {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  color: #6a5a3a;
+  font-style: italic;
+  margin: 0;
+}
+
+.st-modal-toggle {
+  align-self: flex-start;
+}
+
+.st-modal-toggle.collected {
+  background: transparent;
+  color: #4caf80;
+  border-color: #2a7a2a;
+}
+
+.st-modal-toggle.collected:hover {
+  background: rgba(76,175,80,0.08);
+  border-color: #4caf80;
+}
+
+@media (max-width: 560px) {
+  .st-modal-body { flex-direction: column; padding: 20px; }
+  .st-modal-media { width: 140px; margin: 0 auto; }
 }
