@@ -404,6 +404,19 @@ function makeCardSlot(slotIndex) {
       inner.appendChild(badge);
     }
 
+    if (existing.edition === '1st-edition') {
+      const editionBadge = document.createElement('span');
+      editionBadge.className   = 'edition-badge';
+      editionBadge.textContent = '1st ED.';
+      editionBadge.title       = '1st Edition';
+      // Inline fallback in case .edition-badge isn't styled in your CSS yet —
+      // opposite corner from .holo-badge so the two don't overlap.
+      editionBadge.style.cssText =
+        'position:absolute;top:4px;left:4px;font-size:9px;font-weight:700;letter-spacing:0.5px;' +
+        'color:#0a060a;background:#d4af37;border-radius:4px;padding:1px 4px;z-index:2;';
+      inner.appendChild(editionBadge);
+    }
+
     if (!isReadOnly) {
       const removeBtn = document.createElement('button');
       removeBtn.className = 'card-remove-btn';
@@ -677,6 +690,7 @@ async function runCardSearch() {
 // separate, clearly-labelled tiles to pick from.
 // ───────────────────────────────────────────────
 const VARIANT_LABELS = { normal: 'Normal', holo: 'Holo', reverse: 'Reverse Holo' };
+const EDITION_LABELS = { 'unlimited': 'Unlimited', '1st-edition': '1st Edition' };
 
 function renderCardResults(cards) {
   cardSearchResults.innerHTML = '';
@@ -693,49 +707,71 @@ function renderCardResults(cards) {
     if (v.reverse) available.push('reverse');
     if (available.length === 0) available.push('normal'); // fallback if TCGdex gave us nothing
 
+    // TCGDex flags whether a 1st Edition print is known to exist for this
+    // card at all (not per-variant) — offer it as a second tile alongside
+    // each variant when it does. NOTE: TCGDex only has one scan per card,
+    // so the artwork is identical either way — this only affects what gets
+    // recorded, not which image shows.
+    const editions = v.firstEdition ? ['unlimited', '1st-edition'] : ['unlimited'];
+
     for (const variantKey of available) {
-      if (tileCount >= 60) break;
+      for (const edition of editions) {
+        if (tileCount >= 60) break;
 
-      const item = document.createElement('div');
-      item.className = 'card-result-item';
-
-      const img = document.createElement('img');
-      img.src     = card.image;
-      img.alt     = card.name;
-      img.loading = 'lazy';
-
-      // Build label text
-      let labelText = card.name;
-
-      // Trainer type
-      if (card.category === "Trainer" && card.trainerType) {
-        labelText += ` — ${card.trainerType}`;
-      }
-
-      // This tile's specific variant (not the full list — just this one)
-      labelText += ` (${VARIANT_LABELS[variantKey]})`;
-
-      const label = document.createElement('span');
-      label.className   = 'card-result-label';
-      label.textContent = labelText;
-
-      // Small badge so holo/reverse tiles are visually distinct in the grid
-      if (variantKey !== 'normal') {
-        const badge = document.createElement('span');
-        badge.className   = 'card-result-variant-badge';
-        badge.textContent = '✨';
-        badge.title       = VARIANT_LABELS[variantKey];
-        badge.style.cssText = 'position:absolute;top:6px;right:6px;font-size:14px;';
+        const item = document.createElement('div');
+        item.className      = 'card-result-item';
         item.style.position = 'relative';
-        item.appendChild(badge);
+
+        const img = document.createElement('img');
+        img.src     = card.image;
+        img.alt     = card.name;
+        img.loading = 'lazy';
+
+        // Build label text
+        let labelText = card.name;
+
+        // Trainer type
+        if (card.category === "Trainer" && card.trainerType) {
+          labelText += ` — ${card.trainerType}`;
+        }
+
+        // This tile's specific variant (not the full list — just this one)
+        labelText += ` (${VARIANT_LABELS[variantKey]}`;
+        labelText += editions.length > 1 ? `, ${EDITION_LABELS[edition]})` : ')';
+
+        const label = document.createElement('span');
+        label.className   = 'card-result-label';
+        label.textContent = labelText;
+
+        // Small badge so holo/reverse tiles are visually distinct in the grid
+        if (variantKey !== 'normal') {
+          const badge = document.createElement('span');
+          badge.className   = 'card-result-variant-badge';
+          badge.textContent = '✨';
+          badge.title       = VARIANT_LABELS[variantKey];
+          badge.style.cssText = 'position:absolute;top:6px;right:6px;font-size:14px;';
+          item.appendChild(badge);
+        }
+
+        // Separate badge (opposite corner) marking the 1st Edition tile
+        if (edition === '1st-edition') {
+          const editionBadge = document.createElement('span');
+          editionBadge.className   = 'card-result-edition-badge';
+          editionBadge.textContent = '1st ED.';
+          editionBadge.title       = '1st Edition';
+          editionBadge.style.cssText =
+            'position:absolute;top:6px;left:6px;font-size:9px;font-weight:700;letter-spacing:0.5px;' +
+            'color:#0a060a;background:#d4af37;border-radius:4px;padding:1px 4px;';
+          item.appendChild(editionBadge);
+        }
+
+        item.appendChild(img);
+        item.appendChild(label);
+        item.addEventListener('click', () => selectCard(card, variantKey, edition));
+        cardSearchResults.appendChild(item);
+
+        tileCount++;
       }
-
-      item.appendChild(img);
-      item.appendChild(label);
-      item.addEventListener('click', () => selectCard(card, variantKey));
-      cardSearchResults.appendChild(item);
-
-      tileCount++;
     }
   }
 }
@@ -743,7 +779,7 @@ function renderCardResults(cards) {
 // ───────────────────────────────────────────────
 // SELECT CARD → INSERT INTO BINDER
 // ───────────────────────────────────────────────
-async function selectCard(card, chosenVariant = 'normal') {
+async function selectCard(card, chosenVariant = 'normal', chosenEdition = 'unlimited') {
   cardSearchModal.classList.remove('active');
 
   // card.image already includes /high.png from the search builder
@@ -768,6 +804,7 @@ async function selectCard(card, chosenVariant = 'normal') {
       slot_index:  activeSlotIndex,
       is_holo:     chosenVariant === 'holo' || chosenVariant === 'reverse',
       variant:     chosenVariant,
+      edition:     chosenEdition,
       category:    card.category    ?? null,
       trainerType: card.trainerType ?? null,
       rarity:      card.rarity      ?? null,
