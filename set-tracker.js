@@ -61,7 +61,7 @@ const TRACKED_SETS = [
 
 const CACHE_PREFIX      = 'dexoria_set_v7_';  // bumped: fix || vs ?? for rarity fallback
 const RARITY_CACHE_PREFIX = 'dexoria_rarity_v1_';
-const PRICE_CACHE_PREFIX  = 'dexoria_price_v1_';
+const PRICE_CACHE_PREFIX  = 'dexoria_price_v2_'; // bumped: cache now stores {eur, pricing} not a flat number
 const CACHE_TTL         = 60 * 60 * 1000;          // 1 hour per set
 const RARITY_CACHE_TTL  = 7 * 24 * 60 * 60 * 1000; // 7 days — rarity never changes
 const PRICE_CACHE_TTL   = 12 * 60 * 60 * 1000;     // 12 hours — Cardmarket updates daily
@@ -182,7 +182,7 @@ function buildCards(rawCards, officialCount, holoCount) {
     const isHolo = !c.rarity && holoCount && isNum && num <= holoCount;
     const rarity = c.rarity || (isHolo ? 'Rare Holo' : null);
 
-    const base = { localId: c.localId, name: c.name, image: c.image ?? null, rarity, isSpecial, priceEUR: null };
+    const base = { localId: c.localId, name: c.name, image: c.image ?? null, rarity, isSpecial, priceEUR: null, pricing: null };
     result.push(base);
 
     // Only eligible main-set numbered cards get a reverse holo copy
@@ -297,7 +297,14 @@ const state = {
   activeFilter: 'all',
   searchVal:   '',
   collected:   {},
+  fxRate:      null, // EUR→GBP, populated async at init; badges stay hidden until it lands
 };
+
+/** Formats a Cardmarket EUR price as a GBP badge string, or null if not ready. */
+function formatPriceGBP(eur) {
+  if (typeof eur !== 'number' || !state.fxRate) return null;
+  return `£${(eur * state.fxRate).toFixed(2)}`;
+}
 
 // ─── Render: overall progress ─────────────────────────────────────────────────
 
@@ -552,6 +559,8 @@ function renderGrid() {
     const rc         = typeInfo?.cls ?? 'unknown';
     const displayNum = String(card.localId).replace(/RH$/, '');
 
+    const priceLabel = formatPriceGBP(card.priceEUR);
+
     return `
       <div class="st-card-wrap" style="animation-delay:${delay}s">
         <div class="st-card ${collected ? 'collected' : ''} st-rarity-${rc}"
@@ -562,6 +571,11 @@ function renderGrid() {
             <img class="st-card-img" src="${card.image}/low.png" data-base="${card.image}" data-fallback-idx="0" alt="${card.name ?? ''}" loading="lazy" />
             <div class="st-card-img-overlay"></div>
           ` : ''}
+          <button class="st-card-info-btn" data-set="${s.id}" data-local-id="${card.localId}"
+                  aria-label="View price details for ${card.name ?? 'this card'}" title="View price details">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11.5"/><circle cx="12" cy="8" r="0.5" fill="currentColor" stroke="none"/></svg>
+          </button>
+          ${priceLabel ? `<div class="st-card-price">${priceLabel}</div>` : ''}
           <div class="st-card-check">
             <svg viewBox="0 0 10 8" aria-hidden="true"><polyline points="1,4 4,7 9,1"/></svg>
           </div>
@@ -575,7 +589,7 @@ function renderGrid() {
     `;
   }).join('');
 
-  // Attach click listeners
+  // Attach click listeners — clicking the card body selects/deselects it
   grid.querySelectorAll('.st-card').forEach(el => {
     el.addEventListener('click', () => {
       const sid = el.dataset.set;
@@ -588,6 +602,15 @@ function renderGrid() {
       renderOverall();
       updateTabPct(state.activeIdx);
       checkCompletion();
+    });
+  });
+
+  // Info button opens the price detail modal instead of toggling collected —
+  // stopPropagation keeps the click from also firing the tile's own handler.
+  grid.querySelectorAll('.st-card-info-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCardDetail(btn.dataset.set, btn.dataset.localId);
     });
   });
 
@@ -629,6 +652,170 @@ function handleCardImgError(img) {
   // the browser's broken-image icon; the card number/name still render.
   img.closest('.st-card-wrap')?.classList.add('st-img-broken');
   img.style.display = 'none';
+}
+
+// ─── Card detail modal ─────────────────────────────────────────────────────
+// Opened via the "i" button on a tile — separate from the tile's own click,
+// which still just toggles collected. Built lazily and reused across opens.
+
+function ensureCardModal() {
+  let modal = document.getElementById('cardDetailModal');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.id = 'cardDetailModal';
+  modal.className = 'st-modal';
+  modal.innerHTML = `
+    <div class="st-modal-backdrop"></div>
+    <div class="st-modal-dialog" role="dialog" aria-modal="true" aria-label="Card details">
+      <button class="st-modal-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="st-modal-body">
+        <div class="st-modal-media">
+          <img class="st-modal-img" src="" alt="" />
+        </div>
+        <div class="st-modal-details">
+          <h3 class="st-modal-title"></h3>
+          <p class="st-modal-meta"></p>
+          <div class="st-modal-pricing"></div>
+          <button class="st-modal-toggle st-btn st-btn--gold"></button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.querySelector('.st-modal-backdrop').addEventListener('click', closeCardDetail);
+  modal.querySelector('.st-modal-close').addEventListener('click', closeCardDetail);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeCardDetail();
+  });
+
+  return modal;
+}
+
+function closeCardDetail() {
+  document.getElementById('cardDetailModal')?.classList.remove('open');
+  document.body.classList.remove('st-modal-open');
+}
+
+/** Turns capitalised camelCase TCGPlayer variant keys ("reverseHolofoil") into a display label. */
+function variantLabel(key) {
+  return key
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/^./, ch => ch.toUpperCase())
+    .trim();
+}
+
+function buildPricingHTML(pricing) {
+  if (!pricing) {
+    return `<p class="st-modal-no-price">No pricing data available for this card yet.</p>`;
+  }
+
+  const sections = [];
+  const rate = state.fxRate;
+
+  const cm = pricing.cardmarket;
+  if (cm) {
+    const fmt = (eur) => typeof eur === 'number'
+      ? (rate ? `£${(eur * rate).toFixed(2)}` : `€${eur.toFixed(2)}`)
+      : '—';
+    const rows = [
+      ['Trend',    cm.trend],
+      ['Average',  cm.avg],
+      ['Low',      cm.low],
+      ['30-day avg', cm.avg30],
+    ].filter(([, v]) => typeof v === 'number');
+
+    if (rows.length) {
+      sections.push(`
+        <div class="st-modal-price-block">
+          <h4 class="st-modal-price-source">Cardmarket</h4>
+          <div class="st-modal-price-rows">
+            ${rows.map(([label, v]) => `<div class="st-modal-price-row"><span>${label}</span><span>${fmt(v)}</span></div>`).join('')}
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  const tp = pricing.tcgplayer;
+  if (tp) {
+    const fmtUsd = (n) => typeof n === 'number' ? `$${n.toFixed(2)}` : '—';
+    const variantKeys = Object.keys(tp).filter(k => tp[k] && typeof tp[k] === 'object');
+
+    if (variantKeys.length) {
+      const rows = variantKeys.map(key => `
+        <div class="st-modal-price-variant">
+          <span class="st-modal-price-variant-label">${variantLabel(key)}</span>
+          <span class="st-modal-price-variant-vals">
+            <span>Low ${fmtUsd(tp[key].lowPrice)}</span>
+            <span>Mid ${fmtUsd(tp[key].midPrice)}</span>
+            <span>Market ${fmtUsd(tp[key].marketPrice)}</span>
+          </span>
+        </div>
+      `).join('');
+
+      sections.push(`
+        <div class="st-modal-price-block">
+          <h4 class="st-modal-price-source">
+            TCGPlayer${tp.url ? ` · <a href="${tp.url}" target="_blank" rel="noopener">View listing</a>` : ''}
+          </h4>
+          <div class="st-modal-price-rows">${rows}</div>
+        </div>
+      `);
+    }
+  }
+
+  return sections.length
+    ? sections.join('')
+    : `<p class="st-modal-no-price">No pricing data available for this card yet.</p>`;
+}
+
+function openCardDetail(setId, localId) {
+  const s = state.sets.find(set => set.id === setId);
+  if (!s) return;
+  const card = s.cards.find(c => String(c.localId) === String(localId));
+  if (!card) return;
+
+  const modal      = ensureCardModal();
+  const typeInfo   = cardTypeLabel(card);
+  const displayNum = String(card.localId).replace(/RH$/, '');
+  const collected  = isCollected(setId, card.localId);
+
+  const img = modal.querySelector('.st-modal-img');
+  if (card.image) {
+    img.src = `${card.image}/high.png`;
+    img.alt = card.name ?? '';
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+
+  modal.querySelector('.st-modal-title').textContent = card.name ?? 'Unknown card';
+  modal.querySelector('.st-modal-meta').textContent  =
+    `#${displayNum} · ${s.name}${typeInfo ? ' · ' + typeInfo.label : ''}`;
+  modal.querySelector('.st-modal-pricing').innerHTML = buildPricingHTML(card.pricing);
+
+  const toggleBtn = modal.querySelector('.st-modal-toggle');
+  toggleBtn.textContent = collected ? 'Remove from Collection' : 'Mark as Collected';
+  toggleBtn.classList.toggle('collected', collected);
+  toggleBtn.onclick = () => {
+    toggleCollected(setId, card.localId);
+    if (state.activeIdx !== null && state.sets[state.activeIdx].id === setId) {
+      renderGrid();
+      renderPanelHeader();
+      renderMissing();
+      updateTabPct(state.activeIdx);
+      checkCompletion();
+    }
+    renderOverall();
+    openCardDetail(setId, localId); // re-render modal to reflect the new state
+  };
+
+  modal.classList.add('open');
+  document.body.classList.add('st-modal-open');
 }
 
 // ─── Render: missing pills ────────────────────────────────────────────────────
@@ -788,13 +975,18 @@ function applyRarityMap(idx, map) {
 
 function applyPriceMap(idx, map) {
   if (!map || !Object.keys(map).length) return;
-  state.sets[idx].cards = state.sets[idx].cards.map(c => ({
-    ...c,
-    // RH copies share the base card's price rather than having their own entry
-    priceEUR: String(c.localId).endsWith('RH')
-      ? (map[String(c.localId).replace(/RH$/, '')] ?? c.priceEUR)
-      : (map[c.localId] ?? c.priceEUR),
-  }));
+  state.sets[idx].cards = state.sets[idx].cards.map(c => {
+    // RH copies share the base card's pricing entry rather than having their own
+    const baseId = String(c.localId).endsWith('RH') ? String(c.localId).replace(/RH$/, '') : c.localId;
+    const entry  = map[baseId];
+    if (!entry) return c;
+    return {
+      ...c,
+      priceEUR: typeof entry.eur === 'number' ? entry.eur : c.priceEUR,
+      pricing:  entry.pricing ?? c.pricing,
+    };
+  });
+  if (idx === state.activeIdx) renderGrid(); // refresh price badges on the visible grid
   renderOverall();
   syncCollectionValue();
 }
@@ -851,8 +1043,9 @@ async function enrichSetRarity(idx) {
       const card = res.value;
       if (needsRarity && card.rarity) rarityMap[slice[j].localId] = card.rarity;
       if (needsPrice) {
-        const eurPrice = card.pricing?.cardmarket?.trend ?? card.pricing?.cardmarket?.avg ?? null;
-        if (typeof eurPrice === 'number') priceMap[slice[j].localId] = eurPrice;
+        const pricing   = card.pricing ?? null;
+        const eurPrice  = pricing?.cardmarket?.trend ?? pricing?.cardmarket?.avg ?? null;
+        priceMap[slice[j].localId] = { eur: typeof eurPrice === 'number' ? eurPrice : null, pricing };
       }
     });
   }
@@ -927,6 +1120,13 @@ async function init() {
   document.getElementById('exportBtn')?.addEventListener('click', exportChecklist);
   document.getElementById('resetBtn')?.addEventListener('click', resetActiveSet);
   document.getElementById('markAllBtn')?.addEventListener('click', markAllVisible);
+
+  // Fetch the EUR→GBP rate used for price badges/modal — non-blocking, since
+  // it's usually already cached (24h TTL) and shouldn't delay first paint.
+  getEurToGbpRate().then(rate => {
+    state.fxRate = rate;
+    if (state.activeIdx !== null) renderGrid();
+  });
 
   // ── Resolve the logged-in user for namespaced storage + Supabase sync.
   // Timed out rather than awaited indefinitely — a hung auth check should
