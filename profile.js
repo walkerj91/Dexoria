@@ -310,10 +310,10 @@ async function renderTopRated() {
 
     const topCards = enriched
         .sort((a, b) => {
-            const tierDiff = rarityTier(b.rarity) - rarityTier(a.rarity);
-            if (tierDiff !== 0) return tierDiff;
-            // Tie-break by market price — cards with no resolved price sort last
-            return (b.priceEUR ?? -1) - (a.priceEUR ?? -1);
+            const priceDiff = (b.priceEUR ?? -1) - (a.priceEUR ?? -1);
+            if (priceDiff !== 0) return priceDiff;
+            // Tie-break by rarity when price is equal (or equally unresolved)
+            return rarityTier(b.rarity) - rarityTier(a.rarity);
         })
         .slice(0, 5);
 
