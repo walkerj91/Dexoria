@@ -73,6 +73,102 @@ function rarityTier(rarity) {
 }
 
 // ============================================
+// LIVE CARD META (rarity + price) FOR TOP RATED
+// ============================================
+// The `cards` table stores neither rarity nor price (see profileSelectCard —
+// insert only writes card_name/card_image/card_set/etc.), and there's no
+// TCGDex card ID kept either. So Top Rated resolves both live by matching
+// card_set (a set display name) + card_name against TCGDex, then caches the
+// result in localStorage. Best-effort: cards whose card_set is missing (can
+// happen when added via the "any set" search, which doesn't return a set
+// name) or that no longer match a TCGDex entry just fall back to unranked.
+
+const TCGDEX_META_BASE       = 'https://api.tcgdex.net/v2/en';
+const CARD_META_CACHE_PREFIX = 'dexoria_profile_card_meta_v1_';
+const CARD_META_CACHE_TTL    = 12 * 60 * 60 * 1000;       // 12h — matches Set Tracker's price refresh window
+const SET_MAP_CACHE_KEY      = 'dexoria_profile_setmap_v1';
+const SET_MAP_CACHE_TTL      = 7 * 24 * 60 * 60 * 1000;   // set names/ids barely change
+
+let setNameToIdMap = null; // in-memory, populated once per page load
+
+function metaCacheKey(setName, cardName) {
+    return `${CARD_META_CACHE_PREFIX}${(setName || '').toLowerCase()}::${(cardName || '').toLowerCase()}`;
+}
+
+async function getSetNameToIdMap() {
+    if (setNameToIdMap) return setNameToIdMap;
+
+    try {
+        const cached = localStorage.getItem(SET_MAP_CACHE_KEY);
+        if (cached) {
+            const { map, ts } = JSON.parse(cached);
+            if (Date.now() - ts < SET_MAP_CACHE_TTL) {
+                setNameToIdMap = map;
+                return map;
+            }
+        }
+    } catch { /* ignore corrupt cache */ }
+
+    try {
+        const res  = await fetch(`${TCGDEX_META_BASE}/sets`);
+        const sets = await res.json();
+        const map  = {};
+        (sets ?? []).forEach(s => { if (s.name) map[s.name.toLowerCase()] = s.id; });
+        setNameToIdMap = map;
+        try { localStorage.setItem(SET_MAP_CACHE_KEY, JSON.stringify({ map, ts: Date.now() })); } catch { /* ignore */ }
+        return map;
+    } catch (err) {
+        console.warn('[Profile] Failed to fetch TCGDex set list:', err);
+        setNameToIdMap = {};
+        return setNameToIdMap;
+    }
+}
+
+/** Resolves { rarity, priceEUR } for a saved card by matching set name + card name against TCGDex. */
+async function resolveCardMeta(cardName, setName) {
+    if (!cardName) return { rarity: null, priceEUR: null };
+
+    const cacheKey = metaCacheKey(setName, cardName);
+    try {
+        const cached = localStorage.getItem(cacheKey);
+        if (cached) {
+            const { meta, ts } = JSON.parse(cached);
+            if (Date.now() - ts < CARD_META_CACHE_TTL) return meta;
+        }
+    } catch { /* ignore corrupt cache */ }
+
+    let meta = { rarity: null, priceEUR: null };
+
+    try {
+        const setMap = await getSetNameToIdMap();
+        const setId  = setName ? setMap[setName.toLowerCase()] : null;
+        if (!setId) throw new Error('set not found on TCGDex');
+
+        const setRes  = await fetch(`${TCGDEX_META_BASE}/sets/${setId}`);
+        const setData = await setRes.json();
+        const lname   = cardName.toLowerCase();
+        const match   = (setData.cards ?? []).find(c => c.name?.toLowerCase() === lname)
+                      ?? (setData.cards ?? []).find(c => c.name?.toLowerCase().includes(lname));
+        if (!match) throw new Error('card not found in matched set');
+
+        const cardRes  = await fetch(`${TCGDEX_META_BASE}/sets/${setId}/${match.localId}`);
+        const cardData = await cardRes.json();
+        const eurPrice = cardData.pricing?.cardmarket?.trend ?? cardData.pricing?.cardmarket?.avg ?? null;
+
+        meta = {
+            rarity:   cardData.rarity ?? null,
+            priceEUR: typeof eurPrice === 'number' ? eurPrice : null,
+        };
+    } catch {
+        // Not on TCGDex (custom/legacy entry), no set name to match against,
+        // or a network hiccup — cache the miss too so it isn't retried every render.
+    }
+
+    try { localStorage.setItem(cacheKey, JSON.stringify({ meta, ts: Date.now() })); } catch { /* ignore */ }
+    return meta;
+}
+
+// ============================================
 // COLLECTION VALUE
 // ============================================
 async function calculateCollectionValue() {
@@ -190,17 +286,38 @@ async function renderTopRated() {
 
     const container = document.getElementById('topRatedCards');
     if (!container) return;
-    container.innerHTML = '';
 
     if (!cards || cards.length === 0) {
         container.innerHTML = '<p class="collection-empty">No rated cards yet.</p>';
         return;
     }
 
-    const topCards = [...cards]
-        .sort((a, b) => rarityTier(b.rarity) - rarityTier(a.rarity))
+    container.innerHTML = '<p class="collection-empty">Loading top cards...</p>';
+
+    // Resolve rarity + price live from TCGDex (batched + localStorage-cached —
+    // see resolveCardMeta) since the cards table stores neither.
+    const BATCH    = 8;
+    const enriched = [];
+    for (let i = 0; i < cards.length; i += BATCH) {
+        const slice = cards.slice(i, i + BATCH);
+        const metas = await Promise.all(slice.map(c => resolveCardMeta(c.card_name, c.card_set)));
+        slice.forEach((c, j) => enriched.push({ ...c, ...metas[j] }));
+    }
+
+    // This render can be superseded by a later one (e.g. rapid add/remove) —
+    // bail if the container's already been repopulated while we were fetching.
+    if (!container.isConnected) return;
+
+    const topCards = enriched
+        .sort((a, b) => {
+            const tierDiff = rarityTier(b.rarity) - rarityTier(a.rarity);
+            if (tierDiff !== 0) return tierDiff;
+            // Tie-break by market price — cards with no resolved price sort last
+            return (b.priceEUR ?? -1) - (a.priceEUR ?? -1);
+        })
         .slice(0, 5);
 
+    container.innerHTML = '';
     topCards.forEach(card => {
         const tier = rarityTier(card.rarity);
         const div  = document.createElement('div');
@@ -212,6 +329,11 @@ async function renderTopRated() {
             <div class="top-rated-rarity" style="font-size:14px;color:rgba(255,215,0,0.6);margin-top:2px;">
                 ${card.rarity || 'Common'}
             </div>
+            ${typeof card.priceEUR === 'number' ? `
+                <div class="top-rated-price" style="font-size:12px;color:#d4af37;margin-top:2px;">
+                    €${card.priceEUR.toFixed(2)}
+                </div>
+            ` : ''}
         `;
         container.appendChild(div);
     });
