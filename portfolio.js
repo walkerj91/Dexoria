@@ -653,6 +653,7 @@ async function runCardSearch() {
         cards[i].trainerType = full.trainerType ?? null;
         cards[i].rarity      = full.rarity      ?? null;
         cards[i].variants    = full.variants    ?? { normal: false, holo: false, reverse: false };
+        cards[i].set         = full.set         ?? null; // was never captured — left card_set null on every insert
 
         if (!cards[i].image && full.image) {
           cards[i].image = `${full.image}/high.png`;
@@ -1145,6 +1146,13 @@ async function loadBinderDirect(binderId) {
   const { data: { user } } = await supabase.auth.getUser();
   currentUser = user;
   isReadOnly  = !user || user.id !== binder.user_id;
+
+  // openBinder() normally sets these — this is the direct-URL entry point,
+  // which bypasses it. Without this, currentBinderId stays null and any
+  // card added here gets inserted with binder_id: null, landing it in
+  // "My Collection" instead of this binder.
+  currentBinderId = binder.id;
+  currentBinder   = binder;
 
   collectionScreen.style.display      = 'block';
   collectionScreen.style.minHeight    = '600px';
