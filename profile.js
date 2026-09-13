@@ -84,7 +84,7 @@ function rarityTier(rarity) {
 // name) or that no longer match a TCGDex entry just fall back to unranked.
 
 const TCGDEX_META_BASE       = 'https://api.tcgdex.net/v2/en';
-const CARD_META_CACHE_PREFIX = 'dexoria_profile_card_meta_v2_'; // bumped: v1 could cache a wrong same-name print
+const CARD_META_CACHE_PREFIX = 'dexoria_profile_card_meta_v3_'; // bumped: v2 could cache a null price for TCGPlayer-only cards
 const CARD_META_CACHE_TTL    = 12 * 60 * 60 * 1000;       // 12h — matches Set Tracker's price refresh window
 const SET_MAP_CACHE_KEY      = 'dexoria_profile_setmap_v1';
 const SET_MAP_CACHE_TTL      = 7 * 24 * 60 * 60 * 1000;   // set names/ids barely change
@@ -125,6 +125,62 @@ async function getSetNameToIdMap() {
 }
 
 /** Resolves { rarity, priceEUR } for a saved card by matching set name + card name against TCGDex. */
+const USD_EUR_CACHE_KEY = 'dexoria_profile_usdeur_v1';
+const USD_EUR_CACHE_TTL = 24 * 60 * 60 * 1000;
+let usdToEurRate = null;
+
+async function getUsdToEurRate() {
+    if (usdToEurRate) return usdToEurRate;
+
+    try {
+        const cached = localStorage.getItem(USD_EUR_CACHE_KEY);
+        if (cached) {
+            const { rate, ts } = JSON.parse(cached);
+            if (Date.now() - ts < USD_EUR_CACHE_TTL) { usdToEurRate = rate; return rate; }
+        }
+    } catch { /* ignore corrupt cache */ }
+
+    try {
+        const res  = await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR');
+        const data = await res.json();
+        const rate = data?.rates?.EUR;
+        if (typeof rate === 'number') {
+            usdToEurRate = rate;
+            try { localStorage.setItem(USD_EUR_CACHE_KEY, JSON.stringify({ rate, ts: Date.now() })); } catch { /* ignore */ }
+            return rate;
+        }
+    } catch (err) {
+        console.warn('[Profile] Failed to fetch USD→EUR rate:', err);
+    }
+
+    return 0.92; // rough static fallback so a TCGPlayer-only price still counts rather than dropping out
+}
+
+/**
+ * Resolves a comparable EUR price from a TCGDex pricing object. Prefers
+ * Cardmarket (already EUR); falls back to TCGPlayer (USD, converted) when
+ * Cardmarket has nothing — common for chase Illustration/Special Illustration
+ * Rares, which trade mostly on the North American market and often have no
+ * Cardmarket entry at all.
+ */
+async function extractEurPrice(pricing) {
+    if (!pricing) return null;
+
+    const cm = pricing.cardmarket?.trend ?? pricing.cardmarket?.avg ?? null;
+    if (typeof cm === 'number') return cm;
+
+    const tp = pricing.tcgplayer;
+    if (tp) {
+        const variant = Object.values(tp).find(v => v && typeof v === 'object' && typeof v.marketPrice === 'number');
+        if (variant) {
+            const rate = await getUsdToEurRate();
+            return variant.marketPrice * rate;
+        }
+    }
+
+    return null;
+}
+
 async function resolveCardMeta(cardName, setName, knownRarity = null) {
     if (!cardName) return { rarity: null, priceEUR: null };
 
@@ -162,8 +218,8 @@ async function resolveCardMeta(cardName, setName, knownRarity = null) {
             for (const candidate of pool) {
                 const detail = await fetch(`${TCGDEX_META_BASE}/sets/${setId}/${candidate.localId}`).then(r => r.json());
                 if (detail.rarity?.toLowerCase() === lrarity) {
-                    const eurPrice = detail.pricing?.cardmarket?.trend ?? detail.pricing?.cardmarket?.avg ?? null;
-                    meta = { rarity: detail.rarity, priceEUR: typeof eurPrice === 'number' ? eurPrice : null };
+                    const eurPrice = await extractEurPrice(detail.pricing);
+                    meta = { rarity: detail.rarity, priceEUR: eurPrice };
                     break;
                 }
             }
@@ -175,10 +231,10 @@ async function resolveCardMeta(cardName, setName, knownRarity = null) {
             const match    = pool[0];
             const cardRes  = await fetch(`${TCGDEX_META_BASE}/sets/${setId}/${match.localId}`);
             const cardData = await cardRes.json();
-            const eurPrice = cardData.pricing?.cardmarket?.trend ?? cardData.pricing?.cardmarket?.avg ?? null;
+            const eurPrice = await extractEurPrice(cardData.pricing);
             meta = {
                 rarity:   cardData.rarity ?? knownRarity ?? null,
-                priceEUR: typeof eurPrice === 'number' ? eurPrice : null,
+                priceEUR: eurPrice,
             };
         }
     } catch {
