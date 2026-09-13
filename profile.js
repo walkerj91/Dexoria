@@ -84,15 +84,15 @@ function rarityTier(rarity) {
 // name) or that no longer match a TCGDex entry just fall back to unranked.
 
 const TCGDEX_META_BASE       = 'https://api.tcgdex.net/v2/en';
-const CARD_META_CACHE_PREFIX = 'dexoria_profile_card_meta_v1_';
+const CARD_META_CACHE_PREFIX = 'dexoria_profile_card_meta_v2_'; // bumped: v1 could cache a wrong same-name print
 const CARD_META_CACHE_TTL    = 12 * 60 * 60 * 1000;       // 12h — matches Set Tracker's price refresh window
 const SET_MAP_CACHE_KEY      = 'dexoria_profile_setmap_v1';
 const SET_MAP_CACHE_TTL      = 7 * 24 * 60 * 60 * 1000;   // set names/ids barely change
 
 let setNameToIdMap = null; // in-memory, populated once per page load
 
-function metaCacheKey(setName, cardName) {
-    return `${CARD_META_CACHE_PREFIX}${(setName || '').toLowerCase()}::${(cardName || '').toLowerCase()}`;
+function metaCacheKey(setName, cardName, knownRarity) {
+    return `${CARD_META_CACHE_PREFIX}${(setName || '').toLowerCase()}::${(cardName || '').toLowerCase()}::${(knownRarity || '').toLowerCase()}`;
 }
 
 async function getSetNameToIdMap() {
@@ -125,10 +125,10 @@ async function getSetNameToIdMap() {
 }
 
 /** Resolves { rarity, priceEUR } for a saved card by matching set name + card name against TCGDex. */
-async function resolveCardMeta(cardName, setName) {
+async function resolveCardMeta(cardName, setName, knownRarity = null) {
     if (!cardName) return { rarity: null, priceEUR: null };
 
-    const cacheKey = metaCacheKey(setName, cardName);
+    const cacheKey = metaCacheKey(setName, cardName, knownRarity);
     try {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
@@ -147,18 +147,40 @@ async function resolveCardMeta(cardName, setName) {
         const setRes  = await fetch(`${TCGDEX_META_BASE}/sets/${setId}`);
         const setData = await setRes.json();
         const lname   = cardName.toLowerCase();
-        const match   = (setData.cards ?? []).find(c => c.name?.toLowerCase() === lname)
-                      ?? (setData.cards ?? []).find(c => c.name?.toLowerCase().includes(lname));
-        if (!match) throw new Error('card not found in matched set');
+        const exact   = (setData.cards ?? []).filter(c => c.name?.toLowerCase() === lname);
+        const pool    = exact.length ? exact : (setData.cards ?? []).filter(c => c.name?.toLowerCase().includes(lname));
+        if (!pool.length) throw new Error('card not found in matched set');
 
-        const cardRes  = await fetch(`${TCGDEX_META_BASE}/sets/${setId}/${match.localId}`);
-        const cardData = await cardRes.json();
-        const eurPrice = cardData.pricing?.cardmarket?.trend ?? cardData.pricing?.cardmarket?.avg ?? null;
+        // The set-level list has no rarity, so a name collision (e.g. a
+        // regular print and its Illustration Rare reprint share the same
+        // name) can't be told apart from `pool` alone. When we already know
+        // the rarity we're after — from the card's own DB row — check each
+        // candidate's full detail until one matches, rather than defaulting
+        // to the first (almost always the lower-numbered, ordinary) print.
+        if (knownRarity && pool.length > 1) {
+            const lrarity = knownRarity.toLowerCase();
+            for (const candidate of pool) {
+                const detail = await fetch(`${TCGDEX_META_BASE}/sets/${setId}/${candidate.localId}`).then(r => r.json());
+                if (detail.rarity?.toLowerCase() === lrarity) {
+                    const eurPrice = detail.pricing?.cardmarket?.trend ?? detail.pricing?.cardmarket?.avg ?? null;
+                    meta = { rarity: detail.rarity, priceEUR: typeof eurPrice === 'number' ? eurPrice : null };
+                    break;
+                }
+            }
+        }
 
-        meta = {
-            rarity:   cardData.rarity ?? null,
-            priceEUR: typeof eurPrice === 'number' ? eurPrice : null,
-        };
+        // No rarity hint, only one candidate, or none of the candidates
+        // matched the hint — fall back to the first match as before.
+        if (!meta.rarity && !meta.priceEUR) {
+            const match    = pool[0];
+            const cardRes  = await fetch(`${TCGDEX_META_BASE}/sets/${setId}/${match.localId}`);
+            const cardData = await cardRes.json();
+            const eurPrice = cardData.pricing?.cardmarket?.trend ?? cardData.pricing?.cardmarket?.avg ?? null;
+            meta = {
+                rarity:   cardData.rarity ?? knownRarity ?? null,
+                priceEUR: typeof eurPrice === 'number' ? eurPrice : null,
+            };
+        }
     } catch {
         // Not on TCGDex (custom/legacy entry), no set name to match against,
         // or a network hiccup — cache the miss too so it isn't retried every render.
@@ -300,8 +322,12 @@ async function renderTopRated() {
     const enriched = [];
     for (let i = 0; i < cards.length; i += BATCH) {
         const slice = cards.slice(i, i + BATCH);
-        const metas = await Promise.all(slice.map(c => resolveCardMeta(c.card_name, c.card_set)));
-        slice.forEach((c, j) => enriched.push({ ...c, ...metas[j] }));
+        const metas = await Promise.all(slice.map(c => resolveCardMeta(c.card_name, c.card_set, c.rarity)));
+        slice.forEach((c, j) => enriched.push({
+            ...c,
+            rarity:   c.rarity ?? metas[j].rarity, // DB value wins when the card already has one
+            priceEUR: metas[j].priceEUR,
+        }));
     }
 
     // This render can be superseded by a later one (e.g. rapid add/remove) —
