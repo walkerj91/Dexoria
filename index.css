@@ -1,5 +1,4 @@
- 
-    /* ── Hero ── */
+/* ── Hero ── */
 
 .hero {
   position: relative;
@@ -83,6 +82,25 @@
     width: 110px;
     height: 110px;
     margin-top: 90px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* h1's clamp() floor (52px) ignores its own vw-based scaling on narrow
+     phones, and 0.2em letter-spacing adds ~10px per character on top of
+     that — together, a single word in a longer heading like "WHY
+     COLLECTORS JOIN DEXORIA" ends up wider than the viewport and gets
+     clipped instead of wrapping. This brings the floor down and lets it
+     wrap (with a break-word safety net) instead of overflowing. */
+  h1 {
+    font-size: clamp(28px, 8vw, 52px);
+    letter-spacing: 0.08em;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+    padding: 0 12px;
+    text-align: center;
   }
 }
  
