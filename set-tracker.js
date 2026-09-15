@@ -326,7 +326,7 @@ function renderOverall() {
 // ─── Render: set hero cards ──────────────────────────────────────────────────
 
 const SET_IMAGES = {
-  '30C':    '30th_celebration_gold_1080.jpeg',
+  '30C':    '30th_celebration_logo.jpeg',
   'me05':   'Pitch Black Logo 2.png',
   'me04':   'Chaos Rising Logo.jpg',
   'me03':   'Perfect Order Logo.jpg',
