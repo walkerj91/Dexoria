@@ -356,6 +356,37 @@ async function renderMyCollection() {
     });
 }
 
+const EUR_GBP_CACHE_KEY = 'dexoria_profile_eurgbp_v1';
+const EUR_GBP_CACHE_TTL = 24 * 60 * 60 * 1000;
+let eurToGbpRate = null;
+
+async function getEurToGbpRate() {
+    if (eurToGbpRate) return eurToGbpRate;
+
+    try {
+        const cached = localStorage.getItem(EUR_GBP_CACHE_KEY);
+        if (cached) {
+            const { rate, ts } = JSON.parse(cached);
+            if (Date.now() - ts < EUR_GBP_CACHE_TTL) { eurToGbpRate = rate; return rate; }
+        }
+    } catch { /* ignore corrupt cache */ }
+
+    try {
+        const res  = await fetch('https://api.frankfurter.app/latest?from=EUR&to=GBP');
+        const data = await res.json();
+        const rate = data?.rates?.GBP;
+        if (typeof rate === 'number') {
+            eurToGbpRate = rate;
+            try { localStorage.setItem(EUR_GBP_CACHE_KEY, JSON.stringify({ rate, ts: Date.now() })); } catch { /* ignore */ }
+            return rate;
+        }
+    } catch (err) {
+        console.warn('[Profile] Failed to fetch EUR→GBP rate:', err);
+    }
+
+    return 0.86; // rough static fallback
+}
+
 async function renderTopRated() {
     const { data: cards } = await supabase
         .from('cards')
@@ -399,6 +430,8 @@ async function renderTopRated() {
         })
         .slice(0, 5);
 
+    const gbpRate = await getEurToGbpRate();
+
     container.innerHTML = '';
     topCards.forEach(card => {
         const tier = rarityTier(card.rarity);
@@ -413,7 +446,7 @@ async function renderTopRated() {
             </div>
             ${typeof card.priceEUR === 'number' ? `
                 <div class="top-rated-price" style="font-size:12px;color:#d4af37;margin-top:2px;">
-                    €${card.priceEUR.toFixed(2)}
+                    £${(card.priceEUR * gbpRate).toFixed(2)}
                 </div>
             ` : ''}
         `;
