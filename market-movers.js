@@ -1,6 +1,6 @@
 
 const TCGDEX_BASE = 'https://api.tcgdex.net/v2/en';
-const SET_IDS     = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05'];
+const SET_IDS     = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30C',];
 
 function getRarityTier(rarity) {
     const r = rarity?.toLowerCase() || '';
