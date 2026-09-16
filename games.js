@@ -251,7 +251,7 @@ const WEEKLY_BANK = [
     { q:"Which main-series game introduced Pokémon Contests?", o:["FireRed/LeafGreen","Ruby/Sapphire","HeartGold/SoulSilver","Platinum"], a:1 },
     { q:"What is the name of the villain team in Pokémon Sun and Moon?", o:["Team Flare","Team Skull","Team Rocket","Team Plasma"], a:1 },
     { q:"Which game is set in the Hisui region (ancient Sinnoh)?", o:["Brilliant Diamond","Legends: Arceus","Platinum","Mystery Dungeon: Explorers"], a:1 },
-    { q:"What was the subtitle of the Pokémon Diamond and Pearl remakes?", o:["HeartGold/SoulSilver","Omega Ruby/Alpha Sapphire","Brilliant Diamond/Shining Pearl","Ultra Sun/Ultra Moon"], a:2 },
+    { q:"What level does Dragonair evolve into Dragonite?", o:["40","45","55","60"], a:2 },
     { q:"In which game did Ash-Greninja first appear as a mechanic?", o:["X/Y","Sun/Moon","Sword/Shield","Scarlet/Violet"], a:1 },
     { q:"What is the name of the champion in Pokémon Black and White?", o:["Cynthia","Alder","Diantha","Lance"], a:1 },
     { q:"Which spin-off game series lets you play AS a Pokémon?", o:["Pokémon Stadium","Pokémon Ranger","Mystery Dungeon","PokéPark"], a:2 },
@@ -266,7 +266,6 @@ const WEEKLY_BANK = [
     { q:"Which game first introduced the day/night cycle?", o:["Red/Blue","Gold/Silver","Ruby/Sapphire","Crystal"], a:1 },
     { q:"What was the first Pokémon game on the Nintendo DS?", o:["HeartGold","FireRed","Diamond/Pearl","Platinum"], a:2 },
     { q:"What villain organisation appears in Pokémon Diamond and Pearl?", o:["Team Rocket","Team Aqua","Team Galactic","Team Magma"], a:2 },
-    { q:"Which game introduced Poké Amie — bonding with your Pokémon?", o:["X/Y","Sun/Moon","Black 2/White 2","Sword/Shield"], a:0 },
 
     // ── ANIME / TV ──────────────────────────────────────
     { q:"What is the name of Ash's first Pokémon?", o:["Squirtle","Bulbasaur","Pikachu","Caterpie"], a:2 },
@@ -304,11 +303,8 @@ const WEEKLY_BANK = [
     { q:"What is the rarity symbol for a standard Rare card in the TCG?", o:["●","★","◆","♦"], a:1 },
     { q:"What does PSA stand for in Pokémon card grading?", o:["Professional Sports Authenticator","Pokémon Stamp Authority","Premium Seal Agency","Professional Standard Assessment"], a:0 },
     { q:"Which TCG set introduced EX Pokémon cards for the first time?", o:["Neo Destiny","Expedition","EX Ruby & Sapphire","Aquapolis"], a:2 },
-    { q:"How many prize cards do you start with in a standard TCG game?", o:["4","5","6","7"], a:2 },
     { q:"Which Base Set card famously has a 'shadowless' first edition variant?", o:["Pikachu","Blastoise","Charizard","Venusaur"], a:2 },
     { q:"What is the maximum deck size in the Pokémon TCG?", o:["40","50","60","70"], a:2 },
-    { q:"Which card type allows one special attack use before the Pokémon is knocked out?", o:["EX","GX","V","VSTAR"], a:1 },
-    { q:"In the TCG, what does the weakness multiplier change to in modern sets (post-2023)?", o:["×1.5","×2","×3","It was removed"], a:1 },
     { q:"What is the term for a Pokémon card that has a holographic reverse side?", o:["Holo Rare","Secret Rare","Reverse Holo","Full Art"], a:2 },
 
     // ── LORE & MISC ────────────────────────────────────
@@ -324,6 +320,15 @@ const WEEKLY_BANK = [
     { q:"What number did the total Pokémon species pass in Generation 9?", o:["800","900","1000","1100"], a:2 },
     { q:"Which Pokémon is referred to as the 'ancestor of all Pokémon' in lore?", o:["Mew","Mewtwo","Arceus","Ditto"], a:0 },
     { q:"What is the in-universe explanation for why Pokémon say only their name?", o:["They are simple creatures","They communicate via tone and inflection","Game Freak never explained it","They are trained to"], a:1 },
+    { q:"What Pokemon was created first?", o:["Clefairy","Bulbasaur","Pikachu","Rhydon"], a:3 },
+    { q:"What Pokemon doesn’t have any weaknesses?", o:["Eelektross","Gengar","Arceus","Sableye"], a:0 },
+    { q:"Which Legendary Pokemon represents time?", o:["Palkia","Celebi","Xerneas","Dialga"], a:3 },
+    { q:"What is Pikachu’s signature move?", o:["Thunder Wave","Thundershock","Thunderbolt","Volt Tackle"], a:3 },
+    { q:"Which Pokemon can learn the most moves?", o:["Pikachu","Dragonite","Mew","Arceus"], a:2 },
+    { q:"What berry cures a burn?", o:["Pecha Berry","Oran Berry","Rawst Berry","Sitrus Berry"], a:2 },
+    { q:"What is the tallest Pokemon?", o:["Eternatus","Regigigas","Wailord","Gyarados"], a:0 },
+    { q:"Which Pokemon is always female?", o:["Gardevoir","Combee","Jellicent","Kangaskhan"], a:3 },
+    { q:"What is the only Pokemon that evolves by levelling up while knowing a specific move?", o:["Piloswine","Inkay","Bonsly","Runerigus"], a:0 },
 ];
 
 function getWeekMasterQuestions() {
