@@ -74,6 +74,99 @@ serve(async (req) => {
     }
   }
 
+  // ── SINGLES CHECKOUT (no auth required — guest checkout allowed) ──────────
+  if (req.method === 'POST' && url.pathname.endsWith('/singles-checkout')) {
+    try {
+      const { items, user_id } = await req.json();
+      // items: [{ single_id, quantity }, ...] — from the dexoria_cart entries
+
+      if (!Array.isArray(items) || items.length === 0) {
+        return json({ error: 'No items provided' }, 400);
+      }
+
+      const adminSupabase = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      );
+
+      // Never trust client-supplied prices/stock — look up the real thing
+      const singleIds = items.map((i: { single_id: string }) => i.single_id);
+      const { data: singles, error: singlesError } = await adminSupabase
+        .from('card_singles')
+        .select('id, card_name, price_cents, quantity_available, is_active, image_url')
+        .in('id', singleIds);
+
+      if (singlesError || !singles) throw new Error('Could not verify items');
+
+      const formBody = new URLSearchParams();
+      formBody.append('mode', 'payment');
+      formBody.append('success_url', `${SITE_URL}/singles-success.html?session_id={CHECKOUT_SESSION_ID}`);
+      formBody.append('cancel_url', `${SITE_URL}/basket.html`);
+      if (user_id) formBody.append('metadata[user_id]', user_id);
+
+      const purchaseItems: { single_id: string; quantity: number; unit_price_cents: number }[] = [];
+      let totalCents = 0;
+      let idx = 0;
+
+      for (const cartItem of items as { single_id: string; quantity: number }[]) {
+        const single = singles.find((s) => s.id === cartItem.single_id);
+        const quantity = Math.max(1, parseInt(String(cartItem.quantity), 10) || 1);
+
+        if (!single || !single.is_active) {
+          return json({ error: 'One of the items is no longer available' }, 400);
+        }
+        if (quantity > single.quantity_available) {
+          return json({ error: `Only ${single.quantity_available} left of ${single.card_name}` }, 400);
+        }
+
+        formBody.append(`line_items[${idx}][quantity]`, String(quantity));
+        formBody.append(`line_items[${idx}][price_data][currency]`, 'gbp');
+        formBody.append(`line_items[${idx}][price_data][unit_amount]`, String(single.price_cents));
+        formBody.append(`line_items[${idx}][price_data][product_data][name]`, single.card_name);
+        if (single.image_url) {
+          formBody.append(`line_items[${idx}][price_data][product_data][images][0]`, single.image_url);
+        }
+
+        purchaseItems.push({ single_id: single.id, quantity, unit_price_cents: single.price_cents });
+        totalCents += single.price_cents * quantity;
+        idx++;
+      }
+
+      const sessionRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formBody.toString(),
+      });
+
+      const session = await sessionRes.json();
+      if (session.error) throw new Error('Stripe error: ' + session.error.message);
+
+      const { data: purchase, error: purchaseError } = await adminSupabase
+        .from('single_purchases')
+        .insert({
+          buyer_id:          user_id || null,
+          stripe_session_id: session.id,
+          status:            'pending',
+          total_cents:       totalCents,
+        })
+        .select().single();
+
+      if (purchaseError || !purchase) throw new Error('Could not record purchase: ' + purchaseError?.message);
+
+      await adminSupabase.from('single_purchase_items').insert(
+        purchaseItems.map((item) => ({ ...item, purchase_id: purchase.id }))
+      );
+
+      return json({ url: session.url });
+    } catch (err) {
+      console.error('Singles checkout error:', err);
+      return json({ error: String(err) }, 500);
+    }
+  }
+
   // ── LABEL DOWNLOAD PROXY (no auth required) ───────────────────────────────
   if (req.method === 'GET' && url.pathname.includes('/label/')) {
     const parcelId = url.pathname.split('/label/')[1];
