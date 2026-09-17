@@ -1,0 +1,94 @@
+/* Only the bits dexoria-ui.css doesn't already cover.
+   Cards, grid, price, buttons all reuse your existing
+   .dex-card / .dex-grid / .dex-price / .dex-btn classes. */
+
+.singles-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 60px;
+}
+
+.singles-toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0 5% 30px;
+}
+
+.singles-search,
+.singles-sort {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 10px 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--gold-light);
+}
+
+.singles-search {
+  flex: 1;
+  min-width: 200px;
+}
+
+.singles-search:focus,
+.singles-sort:focus {
+  outline: 1px solid var(--gold-mid);
+  outline-offset: 1px;
+}
+
+.singles-stock {
+  font-size: 12px;
+  color: rgba(245, 208, 107, 0.7);
+}
+
+.singles-card-name {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin: 12px 0 2px;
+  line-height: 1.25;
+}
+
+.singles-card-set {
+  font-size: 13px;
+  color: rgba(245, 208, 107, 0.65);
+  margin: 0 0 10px;
+}
+
+.singles-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(245, 208, 107, 0.7);
+  font-family: var(--font-body);
+}
+
+.singles-added-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background: var(--gold-mid);
+  color: #000;
+  font-family: var(--font-body);
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-gold);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+}
+
+.singles-added-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 480px) {
+  .singles-toolbar {
+    padding: 0 6% 24px;
+  }
+}

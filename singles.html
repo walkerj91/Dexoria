@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Singles | Dexoria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="dexoria-ui.css" />
+  <link rel="stylesheet" href="singles.css" /> <!-- small additive styles only -->
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="singles-page">
+
+    <div class="section-title-container stc-with-sub">
+      <div class="stc-row">
+        <span class="stc-diamond">◆</span>
+        <h2>Singles</h2>
+        <span class="stc-diamond">◆</span>
+      </div>
+      <p class="stc-sub">Individual cards, ready to ship</p>
+    </div>
+
+    <div class="singles-toolbar">
+      <input
+        type="search"
+        id="singles-search"
+        class="singles-search"
+        placeholder="Search by card or set name…"
+      />
+      <select id="singles-sort" class="singles-sort">
+        <option value="newest">Newest</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name: A–Z</option>
+      </select>
+    </div>
+
+    <div id="singles-grid" class="dex-grid cols-4">
+      <!-- .dex-card elements injected by singles.js -->
+    </div>
+
+    <p id="singles-empty" class="singles-empty" hidden>
+      No singles are listed for sale right now — check back soon.
+    </p>
+
+  </main>
+
+  <script type="module" src="supabaseClient.js"></script>
+  <script type="module" src="singles.js"></script>
+</body>
+</html>
