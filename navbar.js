@@ -72,6 +72,9 @@ export async function renderNavbar(containerId) {
                 <div class="dropdown-content">
                     <a href="./binders.html">Binder Studio</a>
                 </div>
+                <div class="dropdwon-content">
+                    <a href="./singles.html">Single Cards</a>
+                </div>
             </div>
 
             <a href="./trades.html"    id="trades-nav-link">TRADES</a>
