@@ -3,6 +3,9 @@ import { supabase } from './supabaseClient.js';
 // Dexoria Team system account — excluded from the trainer count
 const DEXORIA_TEAM_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
 
+// Your own account — same UUID you set as ADMIN_USER_ID in Edge Function secrets
+const ADMIN_USER_ID = 'PASTE-YOUR-ADMIN-UUID-HERE';
+
 export async function renderNavbar(containerId) {
 
     const container = document.getElementById(containerId);
@@ -31,6 +34,7 @@ export async function renderNavbar(containerId) {
 }
 
     const isLoggedIn = !!session;
+    const isAdmin    = isLoggedIn && session.user.id === ADMIN_USER_ID;
 
     // ============================================
     // USERNAME
@@ -136,6 +140,9 @@ export async function renderNavbar(containerId) {
                              font-size:10px; font-weight:bold; border-radius:50%; width:16px; height:16px;
                              display:flex; align-items:center; justify-content:center; border:1px solid #5B0D76;">0</span>
             </div>
+
+            <!-- ADMIN — only visible when logged in as the admin account -->
+            ${isAdmin ? `<a href="./admin-add-single.html" id="admin-nav-link">ADMIN</a>` : ''}
 
             ${isLoggedIn
                 ? `<a href="#" id="logout-link">LOGOUT (${username})</a>`
