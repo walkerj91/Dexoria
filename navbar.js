@@ -4,7 +4,7 @@ import { supabase } from './supabaseClient.js';
 const DEXORIA_TEAM_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
 
 // Your own account — same UUID you set as ADMIN_USER_ID in Edge Function secrets
-const ADMIN_USER_ID = 'PASTE-YOUR-ADMIN-UUID-HERE';
+const ADMIN_USER_ID = '1f931092-bedb-4e60-aff4-1b21a4fb01cd';
 
 export async function renderNavbar(containerId) {
 
