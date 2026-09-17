@@ -7,9 +7,15 @@
 .admin-gate,
 .admin-form {
   padding: 24px;
-  display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* Only apply flex layout when NOT hidden — otherwise this class overrides
+   the browser's [hidden] { display: none } rule and both blocks show at once */
+.admin-gate:not([hidden]),
+.admin-form:not([hidden]) {
+  display: flex;
 }
 
 .admin-label {
