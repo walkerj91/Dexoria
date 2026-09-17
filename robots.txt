@@ -1,11 +1,13 @@
 User-agent: *
 Allow: /
 
-# Auth-gated or user-specific pages — no SEO value, don't index
+# No SEO value — transactional/utility pages, not gated by login
 Disallow: /login.html
 Disallow: /basket.html
-Disallow: /portfolio.html
-Disallow: /trades.html
-Disallow: /set-tracker.html
+
+# portfolio.html, trades.html, and set-tracker.html require an account to view
+# meaningfully. Left crawlable here — add <meta name="robots" content="noindex">
+# on the pages themselves so Google can still drop them from results without
+# them showing up as bare, snippet-less URLs from homepage/footer links.
 
 Sitemap: https://dexoria.co.uk/sitemap.xml
