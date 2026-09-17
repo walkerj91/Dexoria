@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dexoria Admin — Add Single</title>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./dexoria-ui.css">
+  <link rel="stylesheet" href="./navbar.css">
+  
+  <!-- PAGE CSS -->
+  <link rel="stylesheet" href="./admin-add-single.css">
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div id="navbar"></div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+
+
+  <main class="admin-page">
+    <div class="section-title-container stc-plain">
+      <h2>Add Single</h2>
+    </div>
+
+    <div id="admin-auth-gate" class="admin-gate glass-panel" hidden>
+      <p>You need to be logged in as the site admin to use this page.</p>
+    </div>
+
+    <form id="admin-add-single-form" class="admin-form glass-panel" hidden>
+
+      <label class="admin-label">
+        TCGDex Card ID
+        <div class="admin-lookup-row">
+          <input type="text" id="tcgdex-id-input" placeholder="e.g. swsh3-136" required />
+          <button type="button" id="lookup-btn" class="dex-btn">Look up</button>
+        </div>
+      </label>
+
+      <div id="lookup-error" class="admin-error" hidden></div>
+
+      <div id="card-preview" class="admin-preview" hidden>
+        <img id="preview-img" class="admin-preview-img" alt="" />
+        <div class="admin-preview-details">
+          <p id="preview-name" class="admin-preview-name"></p>
+          <p id="preview-set" class="admin-preview-set"></p>
+          <p id="preview-rarity" class="admin-preview-rarity"></p>
+        </div>
+      </div>
+
+      <label class="admin-label">
+        Price (£)
+        <input type="number" id="price-input" step="0.01" min="0" required />
+      </label>
+
+      <label class="admin-label">
+        Quantity available
+        <input type="number" id="quantity-input" min="1" value="1" required />
+      </label>
+
+      <button type="submit" id="submit-btn" class="dex-btn" disabled>Add to Store</button>
+
+      <p id="submit-success" class="admin-success" hidden></p>
+      <p id="submit-error" class="admin-error" hidden></p>
+    </form>
+  </main>
+
+  <!-- FOOTER -->
+<footer class="main-footer">
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h2 class="footer-logo">Dexoria</h2>
+            <p class="disclaimer">
+                Dexoria is an unofficial fan-made platform. We are not affiliated with,
+                endorsed by, or supported by Nintendo, Creatures, GAME FREAK,
+                or The Pokémon Company.
+            </p>
+            <p class="copyright">&copy; 2026 Dexoria. All rights reserved.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Explore</h4>
+            <ul>
+                <li><a href="./marketplace.html">Marketplace</a></li>
+                <li><a href="./trades.html">Trade Hub</a></li>
+                <li><a href="./community.html">Community Feed</a></li>
+                <li><a href="./portfolio.html">My Collection</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="./help-centre.html">Help Centre</a></li>
+                <li><a href="./privacy.html">Privacy Policy</a></li>
+                <li><a href="./terms-of-use.html">Terms of Use</a></li>
+                <li><a href="./contact-us.html">Contact Us</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+      <h4>Join the Club</h4>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/dexoria.co.uk/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61594111913297" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
+      </div>
+      <p style="font-size:14px;margin-top:15px;">
+        <span id="trainer-count">—</span> Trainers Joined Dexoria
+      </p>
+    </div>
+</div>
+</footer>
+
+
+    <!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="Go to top">
+    <svg class="pokeball-icon" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="4"/>
+        <path d="M2,50 a48,48 0 0,1 96,0 h-30 a18,18 0 0,0 -36,0 h-30" fill="#ee1515" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="18" fill="white" stroke="black" stroke-width="4"/>
+        <circle cx="50" cy="50" r="10" fill="white" stroke="black" stroke-width="2"/>
+    </svg>
+</button>
+
+<!-- NAVBAR SCRIPT -->
+ <script type="module">
+  import { renderNavbar } from "./navbar.js";
+
+  import { supabase } from "./supabaseClient.js";
+
+const { data } = await supabase.auth.getSession();
+
+let username = "Trainer";
+
+if (data.session) {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("id", data.session.user.id)
+    .single();
+
+  if (profile?.username) username = profile.username;
+}
+
+renderNavbar("navbar", {
+  isLoggedIn: !!data.session,
+  username
+});
+
+</script>
+
+<!-- CURSOR SCRIPT -->
+ <script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('button, a, .feature-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+ 
+  const hero = document.querySelector('.hero');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random() * 100}%;
+      bottom:${Math.random() * 40}%;
+      animation-duration:${Math.random() * 6 + 5}s;
+      animation-delay:${Math.random() * 4}s;
+      opacity:0;
+    `;
+    hero.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+  setInterval(spawnParticle, 600);
+</script>
+
+<!-- BACK TO TOP BUTTON -->
+ <script>
+const backToTopBtn = document.getElementById("backToTop");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("show");
+  } else {
+    backToTopBtn.classList.remove("show");
+  }
+});
+
+// Scroll to top on click
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+</script>
+
+  <script type="module" src="./supabaseClient.js"></script>
+  <script type="module" src="./admin-add-single.js"></script>
+</body>
+</html>
