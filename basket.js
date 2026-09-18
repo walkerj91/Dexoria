@@ -3,6 +3,17 @@ import { supabase } from './supabaseClient.js';
 
 const CHECKOUT_URL = 'https://uygnyhljorjpmwlnbkyp.supabase.co/functions/v1/capture-stripe-payment/singles-checkout';
 
+const MIN_ORDER_PENCE = 30; // Stripe's GBP minimum charge
+
+function calculateSinglesTotalCents(cart) {
+    return cart
+        .filter((item) => item.singleId)
+        .reduce((sum, item) => {
+            const unitPence = Math.round((parseFloat(item.price.replace(/[^\d.]/g, '')) || 0) * 100);
+            return sum + unitPence * (item.quantity || 1);
+        }, 0);
+}
+
 window.startSinglesCheckout = async function () {
     const cart = JSON.parse(localStorage.getItem('dexoria_cart')) || [];
 
@@ -12,6 +23,12 @@ window.startSinglesCheckout = async function () {
 
     if (items.length === 0) {
         alert('Your basket is empty.');
+        return;
+    }
+
+    const totalCents = calculateSinglesTotalCents(cart);
+    if (totalCents < MIN_ORDER_PENCE) {
+        alert(`Minimum order amount is £0.30 — this basket totals £${(totalCents / 100).toFixed(2)}. Please add another item.`);
         return;
     }
 
@@ -96,6 +113,8 @@ async function renderBasket() {
     if (cart.length === 0) {
         basketList.innerHTML = '<p class="placeholder-text" style="text-align:center; padding: 40px; color:white;">Your basket is currently empty.</p>';
         if (totalPriceEl) totalPriceEl.innerText = 'TOTAL: £0.00';
+        const minSpendNoticeEmpty = document.getElementById('min-spend-notice');
+        if (minSpendNoticeEmpty) minSpendNoticeEmpty.hidden = true;
         return;
     }
 
@@ -122,6 +141,8 @@ async function renderBasket() {
     if (cart.length === 0) {
         basketList.innerHTML = '<p class="placeholder-text" style="text-align:center; padding: 40px; color:white;">Your basket is currently empty.</p>';
         if (totalPriceEl) totalPriceEl.innerText = 'TOTAL: £0.00';
+        const minSpendNoticeEmpty2 = document.getElementById('min-spend-notice');
+        if (minSpendNoticeEmpty2) minSpendNoticeEmpty2.hidden = true;
         updateCartBadge();
         return;
     }
@@ -172,6 +193,17 @@ async function renderBasket() {
 
     basketList.innerHTML = html;
     if (totalPriceEl) totalPriceEl.innerText = `TOTAL: £${total.toFixed(2)}`;
+
+    const minSpendNotice = document.getElementById('min-spend-notice');
+    if (minSpendNotice) {
+        const singlesTotalCents = calculateSinglesTotalCents(cart);
+        const belowMinimum = singlesTotalCents > 0 && singlesTotalCents < MIN_ORDER_PENCE;
+        minSpendNotice.hidden = false;
+        minSpendNotice.classList.toggle('below-minimum', belowMinimum);
+        minSpendNotice.textContent = belowMinimum
+            ? `Minimum order: £0.30 — add £${((MIN_ORDER_PENCE - singlesTotalCents) / 100).toFixed(2)} more to check out`
+            : 'Minimum order: £0.30';
+    }
 }
 
 // 2. Quantity & Removal Logic
