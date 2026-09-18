@@ -104,6 +104,20 @@ serve(async (req) => {
       formBody.append('cancel_url', `${SITE_URL}/basket.html`);
       if (user_id) formBody.append('metadata[user_id]', user_id);
 
+      // Collect a delivery address — adjust allowed_countries if you ship outside the UK
+      formBody.append('shipping_address_collection[allowed_countries][0]', 'GB');
+
+      // Flat-rate shipping — adjust the amount (in pence) or swap in multiple
+      // options (e.g. a faster/tracked tier) by adding shipping_options[1][...]
+      formBody.append('shipping_options[0][shipping_rate_data][type]', 'fixed_amount');
+      formBody.append('shipping_options[0][shipping_rate_data][fixed_amount][amount]', '150');
+      formBody.append('shipping_options[0][shipping_rate_data][fixed_amount][currency]', 'gbp');
+      formBody.append('shipping_options[0][shipping_rate_data][display_name]', 'Standard Shipping');
+      formBody.append('shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]', 'business_day');
+      formBody.append('shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]', '2');
+      formBody.append('shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]', 'business_day');
+      formBody.append('shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]', '5');
+
       const purchaseItems: { single_id: string; quantity: number; unit_price_cents: number }[] = [];
       let totalCents = 0;
       let idx = 0;
