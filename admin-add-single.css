@@ -35,7 +35,8 @@
   display: flex;
 }
 
-.admin-label input {
+.admin-label input,
+.admin-label select {
   font-family: var(--font-body);
   font-size: 16px; /* 16px minimum avoids iOS auto-zoom-on-focus */
   padding: 10px 12px;
@@ -46,7 +47,25 @@
   color: var(--gold-light);
 }
 
+.admin-label select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  /* Custom gold chevron replacing the browser's default (usually dark-on-transparent, invisible on this background) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23F5D06B'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+.admin-label select option {
+  background: #1a1a1a;
+  color: var(--gold-light);
+}
+
 .admin-label input:focus-visible,
+.admin-label select:focus-visible,
 .dex-btn:focus-visible {
   outline: 2px solid var(--gold-light);
   outline-offset: 2px;
