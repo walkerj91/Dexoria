@@ -1,0 +1,212 @@
+.orders-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 5% 60px;
+}
+
+.orders-gate {
+  padding: 24px;
+}
+
+.orders-toolbar {
+  margin-bottom: 20px;
+}
+
+#orders-filter {
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 10px 12px;
+  min-height: 44px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--gold-light);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23F5D06B'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+#orders-filter option {
+  background: #1a1a1a;
+  color: var(--gold-light);
+}
+
+.orders-empty {
+  text-align: center;
+  color: rgba(245, 208, 107, 0.6);
+  font-family: var(--font-body);
+  padding: 40px 0;
+}
+
+.order-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.order-card-fulfilled {
+  opacity: 0.6;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.order-id {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(245, 208, 107, 0.55);
+  margin: 0 0 4px;
+}
+
+.order-date {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(245, 208, 107, 0.75);
+  margin: 0;
+}
+
+.order-status {
+  font-family: var(--font-title);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.order-status-paid {
+  background: rgba(200,155,42,0.2);
+  color: var(--gold-light);
+  border: 1px solid var(--gold-line);
+}
+
+.order-status-fulfilled {
+  background: rgba(46,204,113,0.15);
+  color: #2ecc71;
+  border: 1px solid rgba(46,204,113,0.4);
+}
+
+.order-status-refunded {
+  background: rgba(224,122,122,0.15);
+  color: #e07a7a;
+  border: 1px solid rgba(224,122,122,0.4);
+}
+
+.order-section-label {
+  font-family: var(--font-title);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(245, 208, 107, 0.55);
+  margin: 0 0 6px;
+}
+
+.order-shipping {
+  margin-bottom: 16px;
+}
+
+.order-shipping-name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--gold-light);
+  margin: 0 0 2px;
+}
+
+.order-shipping-address {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(245, 208, 107, 0.85);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.order-shipping-missing {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #e07a7a;
+  margin: 0;
+}
+
+.order-items {
+  margin-bottom: 16px;
+}
+
+.order-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--gold-light);
+}
+
+.order-item-img {
+  width: 32px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: #000;
+}
+
+.order-item-name {
+  flex: 1;
+}
+
+.order-item-qty {
+  color: rgba(245, 208, 107, 0.6);
+  white-space: nowrap;
+}
+
+.order-total {
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--gold-light);
+  margin: 0 0 14px;
+}
+
+.order-fulfill-btn {
+  font-size: 13px;
+  padding: 8px 16px;
+  min-height: 36px;
+}
+
+@media (max-width: 480px) {
+  .order-header {
+    flex-direction: column;
+  }
+}
+
+.admin-page-link {
+  text-align: center;
+  margin: -10px 0 20px;
+}
+
+.admin-page-link a {
+  color: var(--gold-mid);
+  font-family: var(--font-body);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.admin-page-link a:hover {
+  color: var(--gold-light);
+  text-decoration: underline;
+}

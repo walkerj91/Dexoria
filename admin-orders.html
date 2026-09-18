@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders | Dexoria Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="dexoria-ui.css" />
+  <link rel="stylesheet" href="admin-orders.css" />
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main class="orders-page">
+    <div class="section-title-container stc-plain">
+      <h2>Orders</h2>
+    </div>
+
+    <p class="admin-page-link"><a href="./admin-add-single.html">← Add Single</a></p>
+
+    <div id="orders-auth-gate" class="orders-gate glass-panel" hidden>
+      <p>You need to be logged in as the site admin to use this page.</p>
+    </div>
+
+    <div class="orders-toolbar" id="orders-toolbar" hidden>
+      <select id="orders-filter">
+        <option value="paid">Needs Fulfillment</option>
+        <option value="fulfilled">Fulfilled</option>
+        <option value="all">All Orders</option>
+      </select>
+    </div>
+
+    <div id="orders-list" class="orders-list"></div>
+    <p id="orders-empty" class="orders-empty" hidden>No orders here.</p>
+  </main>
+
+  <script type="module" src="supabaseClient.js"></script>
+  <script type="module" src="admin-orders.js"></script>
+</body>
+</html>
