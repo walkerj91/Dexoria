@@ -31,15 +31,32 @@
   min-width: 200px;
 }
 
-.singles-search:focus,
-.singles-sort:focus {
+.singles-sort {
+  min-width: 160px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  /* Custom gold chevron — browser default renders dark-on-dark and disappears against this background */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23F5D06B'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+.singles-sort option {
+  background: #1a1a1a;
+  color: var(--gold-light);
+}
+
+.singles-search:focus-visible,
+.singles-sort:focus-visible {
   outline: 1px solid var(--gold-mid);
   outline-offset: 1px;
 }
 
 .singles-stock {
   font-size: 12px;
-  font-weight: 500
   color: rgba(245, 208, 107, 0.7);
 }
 
