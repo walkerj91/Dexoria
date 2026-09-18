@@ -255,3 +255,20 @@
     flex-direction: column;
   }
 }
+
+.admin-page-link {
+  text-align: center;
+  margin: -10px 0 20px;
+}
+
+.admin-page-link a {
+  color: var(--gold-mid);
+  font-family: var(--font-body);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.admin-page-link a:hover {
+  color: var(--gold-light);
+  text-decoration: underline;
+}
