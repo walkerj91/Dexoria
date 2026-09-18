@@ -19,11 +19,12 @@ async function init() {
 }
 
 async function loadSingles() {
+  // Sold-out cards (quantity_available = 0) stay listed as "Sold Out" rather
+  // than disappearing — only is_active=false (manually pulled from sale) hides them.
   const { data, error } = await supabase
     .from('card_singles')
     .select('*')
     .eq('is_active', true)
-    .gt('quantity_available', 0)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -61,41 +62,59 @@ function render() {
 
 function sortSingles(list, sort) {
   const copy = [...list];
+  let sorted;
   switch (sort) {
     case 'price-asc':
-      return copy.sort((a, b) => a.price_cents - b.price_cents);
+      sorted = copy.sort((a, b) => a.price_cents - b.price_cents);
+      break;
     case 'price-desc':
-      return copy.sort((a, b) => b.price_cents - a.price_cents);
+      sorted = copy.sort((a, b) => b.price_cents - a.price_cents);
+      break;
     case 'name':
-      return copy.sort((a, b) => a.card_name.localeCompare(b.card_name));
+      sorted = copy.sort((a, b) => a.card_name.localeCompare(b.card_name));
+      break;
     case 'newest':
     default:
-      return copy.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      sorted = copy.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }
+
+  // Sold-out cards sink to the bottom regardless of sort choice
+  return sorted.sort((a, b) => {
+    const aSoldOut = a.quantity_available <= 0;
+    const bSoldOut = b.quantity_available <= 0;
+    return aSoldOut === bSoldOut ? 0 : aSoldOut ? 1 : -1;
+  });
 }
 
 function buildCard(single) {
   const el = document.createElement('div');
-  el.className = 'dex-card';
+  const soldOut = single.quantity_available <= 0;
+  el.className = 'dex-card' + (soldOut ? ' singles-sold-out' : '');
 
   const priceLabel = formatPrice(single.price_cents);
+  const stockLabel = soldOut ? 'Sold Out' : `${single.quantity_available} left`;
 
   el.innerHTML = `
     <div class="dex-img-wrap">
       <img src="${single.image_url || ''}" alt="${escapeHtml(single.card_name)}" loading="lazy" />
+      ${soldOut ? '<span class="singles-sold-out-badge">Sold Out</span>' : ''}
     </div>
     <p class="singles-card-name">${escapeHtml(single.card_name)}</p>
     <p class="singles-card-set">${escapeHtml(single.set_name)}${single.card_number ? ' · #' + escapeHtml(single.card_number) : ''}</p>
     <div class="dex-row">
       <span class="dex-price">${priceLabel}</span>
-      <span class="singles-stock">${single.quantity_available} left</span>
+      <span class="singles-stock${soldOut ? ' singles-stock-sold-out' : ''}">${stockLabel}</span>
     </div>
     <div class="dex-row">
-      <button class="dex-btn singles-add-btn">Add to Basket</button>
+      <button class="dex-btn singles-add-btn" ${soldOut ? 'disabled' : ''}>
+        ${soldOut ? 'Sold Out' : 'Add to Basket'}
+      </button>
     </div>
   `;
 
-  el.querySelector('.singles-add-btn').addEventListener('click', () => addToBasket(single, priceLabel));
+  if (!soldOut) {
+    el.querySelector('.singles-add-btn').addEventListener('click', () => addToBasket(single, priceLabel));
+  }
 
   return el;
 }
