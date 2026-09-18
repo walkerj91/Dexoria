@@ -1,3 +1,57 @@
+// 0. Checkout
+import { supabase } from './supabaseClient.js';
+
+const CHECKOUT_URL = 'https://uygnyhljorjpmwlnbkyp.supabase.co/functions/v1/capture-stripe-payment/singles-checkout';
+
+window.startSinglesCheckout = async function () {
+    const cart = JSON.parse(localStorage.getItem('dexoria_cart')) || [];
+
+    const items = cart
+        .filter((item) => item.singleId) // only cart entries that are card singles
+        .map((item) => ({ single_id: item.singleId, quantity: item.quantity || 1 }));
+
+    if (items.length === 0) {
+        alert('Your basket is empty.');
+        return;
+    }
+
+    const checkoutBtn = document.querySelector('#checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.disabled = true;
+        checkoutBtn.textContent = 'REDIRECTING…';
+    }
+
+    try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const userId = sessionData?.session?.user?.id || null;
+
+        const response = await fetch(CHECKOUT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items, user_id: userId }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.url) {
+            throw new Error(result.error || 'Could not start checkout');
+        }
+
+        // Clear the singles out of the cart before redirecting — Stripe now owns the order
+        const remaining = cart.filter((item) => !item.singleId);
+        localStorage.setItem('dexoria_cart', JSON.stringify(remaining));
+
+        window.location.href = result.url;
+    } catch (err) {
+        console.error('Checkout error:', err);
+        alert('Something went wrong starting checkout. Please try again.');
+        if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = 'PROCEED TO CHECKOUT';
+        }
+    }
+};
+
 // 1. Core Render Function
 function renderBasket() {
     console.log("Checking storage for items...");
