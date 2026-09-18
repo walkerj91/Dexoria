@@ -46,9 +46,19 @@ serve(async (req) => {
       .maybeSingle();
 
     if (purchase && purchase.status === 'pending') {
+      // Stripe returns the collected address as shipping_details on newer API
+      // versions, or shipping on older ones — check both to be safe
+      const shipping = session.shipping_details || session.shipping || null;
+      const shippingName = shipping?.name || session.customer_details?.name || null;
+      const shippingAddress = shipping?.address || null;
+
       await adminSupabase
         .from('single_purchases')
-        .update({ status: 'paid' })
+        .update({
+          status: 'paid',
+          shipping_name: shippingName,
+          shipping_address: shippingAddress,
+        })
         .eq('id', purchase.id);
 
       const { data: items } = await adminSupabase
