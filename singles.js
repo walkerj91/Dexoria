@@ -75,6 +75,13 @@ function sortSingles(list, sort) {
     case 'name':
       sorted = copy.sort((a, b) => a.card_name.localeCompare(b.card_name));
       break;
+    case 'set':
+      sorted = copy.sort((a, b) => {
+        const setCompare = a.set_name.localeCompare(b.set_name);
+        if (setCompare !== 0) return setCompare;
+        return cardNumberValue(a.card_number) - cardNumberValue(b.card_number);
+      });
+      break;
     case 'newest':
     default:
       sorted = copy.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -168,6 +175,13 @@ function showAddedToast(cardName) {
 
 function formatPrice(cents) {
   return `£${(cents / 100).toFixed(2)}`;
+}
+
+function cardNumberValue(cardNumber) {
+  // Card numbers can be plain ("136") or have letter suffixes ("136a", "TG05").
+  // Parse the leading digits so "2" sorts before "10" instead of after it.
+  const match = String(cardNumber || '').match(/\d+/);
+  return match ? parseInt(match[0], 10) : Number.MAX_SAFE_INTEGER;
 }
 
 function escapeHtml(str) {
