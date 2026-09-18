@@ -1,6 +1,8 @@
 // admin-add-single.js
 import { supabase } from './supabaseClient.js';
 
+const FUNCTION_URL = 'https://uygnyhljorjpmwlnbkyp.supabase.co/functions/v1/admin-add-single';
+
 const authGate = document.getElementById('admin-auth-gate');
 const form = document.getElementById('admin-add-single-form');
 
@@ -19,6 +21,9 @@ const quantityInput = document.getElementById('quantity-input');
 const submitBtn = document.getElementById('submit-btn');
 const submitSuccess = document.getElementById('submit-success');
 const submitError = document.getElementById('submit-error');
+
+const inventoryList = document.getElementById('inventory-list');
+const inventoryEmpty = document.getElementById('inventory-empty');
 
 let currentCard = null; // holds the resolved TCGDex card data
 
@@ -39,6 +44,8 @@ async function init() {
 
   lookupBtn.addEventListener('click', handleLookup);
   form.addEventListener('submit', handleSubmit);
+
+  loadInventory();
 }
 
 async function handleLookup() {
@@ -98,33 +105,18 @@ async function handleSubmit(e) {
   submitBtn.textContent = 'Adding…';
 
   try {
-    const { data: sessionData } = await supabase.auth.getSession();
-    const accessToken = sessionData?.session?.access_token;
-
-    const res = await fetch(
-      'https://uygnyhljorjpmwlnbkyp.supabase.co/functions/v1/admin-add-single',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          tcgdex_card_id: currentCard.id,
-          card_name: currentCard.name,
-          set_name: currentCard.set?.name || '',
-          set_id: currentCard.set?.id || '',
-          card_number: currentCard.localId || '',
-          rarity: currentCard.rarity || '',
-          image_url: currentCard.image ? `${currentCard.image}/high.png` : '',
-          price_cents: priceCents,
-          quantity_available: quantity,
-        }),
-      }
-    );
-
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error || 'Could not add single');
+    const result = await callAdminFunction({
+      action: 'add',
+      tcgdex_card_id: currentCard.id,
+      card_name: currentCard.name,
+      set_name: currentCard.set?.name || '',
+      set_id: currentCard.set?.id || '',
+      card_number: currentCard.localId || '',
+      rarity: currentCard.rarity || '',
+      image_url: currentCard.image ? `${currentCard.image}/high.png` : '',
+      price_cents: priceCents,
+      quantity_available: quantity,
+    });
 
     submitSuccess.textContent = `${currentCard.name} added to the store.`;
     submitSuccess.hidden = false;
@@ -135,6 +127,8 @@ async function handleSubmit(e) {
     quantityInput.value = 1;
     preview.hidden = true;
     currentCard = null;
+
+    loadInventory();
   } catch (err) {
     console.error(err);
     submitError.textContent = err.message || 'Something went wrong.';
@@ -143,4 +137,117 @@ async function handleSubmit(e) {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Add to Store';
   }
+}
+
+// ─── Shared call to the admin Edge Function ────────────────────────────────
+async function callAdminFunction(body) {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const accessToken = sessionData?.session?.access_token;
+
+  const res = await fetch(FUNCTION_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.error || 'Request failed');
+  return result;
+}
+
+// ─── Inventory list ─────────────────────────────────────────────────────────
+async function loadInventory() {
+  try {
+    const result = await callAdminFunction({ action: 'list' });
+    renderInventory(result.singles || []);
+  } catch (err) {
+    console.error('Failed to load inventory:', err);
+  }
+}
+
+function renderInventory(singles) {
+  inventoryList.innerHTML = '';
+
+  if (singles.length === 0) {
+    inventoryEmpty.hidden = false;
+    return;
+  }
+  inventoryEmpty.hidden = true;
+
+  for (const single of singles) {
+    inventoryList.appendChild(buildInventoryRow(single));
+  }
+}
+
+function buildInventoryRow(single) {
+  const row = document.createElement('div');
+  row.className = 'admin-inv-row' + (single.is_active ? '' : ' admin-inv-row-inactive');
+
+  row.innerHTML = `
+    <img class="admin-inv-img" src="${single.image_url || ''}" alt="${escapeHtml(single.card_name)}" loading="lazy" />
+    <div class="admin-inv-details">
+      <p class="admin-inv-name">${escapeHtml(single.card_name)}</p>
+      <p class="admin-inv-set">${escapeHtml(single.set_name)}</p>
+      <div class="admin-inv-fields">
+        <label class="admin-inv-field">
+          £<input type="number" step="0.01" min="0" class="admin-inv-price" value="${(single.price_cents / 100).toFixed(2)}" />
+        </label>
+        <label class="admin-inv-field">
+          Qty <input type="number" min="0" class="admin-inv-qty" value="${single.quantity_available}" />
+        </label>
+        <button class="dex-btn admin-inv-save">Save</button>
+        <button class="dex-btn admin-inv-toggle">${single.is_active ? 'Remove from Store' : 'Restore to Store'}</button>
+      </div>
+      <p class="admin-inv-status">${single.is_active ? '' : 'Hidden from store'}${single.quantity_sold ? ` · ${single.quantity_sold} sold` : ''}</p>
+    </div>
+  `;
+
+  row.querySelector('.admin-inv-save').addEventListener('click', async (e) => {
+    const btn = e.target;
+    const priceCents = Math.round(parseFloat(row.querySelector('.admin-inv-price').value) * 100);
+    const quantityAvailable = Math.max(0, parseInt(row.querySelector('.admin-inv-qty').value, 10) || 0);
+
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+      await callAdminFunction({
+        action: 'update',
+        id: single.id,
+        price_cents: priceCents,
+        quantity_available: quantityAvailable,
+      });
+      loadInventory();
+    } catch (err) {
+      alert(err.message || 'Could not save changes.');
+      btn.disabled = false;
+      btn.textContent = 'Save';
+    }
+  });
+
+  row.querySelector('.admin-inv-toggle').addEventListener('click', async (e) => {
+    const btn = e.target;
+    btn.disabled = true;
+    try {
+      await callAdminFunction({
+        action: 'toggle',
+        id: single.id,
+        is_active: !single.is_active,
+      });
+      loadInventory();
+    } catch (err) {
+      alert(err.message || 'Could not update this card.');
+      btn.disabled = false;
+    }
+  });
+
+  return row;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
