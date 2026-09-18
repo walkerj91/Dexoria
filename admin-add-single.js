@@ -108,6 +108,8 @@ function populateVariants(variants) {
 
   variantLabel.hidden = false;
 }
+
+async function handleSubmit(e) {
   e.preventDefault();
   submitSuccess.hidden = true;
   submitError.hidden = true;
