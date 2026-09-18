@@ -9,15 +9,18 @@ const grid = document.getElementById('singles-grid');
 const emptyMsg = document.getElementById('singles-empty');
 const searchInput = document.getElementById('singles-search');
 const sortSelect = document.getElementById('singles-sort');
+const setFilterSelect = document.getElementById('singles-set-filter');
 
 init();
 
 async function init() {
   await loadSingles();
+  populateSetFilter();
   render();
 
   searchInput.addEventListener('input', render);
   sortSelect.addEventListener('change', render);
+  setFilterSelect.addEventListener('change', render);
 }
 
 async function loadSingles() {
@@ -38,13 +41,25 @@ async function loadSingles() {
   allSingles = data || [];
 }
 
+function populateSetFilter() {
+  const setNames = [...new Set(allSingles.map((s) => s.set_name))].sort((a, b) => a.localeCompare(b));
+
+  for (const setName of setNames) {
+    const option = document.createElement('option');
+    option.value = setName;
+    option.textContent = setName;
+    setFilterSelect.appendChild(option);
+  }
+}
+
 function render() {
   const query = searchInput.value.trim().toLowerCase();
   const sort = sortSelect.value;
+  const setFilter = setFilterSelect.value;
 
   let filtered = allSingles.filter((s) =>
-    s.card_name.toLowerCase().includes(query) ||
-    s.set_name.toLowerCase().includes(query)
+    (s.card_name.toLowerCase().includes(query) || s.set_name.toLowerCase().includes(query)) &&
+    (!setFilter || s.set_name === setFilter)
   );
 
   filtered = sortSingles(filtered, sort);
