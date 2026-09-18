@@ -93,7 +93,7 @@ serve(async (req) => {
       const singleIds = items.map((i: { single_id: string }) => i.single_id);
       const { data: singles, error: singlesError } = await adminSupabase
         .from('card_singles')
-        .select('id, card_name, price_cents, quantity_available, is_active, image_url')
+        .select('id, card_name, variant, price_cents, quantity_available, is_active, image_url')
         .in('id', singleIds);
 
       if (singlesError || !singles) throw new Error('Could not verify items');
@@ -122,7 +122,10 @@ serve(async (req) => {
         formBody.append(`line_items[${idx}][quantity]`, String(quantity));
         formBody.append(`line_items[${idx}][price_data][currency]`, 'gbp');
         formBody.append(`line_items[${idx}][price_data][unit_amount]`, String(single.price_cents));
-        formBody.append(`line_items[${idx}][price_data][product_data][name]`, single.card_name);
+        const variantSuffix = single.variant && single.variant !== 'normal'
+          ? ` (${single.variant === 'holo' ? 'Holo' : 'Reverse Holo'})`
+          : '';
+        formBody.append(`line_items[${idx}][price_data][product_data][name]`, `${single.card_name}${variantSuffix}`);
         if (single.image_url) {
           formBody.append(`line_items[${idx}][price_data][product_data][images][0]`, single.image_url);
         }
