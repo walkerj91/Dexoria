@@ -87,15 +87,15 @@ function renderBasket() {
     <div class="trading-row" style="display: flex; align-items: center; justify-content: flex-start; gap: 30px; padding: 25px 0; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%;">
         
         <!-- Image Section (Now on the left side of the row) -->
-        <div class="card-image" style="width: 120px; height: 120px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+        <div class="card-image">
             <img src="${item.image}" alt="${item.name}" 
-                 onerror="this.src='quickball.png'"
-                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                 onerror="this.src='quickball.png'">
         </div>
 
         <!-- Info Section (Stacked in a column next to image) -->
         <div class="card-info" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
             <h3 style="margin: 0 0 5px 0; font-size: 1.2rem; color: white;">${item.name}</h3>
+            ${(item.setName || item.rarity) ? `<p style="color: rgba(255,255,255,0.6); margin: 0 0 8px 0; font-size: 0.85rem;">${item.setName || ''}${item.setName && item.rarity ? ' · ' : ''}${item.rarity || ''}</p>` : ''}
             <p style="color: #ffd700; font-weight: bold; margin: 0 0 12px 0; font-size: 0.9rem;">Unit Price: ${item.price}</p>
             
             <!-- Compact Quantity Selector -->
