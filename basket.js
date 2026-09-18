@@ -44,7 +44,7 @@ window.startSinglesCheckout = async function () {
         window.location.href = result.url;
     } catch (err) {
         console.error('Checkout error:', err);
-        alert('Something went wrong starting checkout. Please try again.');
+        alert(err.message || 'Something went wrong starting checkout. Please try again.');
         if (checkoutBtn) {
             checkoutBtn.disabled = false;
             checkoutBtn.textContent = 'PROCEED TO CHECKOUT';
