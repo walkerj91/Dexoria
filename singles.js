@@ -1,6 +1,8 @@
 // singles.js
 import { supabase } from './supabaseClient.js';
 
+const VARIANT_NAMES = { normal: '', holo: 'Holo', reverse: 'Reverse Holo' };
+
 let allSingles = [];
 
 const grid = document.getElementById('singles-grid');
@@ -93,6 +95,8 @@ function buildCard(single) {
 
   const priceLabel = formatPrice(single.price_cents);
   const stockLabel = soldOut ? 'Sold Out' : `${single.quantity_available} left`;
+  const variantLabel = VARIANT_NAMES[single.variant] || '';
+  const cartName = variantLabel ? `${single.card_name} (${variantLabel})` : single.card_name;
 
   el.innerHTML = `
     <div class="dex-img-wrap">
@@ -100,7 +104,7 @@ function buildCard(single) {
       ${soldOut ? '<span class="singles-sold-out-badge">Sold Out</span>' : ''}
     </div>
     <p class="singles-card-name">${escapeHtml(single.card_name)}</p>
-    <p class="singles-card-set">${escapeHtml(single.set_name)}${single.card_number ? ' · #' + escapeHtml(single.card_number) : ''}</p>
+    <p class="singles-card-set">${escapeHtml(single.set_name)}${single.card_number ? ' · #' + escapeHtml(single.card_number) : ''}${variantLabel ? ' · ' + escapeHtml(variantLabel) : ''}</p>
     <div class="dex-row">
       <span class="dex-price">${priceLabel}</span>
       <span class="singles-stock${soldOut ? ' singles-stock-sold-out' : ''}">${stockLabel}</span>
@@ -113,16 +117,16 @@ function buildCard(single) {
   `;
 
   if (!soldOut) {
-    el.querySelector('.singles-add-btn').addEventListener('click', () => addToBasket(single, priceLabel));
+    el.querySelector('.singles-add-btn').addEventListener('click', () => addToBasket(single, priceLabel, cartName));
   }
 
   return el;
 }
 
-function addToBasket(single, priceLabel) {
+function addToBasket(single, priceLabel, cartName) {
   const cart = JSON.parse(localStorage.getItem('dexoria_cart')) || [];
 
-  // Match same card already in basket by singleId, bump quantity instead of duplicating
+  // Match same card+variant already in basket by singleId, bump quantity instead of duplicating
   const existing = cart.find((item) => item.singleId === single.id);
 
   if (existing) {
@@ -130,7 +134,7 @@ function addToBasket(single, priceLabel) {
   } else {
     cart.push({
       singleId: single.id,   // used by checkout to build the real Stripe line item + fulfillment
-      name: single.card_name,
+      name: cartName,        // includes variant, e.g. "Charizard VMAX (Holo)"
       price: priceLabel,     // matches basket.js's expected "£X.XX" display string
       image: single.image_url || '',
       quantity: 1,
@@ -139,7 +143,7 @@ function addToBasket(single, priceLabel) {
 
   localStorage.setItem('dexoria_cart', JSON.stringify(cart));
   updateCartBadge(cart);
-  showAddedToast(single.card_name);
+  showAddedToast(cartName);
 }
 
 function updateCartBadge(cart) {
