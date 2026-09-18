@@ -154,8 +154,8 @@
 
 /* Container for the image in the basket row */
 .trading-row .card-image {
-    width: 100px;   /* Matches a Pokémon card's ~5:7 aspect ratio so nothing gets cropped */
-    height: 140px;
+    width: 160px;   /* Matches a Pokémon card's ~5:7 aspect ratio so nothing gets cropped */
+    height: 224px;
     flex-shrink: 0; /* Prevents the image from being squished */
     margin-left: 20px;
     border-radius: 12px;
@@ -169,6 +169,14 @@
     height: 100%;
     object-fit: contain; /* Shows the whole card instead of cropping to fill a square */
     display: block;
+}
+
+@media (max-width: 480px) {
+    .trading-row .card-image {
+        width: 110px;
+        height: 154px;
+        margin-left: 0;
+    }
 }
 
 /* Adjusting the text side to make room for the larger image */
