@@ -197,3 +197,13 @@ body {
 .shopping-container {
     flex: 1;
 }
+
+.min-spend-notice {
+    color: rgba(255, 215, 0, 0.75);
+    font-size: 0.8rem;
+    margin: -4px 0 0;
+}
+
+.min-spend-notice.below-minimum {
+    color: #ff4d4d;
+}
