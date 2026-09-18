@@ -32,53 +32,55 @@
     <div class="section-title-container stc-plain">
       <h2>Add Single</h2>
     </div>
-
-    <div id="admin-auth-gate" class="admin-gate glass-panel" hidden>
-      <p>You need to be logged in as the site admin to use this page.</p>
-    </div>
-
-    <form id="admin-add-single-form" class="admin-form glass-panel" hidden>
-
-      <label class="admin-label">
-        TCGDex Card ID
-        <div class="admin-lookup-row">
-          <input type="text" id="tcgdex-id-input" placeholder="e.g. swsh3-136" required>
-          <button type="button" id="lookup-btn" class="dex-btn">Look up</button>
-        </div>
-      </label>
-
-      <div id="lookup-error" class="admin-error" hidden></div>
-
-      <div id="card-preview" class="admin-preview" hidden>
-        <img id="preview-img" class="admin-preview-img" alt="">
-        <div class="admin-preview-details">
-          <p id="preview-name" class="admin-preview-name"></p>
-          <p id="preview-set" class="admin-preview-set"></p>
-          <p id="preview-rarity" class="admin-preview-rarity"></p>
-        </div>
+ 
+    <div class="admin-form-wrap">
+      <div id="admin-auth-gate" class="admin-gate glass-panel" hidden>
+        <p>You need to be logged in as the site admin to use this page.</p>
       </div>
-
-      <label class="admin-label">
-        Price (£)
-        <input type="number" id="price-input" step="0.01" min="0" required>
-      </label>
-
-      <label class="admin-label">
-        Quantity available
-        <input type="number" id="quantity-input" min="1" value="1" required>
-      </label>
-
-      <button type="submit" id="submit-btn" class="dex-btn" disabled>Add to Store</button>
-
-      <p id="submit-success" class="admin-success" hidden></p>
-      <p id="submit-error" class="admin-error" hidden></p>
-    </form>
-
+ 
+      <form id="admin-add-single-form" class="admin-form glass-panel" hidden>
+ 
+        <label class="admin-label">
+          TCGDex Card ID
+          <div class="admin-lookup-row">
+            <input type="text" id="tcgdex-id-input" placeholder="e.g. swsh3-136" required />
+            <button type="button" id="lookup-btn" class="dex-btn">Look up</button>
+          </div>
+        </label>
+ 
+        <div id="lookup-error" class="admin-error" hidden></div>
+ 
+        <div id="card-preview" class="admin-preview" hidden>
+          <img id="preview-img" class="admin-preview-img" alt="" />
+          <div class="admin-preview-details">
+            <p id="preview-name" class="admin-preview-name"></p>
+            <p id="preview-set" class="admin-preview-set"></p>
+            <p id="preview-rarity" class="admin-preview-rarity"></p>
+          </div>
+        </div>
+ 
+        <label class="admin-label">
+          Price (£)
+          <input type="number" id="price-input" step="0.01" min="0" required />
+        </label>
+ 
+        <label class="admin-label">
+          Quantity available
+          <input type="number" id="quantity-input" min="1" value="1" required />
+        </label>
+ 
+        <button type="submit" id="submit-btn" class="dex-btn" disabled>Add to Store</button>
+ 
+        <p id="submit-success" class="admin-success" hidden></p>
+        <p id="submit-error" class="admin-error" hidden></p>
+      </form>
+    </div>
+ 
     <div class="section-title-container stc-plain admin-inventory-title">
       <h2>Current Inventory</h2>
     </div>
-
-    <div id="inventory-list" class="admin-inventory-list"></div>
+ 
+    <div id="inventory-list" class="dex-grid cols-4"></div>
     <p id="inventory-empty" class="admin-inventory-empty" hidden>No singles added yet.</p>
   </main>
 
