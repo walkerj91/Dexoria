@@ -29,12 +29,19 @@
 
 .admin-label input {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 16px; /* 16px minimum avoids iOS auto-zoom-on-focus */
   padding: 10px 12px;
+  min-height: 44px; /* comfortable touch target */
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
   color: var(--gold-light);
+}
+
+.admin-label input:focus-visible,
+.dex-btn:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
 }
 
 .admin-lookup-row {
@@ -44,6 +51,13 @@
 
 .admin-lookup-row input {
   flex: 1;
+  min-width: 0; /* lets the input actually shrink instead of overflowing */
+}
+
+.admin-lookup-row .dex-btn {
+  flex-shrink: 0;
+  min-height: 44px;
+  white-space: nowrap;
 }
 
 .admin-preview {
@@ -58,6 +72,7 @@
 
 .admin-preview-img {
   width: 70px;
+  flex-shrink: 0;
   border-radius: var(--radius-sm);
 }
 
@@ -82,4 +97,48 @@
 .admin-success {
   color: #6fcf7a;
   font-size: 14px;
+}
+
+#submit-btn {
+  min-height: 44px;
+  width: 100%;
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .admin-page {
+    padding: 16px 5% 48px;
+  }
+
+  .admin-gate,
+  .admin-form {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  /* Stack the ID field and Look up button instead of squeezing them side by side */
+  .admin-lookup-row {
+    flex-direction: column;
+  }
+
+  .admin-lookup-row .dex-btn {
+    width: 100%;
+  }
+
+  .admin-preview {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .admin-preview-img {
+    width: 100px;
+  }
+}
+
+@media (hover: none) {
+  /* No hover state to rely on for touch devices — focus-visible above covers keyboard nav */
+  .dex-btn:hover {
+    transform: none;
+  }
 }
