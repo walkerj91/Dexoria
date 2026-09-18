@@ -24,12 +24,15 @@
 }
 
 .admin-label {
-  display: flex;
   flex-direction: column;
   gap: 6px;
   font-family: var(--font-body);
   font-size: 14px;
   color: var(--gold-light);
+}
+
+.admin-label:not([hidden]) {
+  display: flex;
 }
 
 .admin-label input {
