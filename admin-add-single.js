@@ -183,32 +183,34 @@ function renderInventory(singles) {
 }
 
 function buildInventoryRow(single) {
-  const row = document.createElement('div');
-  row.className = 'admin-inv-row' + (single.is_active ? '' : ' admin-inv-row-inactive');
+  const el = document.createElement('div');
+  el.className = 'dex-card admin-inv-card' + (single.is_active ? '' : ' admin-inv-inactive');
 
-  row.innerHTML = `
-    <img class="admin-inv-img" src="${single.image_url || ''}" alt="${escapeHtml(single.card_name)}" loading="lazy" />
-    <div class="admin-inv-details">
-      <p class="admin-inv-name">${escapeHtml(single.card_name)}</p>
-      <p class="admin-inv-set">${escapeHtml(single.set_name)}</p>
-      <div class="admin-inv-fields">
-        <label class="admin-inv-field">
-          £<input type="number" step="0.01" min="0" class="admin-inv-price" value="${(single.price_cents / 100).toFixed(2)}" />
-        </label>
-        <label class="admin-inv-field">
-          Qty <input type="number" min="0" class="admin-inv-qty" value="${single.quantity_available}" />
-        </label>
-        <button class="dex-btn admin-inv-save">Save</button>
-        <button class="dex-btn admin-inv-toggle">${single.is_active ? 'Remove from Store' : 'Restore to Store'}</button>
-      </div>
-      <p class="admin-inv-status">${single.is_active ? '' : 'Hidden from store'}${single.quantity_sold ? ` · ${single.quantity_sold} sold` : ''}</p>
+  el.innerHTML = `
+    <div class="dex-img-wrap">
+      <img src="${single.image_url || ''}" alt="${escapeHtml(single.card_name)}" loading="lazy" />
     </div>
+    <p class="admin-inv-name">${escapeHtml(single.card_name)}</p>
+    <p class="admin-inv-set">${escapeHtml(single.set_name)}</p>
+    <div class="admin-inv-fields">
+      <label class="admin-inv-field">
+        £<input type="number" step="0.01" min="0" class="admin-inv-price" value="${(single.price_cents / 100).toFixed(2)}" />
+      </label>
+      <label class="admin-inv-field">
+        Qty <input type="number" min="0" class="admin-inv-qty" value="${single.quantity_available}" />
+      </label>
+    </div>
+    <div class="admin-inv-actions">
+      <button class="dex-btn admin-inv-save">Save</button>
+      <button class="dex-btn admin-inv-toggle">${single.is_active ? 'Remove' : 'Restore'}</button>
+    </div>
+    <p class="admin-inv-status">${single.is_active ? '' : 'Hidden from store'}${single.quantity_sold ? ` · ${single.quantity_sold} sold` : ''}</p>
   `;
 
-  row.querySelector('.admin-inv-save').addEventListener('click', async (e) => {
+  el.querySelector('.admin-inv-save').addEventListener('click', async (e) => {
     const btn = e.target;
-    const priceCents = Math.round(parseFloat(row.querySelector('.admin-inv-price').value) * 100);
-    const quantityAvailable = Math.max(0, parseInt(row.querySelector('.admin-inv-qty').value, 10) || 0);
+    const priceCents = Math.round(parseFloat(el.querySelector('.admin-inv-price').value) * 100);
+    const quantityAvailable = Math.max(0, parseInt(el.querySelector('.admin-inv-qty').value, 10) || 0);
 
     btn.disabled = true;
     btn.textContent = 'Saving…';
@@ -227,7 +229,7 @@ function buildInventoryRow(single) {
     }
   });
 
-  row.querySelector('.admin-inv-toggle').addEventListener('click', async (e) => {
+  el.querySelector('.admin-inv-toggle').addEventListener('click', async (e) => {
     const btn = e.target;
     btn.disabled = true;
     try {
@@ -243,7 +245,7 @@ function buildInventoryRow(single) {
     }
   });
 
-  return row;
+  return el;
 }
 
 function escapeHtml(str) {
