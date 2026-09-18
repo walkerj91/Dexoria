@@ -154,19 +154,20 @@
 
 /* Container for the image in the basket row */
 .trading-row .card-image {
-    width: 120px;   /* Adjusted to match a standard binder thumbnail size */
-    height: 120px;  /* Keeps it square and consistent */
+    width: 100px;   /* Matches a Pokémon card's ~5:7 aspect ratio so nothing gets cropped */
+    height: 140px;
     flex-shrink: 0; /* Prevents the image from being squished */
     margin-left: 20px;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000; /* Fills any letterboxing from object-fit: contain below */
 }
 
 .trading-row .card-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* This is the "Magic" fix - it crops the image to fill the box without stretching */
+    object-fit: contain; /* Shows the whole card instead of cropping to fill a square */
     display: block;
 }
 
