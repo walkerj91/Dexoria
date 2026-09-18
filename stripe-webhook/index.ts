@@ -70,7 +70,8 @@ serve(async (req) => {
             .update({
               quantity_available: newAvailable,
               quantity_sold:      (single.quantity_sold || 0) + item.quantity,
-              is_active:          newAvailable > 0, // auto-hide once sold out
+              // is_active is left untouched — sold-out cards stay listed and
+              // show a "Sold Out" state instead of disappearing (singles.js)
             })
             .eq('id', item.single_id);
         }
