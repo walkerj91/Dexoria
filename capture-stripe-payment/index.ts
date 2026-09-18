@@ -135,6 +135,12 @@ serve(async (req) => {
         idx++;
       }
 
+      // Stripe's minimum charge for GBP is £0.30 — catch this before calling
+      // Stripe so the customer gets a clear message instead of a raw Stripe error
+      if (totalCents < 30) {
+        return json({ error: `Minimum order amount is £0.30 — this basket totals £${(totalCents / 100).toFixed(2)}. Please add another item.` }, 400);
+      }
+
       const sessionRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST',
         headers: {
