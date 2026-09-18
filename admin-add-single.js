@@ -16,6 +16,11 @@ const previewName = document.getElementById('preview-name');
 const previewSet = document.getElementById('preview-set');
 const previewRarity = document.getElementById('preview-rarity');
 
+const variantLabel = document.getElementById('variant-label');
+const variantSelect = document.getElementById('variant-select');
+
+const VARIANT_NAMES = { normal: 'Normal / Common', holo: 'Holo', reverse: 'Reverse Holo' };
+
 const priceInput = document.getElementById('price-input');
 const quantityInput = document.getElementById('quantity-input');
 const submitBtn = document.getElementById('submit-btn');
@@ -52,6 +57,7 @@ async function handleLookup() {
   const id = idInput.value.trim();
   lookupError.hidden = true;
   preview.hidden = true;
+  variantLabel.hidden = true;
   submitBtn.disabled = true;
   currentCard = null;
 
@@ -73,6 +79,8 @@ async function handleLookup() {
     previewSet.textContent = card.set?.name || '';
     previewRarity.textContent = card.rarity || '';
 
+    populateVariants(card.variants);
+
     preview.hidden = false;
     submitBtn.disabled = false;
   } catch (err) {
@@ -85,7 +93,21 @@ async function handleLookup() {
   }
 }
 
-async function handleSubmit(e) {
+function populateVariants(variants) {
+  // Only the three we sell: normal (common), holo, reverse holo.
+  // TCGDex also reports firstEdition, which we don't offer as a listing option.
+  const available = ['normal', 'holo', 'reverse'].filter((key) => variants?.[key]);
+
+  // Fallback: if TCGDex reports none of the three (rare/older data gaps),
+  // still offer 'normal' so the form isn't stuck.
+  const options = available.length > 0 ? available : ['normal'];
+
+  variantSelect.innerHTML = options
+    .map((key) => `<option value="${key}">${VARIANT_NAMES[key]}</option>`)
+    .join('');
+
+  variantLabel.hidden = false;
+}
   e.preventDefault();
   submitSuccess.hidden = true;
   submitError.hidden = true;
@@ -114,6 +136,7 @@ async function handleSubmit(e) {
       card_number: currentCard.localId || '',
       rarity: currentCard.rarity || '',
       image_url: currentCard.image ? `${currentCard.image}/high.png` : '',
+      variant: variantSelect.value || 'normal',
       price_cents: priceCents,
       quantity_available: quantity,
     });
@@ -126,6 +149,7 @@ async function handleSubmit(e) {
     priceInput.value = '';
     quantityInput.value = 1;
     preview.hidden = true;
+    variantLabel.hidden = true;
     currentCard = null;
 
     loadInventory();
@@ -191,7 +215,7 @@ function buildInventoryRow(single) {
       <img src="${single.image_url || ''}" alt="${escapeHtml(single.card_name)}" loading="lazy" />
     </div>
     <p class="admin-inv-name">${escapeHtml(single.card_name)}</p>
-    <p class="admin-inv-set">${escapeHtml(single.set_name)}</p>
+    <p class="admin-inv-set">${escapeHtml(single.set_name)}${single.variant && single.variant !== 'normal' ? ' · ' + escapeHtml(VARIANT_NAMES[single.variant] || single.variant) : ''}</p>
     <div class="admin-inv-fields">
       <label class="admin-inv-field">
         £<input type="number" step="0.01" min="0" class="admin-inv-price" value="${(single.price_cents / 100).toFixed(2)}" />
