@@ -53,7 +53,32 @@ window.startSinglesCheckout = async function () {
 };
 
 // 1. Core Render Function
-function renderBasket() {
+let stockLevels = {}; // { singleId: quantity_available } — refreshed on every render
+
+async function loadStockLevels(cart) {
+    const singleIds = [...new Set(cart.filter((item) => item.singleId).map((item) => item.singleId))];
+    if (singleIds.length === 0) {
+        stockLevels = {};
+        return;
+    }
+
+    const { data, error } = await supabase
+        .from('card_singles')
+        .select('id, quantity_available')
+        .in('id', singleIds);
+
+    if (error) {
+        console.error('Failed to load stock levels:', error);
+        return; // keep whatever stockLevels we had — fail open rather than blocking the basket
+    }
+
+    stockLevels = {};
+    for (const row of data || []) {
+        stockLevels[row.id] = row.quantity_available;
+    }
+}
+
+async function renderBasket() {
     console.log("Checking storage for items...");
     const basketList = document.getElementById('basket-items-list');
     const totalPriceEl = document.getElementById('total-price');
@@ -65,12 +90,39 @@ function renderBasket() {
     }
 
     // Pull from storage
-    const cart = JSON.parse(localStorage.getItem('dexoria_cart')) || [];
+    let cart = JSON.parse(localStorage.getItem('dexoria_cart')) || [];
     console.log("Current Cart Data:", cart);
 
     if (cart.length === 0) {
         basketList.innerHTML = '<p class="placeholder-text" style="text-align:center; padding: 40px; color:white;">Your basket is currently empty.</p>';
         if (totalPriceEl) totalPriceEl.innerText = 'TOTAL: £0.00';
+        return;
+    }
+
+    await loadStockLevels(cart);
+
+    // If stock dropped below what's already in the basket (someone else bought it
+    // in the meantime), clamp it down rather than letting checkout reject it later
+    let clamped = false;
+    cart = cart.map((item) => {
+        if (item.singleId && stockLevels[item.singleId] !== undefined) {
+            const maxQty = Math.max(0, stockLevels[item.singleId]);
+            if ((item.quantity || 1) > maxQty) {
+                clamped = true;
+                return { ...item, quantity: maxQty };
+            }
+        }
+        return item;
+    }).filter((item) => !item.singleId || item.quantity > 0); // drop items that sold out entirely
+
+    if (clamped) {
+        localStorage.setItem('dexoria_cart', JSON.stringify(cart));
+    }
+
+    if (cart.length === 0) {
+        basketList.innerHTML = '<p class="placeholder-text" style="text-align:center; padding: 40px; color:white;">Your basket is currently empty.</p>';
+        if (totalPriceEl) totalPriceEl.innerText = 'TOTAL: £0.00';
+        updateCartBadge();
         return;
     }
 
@@ -82,6 +134,11 @@ function renderBasket() {
         const unitPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0;
         const lineTotal = unitPrice * qty;
         total += lineTotal;
+
+        const maxQty = item.singleId && stockLevels[item.singleId] !== undefined
+            ? stockLevels[item.singleId]
+            : Infinity;
+        const atMax = qty >= maxQty;
 
   html += `
     <div class="trading-row" style="display: flex; align-items: center; justify-content: flex-start; gap: 30px; padding: 25px 0; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%;">
@@ -102,8 +159,9 @@ function renderBasket() {
             <div class="qty-selector" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
                 <button onclick="updateQty(${index}, -1)" class="qty-btn" style="width:28px; height:28px; border-radius:50%; border:1px solid #ffd700; background:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center;">-</button>
                 <span style="font-weight:bold; font-size: 1rem; min-width: 15px; text-align: center;">${qty}</span>
-                <button onclick="updateQty(${index}, 1)" class="qty-btn" style="width:28px; height:28px; border-radius:50%; border:1px solid #ffd700; background:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+                <button onclick="updateQty(${index}, 1)" class="qty-btn" ${atMax ? 'disabled' : ''} style="width:28px; height:28px; border-radius:50%; border:1px solid #ffd700; background:none; color:white; cursor:${atMax ? 'not-allowed' : 'pointer'}; opacity:${atMax ? '0.4' : '1'}; display:flex; align-items:center; justify-content:center;">+</button>
             </div>
+            ${atMax && isFinite(maxQty) ? `<p style="color: rgba(255,215,0,0.7); font-size: 0.75rem; margin: -8px 0 12px;">Max available: ${maxQty}</p>` : ''}
 
             <button onclick="removeItem(${index})" style="color: #ff4d4d; background:none; border:none; cursor:pointer; text-decoration:underline; font-size: 0.8rem; padding:0;">Remove Item</button>
         </div>
@@ -117,13 +175,25 @@ function renderBasket() {
 }
 
 // 2. Quantity & Removal Logic
-window.updateQty = function(index, change) {
+window.updateQty = async function(index, change) {
     let cart = JSON.parse(localStorage.getItem('dexoria_cart')) || [];
-    if (!cart[index].quantity) cart[index].quantity = 1;
-    cart[index].quantity += change;
-    if (cart[index].quantity < 1) cart[index].quantity = 1;
+    const item = cart[index];
+    if (!item) return;
+
+    if (!item.quantity) item.quantity = 1;
+
+    // Block increasing past what's actually in stock
+    if (change > 0 && item.singleId) {
+        const maxQty = stockLevels[item.singleId];
+        if (maxQty !== undefined && item.quantity >= maxQty) {
+            return; // button should already be disabled, but guard here too
+        }
+    }
+
+    item.quantity += change;
+    if (item.quantity < 1) item.quantity = 1;
     localStorage.setItem('dexoria_cart', JSON.stringify(cart));
-    renderBasket();    
+    await renderBasket();
     updateCartBadge(); 
 };
 
