@@ -1,7 +1,7 @@
 // admin-add-single.js
 import { supabase } from './supabaseClient.js';
 
-const FUNCTION_URL = 'https://uygnyhljorjpmwlnbkyp.supabase.co/functions/v1/admin-add-single';
+const FUNCTION_URL = 'https://uygnyhljorjpmwlnbkyp.supabase.co/functions/v1/admin-add-singles-index';
 
 const authGate = document.getElementById('admin-auth-gate');
 const form = document.getElementById('admin-add-single-form');
