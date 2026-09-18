@@ -159,6 +159,8 @@ function addToBasket(single, priceLabel, cartName) {
       name: cartName,        // includes variant, e.g. "Charizard VMAX (Holo)"
       price: priceLabel,     // matches basket.js's expected "£X.XX" display string
       image: single.image_url || '',
+      setName: single.set_name || '',
+      rarity: single.rarity || '',
       quantity: 1,
     });
   }
