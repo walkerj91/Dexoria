@@ -92,7 +92,7 @@ export async function renderNavbar(containerId) {
                     </button>
                 </div>
                 <div class="dropdown-content">
-                    <a href="./games.html">Games Corner</a>
+                    <a href="./games.html">Game Corner</a>
                 </div>
             </div>
 
