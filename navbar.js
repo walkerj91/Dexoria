@@ -80,7 +80,21 @@ export async function renderNavbar(containerId) {
             </div>
 
             <a href="./trades.html"    id="trades-nav-link">TRADES</a>
-            <a href="./community.html" id="community-nav-link">COMMUNITY</a>
+
+            <div class="dropdown">
+                <div class="dropdown-title-row">
+                    <a href="./community.html" id="community-nav-link">COMMUNITY</a>
+                    <button
+                        type="button"
+                        class="dropdown-toggle"
+                        aria label="Open submenu">
+                        ▾
+                    </button>
+                </div>
+                <div class="dropdown-content">
+                    <a href=./games-corner.html">Games Corner</a>
+                </div>
+            </div>
 
             <div class="dropdown">
                 <div class="dropdown-title-row">
