@@ -75,7 +75,7 @@ export async function renderNavbar(containerId) {
                 </div>
                 <div class="dropdown-content">
                     <a href="./binders.html">Binder Studio</a>
-                    <a href="./singles.html">Single Cards</a>
+                    ${isAdmin ? `<a href="./singles.html">Single Cards</a>` : ''}
                 </div>
             </div>
 
