@@ -16,7 +16,7 @@ const TCGDEX_BASE = 'https://api.tcgdex.net/v2/en';
 // Your Dexoria sets — update as new sets are added
 // Add a `series` field to group sets into collapsible sections
 const TRACKED_SETS = [
-  { id: '30th',    name: '30th Celebration',  year: '2026', series: 'Mega Evolution Series', officialCount: 199 },
+  { id: '30th',   name: '30th Celebration',   year: '2026', series: 'Mega Evolution Series', officialCount: 128, allFoil: true },
   { id: 'me05',   name: 'Pitch Black',        year: '2026', series: 'Mega Evolution Series', officialCount: 120 },
   { id: 'me04',   name: 'Chaos Rising',       year: '2026', series: 'Mega Evolution Series', officialCount: 198 },
   { id: 'me03',   name: 'Perfect Order',      year: '2026', series: 'Mega Evolution Series', officialCount: 203 },
@@ -168,7 +168,7 @@ function hasReverseHolo(name) {
  * All other cards (special arts, ex, V, VMAX…) are flagged isSpecial
  * so they show no label and no RH twin.
  */
-function buildCards(rawCards, officialCount, holoCount) {
+function buildCards(rawCards, officialCount, holoCount, allFoil = false) {
   const result = [];
   for (const c of (rawCards ?? [])) {
     const lid        = String(c.localId);
@@ -183,11 +183,11 @@ function buildCards(rawCards, officialCount, holoCount) {
     const isHolo = !c.rarity && holoCount && isNum && num <= holoCount;
     const rarity = c.rarity || (isHolo ? 'Rare Holo' : null);
 
-    const base = { localId: c.localId, name: c.name, image: c.image ?? null, rarity, isSpecial, priceEUR: null, pricing: null };
+    const base = { localId: c.localId, name: c.name, image: c.image ?? null, rarity, isSpecial, allFoil, priceEUR: null, pricing: null };
     result.push(base);
 
-    // Only eligible main-set numbered cards get a reverse holo copy
-    if (!isSpecial) {
+    // Only eligible main-set numbered cards get a reverse holo copy (never in all-foil sets)
+    if (!isSpecial && !allFoil) {
       result.push({ ...base, localId: `${c.localId}RH`, rarity: 'Reverse Holo', isSpecial: false });
     }
   }
@@ -216,6 +216,7 @@ function cardTypeLabel(card) {
   const lid = String(card.localId);
   if (lid.endsWith('RH'))  return { label: 'Reverse Holo', cls: 'rh' };
   if (card.isSpecial)      return null;
+  if (card.allFoil && /^\d+$/.test(lid)) return { label: 'Holo', cls: 'holo' };
   if (/^\d+$/.test(lid)) {
     if (card.rarity || card.rarity === 0) {
       // Simplify any "Rare Holo *" variant to just "Holo" for cleaner display
@@ -1071,7 +1072,7 @@ async function loadSet(idx) {
     // TCGDex primary → TRACKED_SETS fallback
     const officialCount = data.cardCount?.official || state.sets[idx].officialCount || null;
     const holoCount     = state.sets[idx].holoCount ?? null;
-    state.sets[idx].cards       = buildCards(data.cards, officialCount, holoCount);
+    state.sets[idx].cards       = buildCards(data.cards, officialCount, holoCount, state.sets[idx].allFoil);
     state.sets[idx].releaseDate = data.releaseDate ?? null;
     state.sets[idx].loaded       = true;
   } catch (err) {
@@ -1102,7 +1103,7 @@ function populateFromCache() {
       // TCGDex primary → TRACKED_SETS fallback
       const officialCount         = data.cardCount?.official || state.sets[idx].officialCount || null;
       const holoCount             = state.sets[idx].holoCount ?? null;
-      state.sets[idx].cards       = buildCards(data.cards, officialCount, holoCount);
+      state.sets[idx].cards       = buildCards(data.cards, officialCount, holoCount, state.sets[idx].allFoil);
       state.sets[idx].releaseDate = data.releaseDate ?? null;
       state.sets[idx].loaded      = true;
     } catch { /* ignore corrupt cache */ }
