@@ -86,7 +86,7 @@ async function initMarketplace() {
     }
 
     try {
-        const setIds = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30C'];
+        const setIds = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30th'];
 
         const setResults = await Promise.allSettled(
             setIds.map(id => fetch(`${TCGDEX_BASE}/sets/${id}`).then(r => r.json()))
@@ -273,7 +273,7 @@ async function initMarketplace() {
 // MARKET INTELLIGENCE
 // ============================================
 
-const MI_TRACKED_SETS = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30C'];
+const MI_TRACKED_SETS = ['me01', 'me02', 'me02.5', 'me03', 'me04', 'me05', '30th'];
 
 const MI_RARITY_PRICES = {
     'Special Illustration Rare': { min: 18,  max: 95  },
