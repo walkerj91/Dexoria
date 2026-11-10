@@ -16,6 +16,7 @@ const TCGDEX_BASE = 'https://api.tcgdex.net/v2/en';
 // Your Dexoria sets — update as new sets are added
 // Add a `series` field to group sets into collapsible sections
 const TRACKED_SETS = [
+  { id: 'me06',   name: 'Delta Reign',        year: '2026', series: 'Mega Evolution Series', officialCount: 141 },
   { id: '30th',   name: '30th Celebration',   year: '2026', series: 'Mega Evolution Series', officialCount: 128, allFoil: true },
   { id: 'me05',   name: 'Pitch Black',        year: '2026', series: 'Mega Evolution Series', officialCount: 120 },
   { id: 'me04',   name: 'Chaos Rising',       year: '2026', series: 'Mega Evolution Series', officialCount: 198 },
@@ -327,6 +328,7 @@ function renderOverall() {
 // ─── Render: set hero cards ──────────────────────────────────────────────────
 
 const SET_IMAGES = {
+  'me06':   'Delta_Reign_Logo.png',
   '30th':   '30th_celebration_logo.jpeg',
   'me05':   'Pitch Black Logo 2.png',
   'me04':   'Chaos Rising Logo.jpg',
